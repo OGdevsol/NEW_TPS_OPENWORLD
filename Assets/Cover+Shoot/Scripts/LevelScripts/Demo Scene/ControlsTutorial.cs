@@ -26,8 +26,8 @@ public class ControlsTutorial : MonoBehaviour
 		textColor.a = 0;
 		textArea = new Rect((Screen.width-w)/2, 0, w, h);
 
-		KeyboardCommands = this.transform.Find("ScreenHUD/Keyboard").gameObject;
-		gamepadCommands = this.transform.Find("ScreenHUD/Gamepad").gameObject;
+//		KeyboardCommands = this.transform.Find("ScreenHUD/Keyboard").gameObject;
+	//	gamepadCommands = this.transform.Find("ScreenHUD/Gamepad").gameObject;
 	}
 
 	void Update()
