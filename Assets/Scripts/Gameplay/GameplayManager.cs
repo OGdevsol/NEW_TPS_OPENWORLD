@@ -1,114 +1,112 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Gameplay;
+using OpenCover.Framework.Model;
 using UnityEngine;
 
 namespace Gameplay
 {
     public class GameplayManager : MonoBehaviour
     {
+        #region Variables
+
+        public static GameplayManager instance;
+        public GameObject[] enemyVariantsPrefab;
+        public Mission[] missions;
+        [SerializeField] private List<Transform> enemiesInLevel;
+
         public enum EnemyType
         {
             Enemy_ak47,
             Enemy_m16,
             Enemy_Pistol,
-
-
-
-
+            Interactable,
         }
 
-        public static GameplayManager instance;
-        public GameObject[] enemyVariantsPrefab;
-        public Mission[] missions;
 
-        [SerializeField] private List<Transform> enemiesInLevel;
+        private DataController dataController;
+        private int y;
+
+        private int
+            waveToKeepActive; //Introduce removeAt0 functionality by adding the wave to a list and then initializing waves again if waves are >0
+
+        #endregion
 
 
         private void Awake()
         {
             instance = this;
-            TestFunction();
+            DataCache();
+            SpawnEnemies();
+            dataController.SetSelectedLevel(1);
+            Debug.Log(dataController.GetSelectedLevel());
         }
 
-
-        private int y;
-
-        int checkEnemyType(int enemyIndex)
+        private void DataCache()
         {
-
-            if (missions[0].enemiesInLevel[enemyIndex].enemyType == EnemyType.Enemy_ak47)
-            {
-                y = 0;
-                Debug.Log("YOU SELECTED ENEMY NO" + enemyIndex);
-            }
-
-            if (missions[0].enemiesInLevel[enemyIndex].enemyType == EnemyType.Enemy_m16)
-            {
-                y = 1;
-                Debug.Log("YOU SELECTED ENEMY NO" + enemyIndex);
-            }
-
-            if (missions[0].enemiesInLevel[enemyIndex].enemyType == EnemyType.Enemy_Pistol)
-            {
-                y = 2;
-                Debug.Log("YOU SELECTED ENEMY NO" + enemyIndex);
-            }
-
-            return y;
+            dataController = DataController.instance;
         }
 
-        private void TestFunction()
+      
+        private void SpawnEnemies()
         {
+            var selectedWave = missions[dataController.GetSelectedLevel()].waves[waveToKeepActive];
+            int j;
+            var enemiesInLevelCount=selectedWave.enemiesInLevel.Count;
 
-
-
-            for (int j = 0; j < missions[0].enemiesInLevel.Length; j++)
+            for (j = 0; j < enemiesInLevelCount; j++)
             {
-                Debug.LogError("selected variant enemy Index is:" + j);
-                Debug.LogError(missions[0].enemiesInLevel[j].enemyType);
-                var g = Instantiate(enemyVariantsPrefab[checkEnemyType(j)]);
-                enemiesInLevel.Add(g.transform);
+                var enemyType = selectedWave.enemiesInLevel[j].enemyType;
+                Debug.Log(enemyType);
 
+                var variantIndex = CheckEnemyType(j);
+                var enemyPrefab = enemyVariantsPrefab[variantIndex];
 
+                enemiesInLevel.Add(Instantiate(enemyPrefab).transform);
             }
-
         }
 
 
 
+        private int CheckEnemyType(int enemyIndex)
+        {
+            var enemyType = missions[dataController.GetSelectedLevel()].waves[waveToKeepActive]
+                .enemiesInLevel[enemyIndex].enemyType;
 
-
-
+            return enemyType switch
+            {
+                EnemyType.Enemy_ak47 => 0,
+                EnemyType.Enemy_m16 => 1,
+                EnemyType.Enemy_Pistol => 2,
+                EnemyType.Interactable => 3,
+                _ => -1
+            };
+        }
 
         [Serializable]
         public class Mission
         {
             //   public MissionType missionType;
-            public Transform playerPosition;
             public string missionObjective;
-            public EnemiesInLevel[] enemiesInLevel;
-
-
-            public enum MissionType
-            {
-                Shooting,
-                Driving,
-                ReachDestination,
-            }
+            public Transform playerPosition;
+            public List<Wave> waves;
         }
-    }
 
-    [System.Serializable]
-    public class EnemiesInLevel
-    {
-        public GameplayManager.EnemyType enemyType;
-        public Transform enemyPosition;
-        public Transform[] enemyWaypoints;
-        public string waveObjective;
-        public GameObject waveMissionIndicator;
+        [System.Serializable]
+        public class EnemiesInLevel
+        {
+            public GameplayManager.EnemyType enemyType;
+            public Transform enemyPosition;
+            public Transform[] enemyWaypoints;
+        }
 
-
-
+        [Serializable]
+        public class Wave
+        {
+            public List<EnemiesInLevel> enemiesInLevel;
+            public string waveObjective;
+            public GameObject waveMissionIndicator;
+        }
     }
 }
