@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using EnemyAI;
 using Gameplay;
-using OpenCover.Framework.Model;
+//using OpenCover.Framework.Model;
 using UnityEngine;
 
 namespace Gameplay
@@ -12,9 +13,12 @@ namespace Gameplay
         #region Variables
 
         public static GameplayManager instance;
+
+        public GameObject targetForEnemy;
+        
         public GameObject[] enemyVariantsPrefab;
         public Mission[] missions;
-        [SerializeField] private List<Transform> enemiesInLevel;
+        [SerializeField] public List<Transform> enemiesInLevel;
 
         public enum EnemyType
         {
@@ -25,6 +29,7 @@ namespace Gameplay
         }
 
 
+        private StateController stateController;
         private DataController dataController;
         private int y;
 
@@ -37,37 +42,58 @@ namespace Gameplay
         private void Awake()
         {
             instance = this;
+
             DataCache();
-            SpawnEnemies();
-            dataController.SetSelectedLevel(1);
+            dataController.SetSelectedLevel(0);
+          
             Debug.Log(dataController.GetSelectedLevel());
+        }
+
+        private void Start()
+        {
+            SpawnEnemies();
         }
 
         private void DataCache()
         {
             dataController = DataController.instance;
+           
         }
 
-      
+
         private void SpawnEnemies()
         {
             var selectedWave = missions[dataController.GetSelectedLevel()].waves[waveToKeepActive];
-            int j;
-            var enemiesInLevelCount=selectedWave.enemiesInLevel.Count;
 
-            for (j = 0; j < enemiesInLevelCount; j++)
+            for (int j = 0; j < selectedWave.enemiesInLevel.Count; j++)
             {
-                var enemyType = selectedWave.enemiesInLevel[j].enemyType;
-                Debug.Log(enemyType);
+                var enemyData = selectedWave.enemiesInLevel[j];
+                var enemyTypeIndex = CheckEnemyType(j);
 
-                var variantIndex = CheckEnemyType(j);
-                var enemyPrefab = enemyVariantsPrefab[variantIndex];
+                var enemy = Instantiate(enemyVariantsPrefab[enemyTypeIndex], enemyData.enemyPosition);
+                enemiesInLevel.Add(enemy.transform);
 
-                enemiesInLevel.Add(Instantiate(enemyPrefab).transform);
+                if (IsShootingEnemy(enemyData.enemyType))
+                {
+                    var stateController = enemy.GetComponent<StateController>();
+
+                    if (stateController != null && enemyData.enemyWaypoints != null)
+                    {
+                        stateController.patrolWayPoints.AddRange(enemyData.enemyWaypoints);
+                        Debug.Log("Enemies With Waypoints Spawned");
+                    }
+                }
+                else
+                {
+                    Debug.Log("Interactable Spawned");
+                }
             }
         }
 
-
+        private bool IsShootingEnemy(EnemyType enemyType)
+        {
+            return enemyType is EnemyType.Enemy_ak47 or EnemyType.Enemy_m16 or EnemyType.Enemy_Pistol;
+        }
 
         private int CheckEnemyType(int enemyIndex)
         {
@@ -82,31 +108,6 @@ namespace Gameplay
                 EnemyType.Interactable => 3,
                 _ => -1
             };
-        }
-
-        [Serializable]
-        public class Mission
-        {
-            //   public MissionType missionType;
-            public string missionObjective;
-            public Transform playerPosition;
-            public List<Wave> waves;
-        }
-
-        [System.Serializable]
-        public class EnemiesInLevel
-        {
-            public GameplayManager.EnemyType enemyType;
-            public Transform enemyPosition;
-            public Transform[] enemyWaypoints;
-        }
-
-        [Serializable]
-        public class Wave
-        {
-            public List<EnemiesInLevel> enemiesInLevel;
-            public string waveObjective;
-            public GameObject waveMissionIndicator;
         }
     }
 }

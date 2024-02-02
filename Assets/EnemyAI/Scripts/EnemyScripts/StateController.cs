@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Gameplay;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,6 +9,7 @@ namespace EnemyAI
 	// This class controls the NPC Finite State Machine (FSM).
 	public class StateController : MonoBehaviour
 	{
+		public static StateController instance;
 		[Tooltip("NPC common stats.")]
 		public GeneralStats generalStats;
 		[Tooltip("NPC class specific stats.")]
@@ -57,7 +59,9 @@ namespace EnemyAI
 		private bool checkedOnLoop, blockedSight;                   // Blocked sight test related variables.
 		private static readonly int Strafe = Animator.StringToHash("Strafe");
 		private static readonly int Aim = Animator.StringToHash("Aim");
+		private GameplayManager gameplayManager;
 
+		
 		// Reset cover position.
 		private void OnDestroy()
 		{
@@ -104,6 +108,9 @@ namespace EnemyAI
 
 		void Awake()
 		{
+			instance = this;
+			gameplayManager=GameplayManager.instance;
+			aimTarget =gameplayManager .targetForEnemy.transform;
 			// Setup the references.
 			coverSpot ??= new Dictionary<int, Vector3>();
 			coverSpot[this.GetHashCode()] = Vector3.positiveInfinity;
@@ -132,6 +139,8 @@ namespace EnemyAI
 			}
 			// Ensure the target has a health manager component to receive shots.
 			Debug.Assert(aimTarget.root.GetComponent<HealthManager>(), "You must add a health manager to the target");
+		
+			
 		}
 
 		public void Start()

@@ -202,6 +202,7 @@ public class ShootBehaviour : GenericBehaviour
 					if(hit.collider)
 						hit.collider.SendMessageUpwards("HitCallback", new HealthManager.DamageInfo(
 							hit.point, ray.direction, weapons[weapon].bulletDamage, hit.collider), SendMessageOptions.DontRequireReceiver);
+				//	Debug.Log(hit.collider.name);
 				}
 			}
 			// No target was hit.

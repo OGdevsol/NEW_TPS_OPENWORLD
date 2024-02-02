@@ -5,28 +5,19 @@ using UnityEngine;
 
 public class DataController : MonoBehaviour
 {
-    public static DataController instance;
-    private string selectedLevel = "SelectedLevel";
-    
+  
+
 
     private void Awake()
     {
-        if (instance==null)
-        {
-            instance = this;    
-        }
-        
-        
+        instance = this;
     }
 
-
-
-
-
-
+    public static DataController instance;
+    private string selectedLevel = "SelectedLevel";
     public void SetSelectedLevel(int selectedLevelIndex)
     {
-        PlayerPrefs.SetInt(selectedLevel,selectedLevelIndex);
+        PlayerPrefs.SetInt(selectedLevel, selectedLevelIndex);
     }
 
     public int GetSelectedLevel()

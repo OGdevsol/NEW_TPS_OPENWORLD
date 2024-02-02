@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Gameplay;
+using SickscoreGames.HUDNavigationSystem;
+using UnityEngine;
 using UnityEngine.AI;
 
 namespace EnemyAI
@@ -25,6 +27,8 @@ namespace EnemyAI
 		private Animator anim;                                      // The NPC animator controller.
 		private StateController controller;                         // The NPC AI FSM controller.
 		private static readonly int Hit = Animator.StringToHash("Hit");
+		private int x;
+		private GameplayManager gameplayManager;
 
 		private void Awake()
 		{
@@ -49,6 +53,7 @@ namespace EnemyAI
 				}
 			}
 			weapon = weapon.parent;
+			gameplayManager=GameplayManager.instance;
 		}
 
 		// Receive damage from shots taken.
@@ -89,13 +94,17 @@ namespace EnemyAI
 					Kill();
 
 				// Shooting a dead body? Just apply shot force on the ragdoll part.
-				bodyPart.GetComponent<Rigidbody>().AddForce(100f * direction.normalized, ForceMode.Impulse);
+				bodyPart.GetComponent<Rigidbody>().AddForce(120f * direction.normalized, ForceMode.Impulse);
+				Debug.Log("THIS ENEMY IS DEAD");
+				//gameObject.GetComponent<HUDNavigationElement>().enabled = false;
 			}
 		}
 
 		// Remove unnecessary components on killed NPC and set as dead.
 		public void Kill()
 		{
+			x = gameplayManager.enemiesInLevel
+				.IndexOf(transform);
 			// Destroy all other MonoBehaviour scripts attached to the NPC.
 			foreach (MonoBehaviour mb in this.GetComponents<MonoBehaviour>())
 			{
@@ -108,6 +117,22 @@ namespace EnemyAI
 			Destroy(weapon.gameObject);
 			Destroy(hud.gameObject);
 			dead = true;
+			gameplayManager.enemiesInLevel.RemoveAt(x);
+			print("Enemy Removed from list");
+			CheckEnemiesInLevel();
+		}
+
+		private void CheckEnemiesInLevel()
+		{
+			if (gameplayManager.enemiesInLevel.Count==0)
+			{
+				print("All Enemies Are Dead");
+				print("Level Complete");
+			}
+			if (gameplayManager.enemiesInLevel.Count>0)
+			{
+				print("Enemies Still Remaining");
+			}
 		}
 
 		// Update health bar HUD to current NPC health.
