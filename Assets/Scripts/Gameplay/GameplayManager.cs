@@ -57,6 +57,7 @@ namespace Gameplay
         private void DataCache()
         {
             dataController = DataController.instance;
+            stateController = StateController.instance;
            
         }
 
@@ -85,7 +86,7 @@ namespace Gameplay
                 }
                 else
                 {
-                    Debug.Log("Interactable Spawned");
+                    Debug.Log("Interactable Spawned");   //Interactable logic and assignment here
                 }
             }
         }

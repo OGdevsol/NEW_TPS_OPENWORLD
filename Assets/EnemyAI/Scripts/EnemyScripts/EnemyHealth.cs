@@ -1,4 +1,5 @@
-﻿using Gameplay;
+﻿using System;
+using Gameplay;
 using SickscoreGames.HUDNavigationSystem;
 using UnityEngine;
 using UnityEngine.AI;
@@ -9,6 +10,7 @@ namespace EnemyAI
 	// Any in-game entity that reacts to a shot must have a HealthManager script.
 	public class EnemyHealth : HealthManager
 	{
+		public static EnemyHealth instance;
 		[Tooltip("The current NPC health.")]
 		public float health = 100f;
 		[Tooltip("The NPC health HUD prefab.")]
@@ -29,9 +31,12 @@ namespace EnemyAI
 		private static readonly int Hit = Animator.StringToHash("Hit");
 		private int x;
 		private GameplayManager gameplayManager;
+		private MissionCompleteManager missionCompleteManager;
 
 		private void Awake()
 		{
+			instance = this;
+			missionCompleteManager = MissionCompleteManager.Instance;
 			// Create the health HUD.
 			hud = GameObject.Instantiate(healthHUD, transform).transform;
 
@@ -55,7 +60,10 @@ namespace EnemyAI
 			weapon = weapon.parent;
 			gameplayManager=GameplayManager.instance;
 		}
-
+		/*private void OnEnable()
+		{
+			MissionCompleteManager.onMissionComplete += HandleLevelComplete;
+		}*/
 		// Receive damage from shots taken.
 		public override void TakeDamage(Vector3 location, Vector3 direction, float damage, Collider bodyPart, GameObject origin = null)
 		{
@@ -122,14 +130,18 @@ namespace EnemyAI
 			CheckEnemiesInLevel();
 		}
 
+		
+		
+
+		
+
 		private void CheckEnemiesInLevel()
 		{
 			if (gameplayManager.enemiesInLevel.Count==0)
 			{
-				print("All Enemies Are Dead");
-				print("Level Complete");
+				missionCompleteManager.CompleteMission();
 			}
-			if (gameplayManager.enemiesInLevel.Count>0)
+			else 
 			{
 				print("Enemies Still Remaining");
 			}
@@ -152,5 +164,9 @@ namespace EnemyAI
 				member.velocity = Vector3.zero;
 			}
 		}
+		/*private void OnDisable()
+		{
+			MissionCompleteManager.onMissionComplete -= HandleLevelComplete;
+		}*/
 	}
 }

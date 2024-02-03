@@ -12,12 +12,18 @@ public class SimplePlayerHealth : HealthManager
 	public float decayFactor = 0.8f;
 
 	private HurtHUD hurtUI;
+	private MissionFailManager missionFailManager;
+	private Rigidbody[] playerRigidBodies;
+	private Animator playerAnimator;
 
 	private void Awake()
 	{
 		AudioListener.pause = false;
 		hurtUI = this.gameObject.AddComponent<HurtHUD>();
 		hurtUI.Setup(canvas, hurtPrefab, decayFactor, this.transform);
+		missionFailManager=MissionFailManager.Instance;
+		playerRigidBodies = gameObject.GetComponentsInChildren<Rigidbody>();
+		playerAnimator = gameObject.GetComponent<Animator>();
 	}
 
 	public override void TakeDamage(Vector3 location, Vector3 direction, float damage, Collider bodyPart, GameObject origin)
@@ -42,8 +48,15 @@ public class SimplePlayerHealth : HealthManager
 		else if (!dead)
 		{
 			dead = true;
-			StartCoroutine(nameof(ReloadScene));
+			missionFailManager.FailMission();
+			KillPlayer();
+			//StartCoroutine(nameof(ReloadScene));
 		}
+	}
+
+	private void KillPlayer()
+	{
+		playerAnimator.Play("Death");
 	}
 
 	private IEnumerator ReloadScene()
