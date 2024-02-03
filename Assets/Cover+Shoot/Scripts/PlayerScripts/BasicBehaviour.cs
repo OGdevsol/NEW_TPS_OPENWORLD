@@ -5,6 +5,7 @@ using System.Collections.Generic;
 // Contains basic setup and common functions used by all the player behaviours.
 public class BasicBehaviour : MonoBehaviour
 {
+	public static BasicBehaviour instance;
 	public Transform playerCamera;                        // Reference to the camera that focus the player.
 	public float turnSmoothing = 0.06f;                   // Speed of turn when moving to match camera facing.
 	public float sprintFOV = 100f;                        // the FOV to use on the camera when player is sprinting.
@@ -46,6 +47,7 @@ public class BasicBehaviour : MonoBehaviour
 
 	void Awake ()
 	{
+		instance = this;
 		// Set up the references.
 		behaviours = new List<GenericBehaviour> ();
 		overridingBehaviours = new List<GenericBehaviour>();

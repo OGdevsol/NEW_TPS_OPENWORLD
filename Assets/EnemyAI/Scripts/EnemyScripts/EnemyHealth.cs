@@ -8,7 +8,7 @@ namespace EnemyAI
 {
 	// EnemyHealth is a the enemy NPC specific health manager.
 	// Any in-game entity that reacts to a shot must have a HealthManager script.
-	public class EnemyHealth : HealthManager
+	public class EnemyHealth : HealthManager 
 	{
 		public static EnemyHealth instance;
 		[Tooltip("The current NPC health.")]

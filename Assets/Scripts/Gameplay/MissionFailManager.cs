@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,7 +11,7 @@ public class MissionFailManager : MonoBehaviour
     public static event MissionFailDelegate onMissionFail;
     
     private static MissionFailManager _instance;
-
+    private SimplePlayerHealth simplePlayerHealth;
     public static MissionFailManager Instance
     {
         get
@@ -28,12 +29,9 @@ public class MissionFailManager : MonoBehaviour
         }
     }
 
-    // Method to call when the level is complete
-    public void FailMission()
-    {
-        // Trigger the event when the level is complete
-        onMissionFail?.Invoke();
-        Debug.Log("Mission Failed, You Died");
-    }
+
+    
+    
+   
 
 }

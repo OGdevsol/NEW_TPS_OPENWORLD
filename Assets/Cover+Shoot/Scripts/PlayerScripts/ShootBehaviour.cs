@@ -6,6 +6,9 @@ using UnityEngine;
 // There is no need to use behaviour manager to watch it. Use direct call to all the MonoBehaviour basic functions.
 public class ShootBehaviour : GenericBehaviour
 {
+	
+
+	
 	public string shootButton = "Fire1",                           // Default shoot weapon button.
 		pickButton = "Interact",                                   // Default pick weapon button.
 		changeButton = "Change",                                   // Default change weapon button.
@@ -35,7 +38,7 @@ public class ShootBehaviour : GenericBehaviour
 	private int coveringBool, aimBool,                             // Animator variables related to covering and aiming.
 		blockedAimBool,                                            // Animator variable related to blocked aim.
 		reloadBool;                                                // Animator variable related to reloading.
-	private bool isAiming,                                         // Boolean to get whether or not the player is aiming.
+	public bool isAiming,                                         // Boolean to get whether or not the player is aiming.
 		isAimBlocked;                                              // Boolean to determine whether or not the aim is blocked.
 	private Transform gunMuzzle;                                   // World position of the gun muzzle.
 	private float distToHand;                                      // Distance from neck to hand.

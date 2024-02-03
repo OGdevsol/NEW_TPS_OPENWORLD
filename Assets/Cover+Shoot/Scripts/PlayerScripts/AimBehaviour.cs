@@ -4,6 +4,7 @@ using System.Collections;
 // AimBehaviour inherits from GenericBehaviour. This class corresponds to aim and strafe behaviour.
 public class AimBehaviour : GenericBehaviour
 {
+	public static AimBehaviour instance;
 	public string aimButton = "Aim", shoulderButton = "Aim Shoulder";     // Default aim and switch shoulders buttons.
 	public Texture2D crosshair;                                           // Crosshair texture.
 	public float aimTurnSmoothing = 0.15f;                                // Speed of turn response when aiming to match camera facing.
@@ -71,7 +72,7 @@ public class AimBehaviour : GenericBehaviour
 	}
 
 	// Co-rountine to start aiming mode with delay.
-	private IEnumerator ToggleAimOn()
+	public IEnumerator ToggleAimOn()
 	{
 		yield return new WaitForSeconds(0.05f);
 		// Aiming is not possible.
@@ -97,8 +98,9 @@ public class AimBehaviour : GenericBehaviour
 	}
 
 	// Co-rountine to end aiming mode with delay.
-	private IEnumerator ToggleAimOff()
+	public IEnumerator ToggleAimOff()
 	{
+		Debug.Log("Turning Off Aim");
 		aim = false;
 		yield return new WaitForSeconds(0.3f);
 		behaviourManager.GetCamScript.ResetTargetOffsets();
