@@ -7,6 +7,7 @@ public class GameUIManager : MonoBehaviour
 {
     public static GameUIManager instance;
     public List<GameObject> deathDeactivationButtons;
+    public GameObject headshotEffect;
 
     private void Awake()
     {
@@ -21,5 +22,7 @@ public class GameUIManager : MonoBehaviour
             deathDeactivationButtons[i].SetActive(false);
         }
     }
+    
+    
     
 }

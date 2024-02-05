@@ -6,15 +6,15 @@ using UnityEngine;
 public class DataController : MonoBehaviour
 {
   
-
+   public static DataController instance;
+    private string selectedLevel = "SelectedLevel";
 
     private void Awake()
     {
         instance = this;
     }
 
-    public static DataController instance;
-    private string selectedLevel = "SelectedLevel";
+ 
     public void SetSelectedLevel(int selectedLevelIndex)
     {
         PlayerPrefs.SetInt(selectedLevel, selectedLevelIndex);

@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using EnemyAI;
 using Gameplay;
+using SickscoreGames.HUDNavigationSystem;
 //using OpenCover.Framework.Model;
 using UnityEngine;
 
@@ -19,6 +21,7 @@ namespace Gameplay
         public GameObject[] enemyVariantsPrefab;
         public Mission[] missions;
         [SerializeField] public List<Transform> enemiesInLevel;
+         public List<Transform> hudElement;
 
         public enum EnemyType
         {
@@ -73,6 +76,9 @@ namespace Gameplay
 
                 var enemy = Instantiate(enemyVariantsPrefab[enemyTypeIndex], enemyData.enemyPosition);
                 enemiesInLevel.Add(enemy.transform);
+                HUDNavigationElement hudElementEnemy = enemiesInLevel[j].GetComponentInChildren<HUDNavigationElement>(); 
+                hudElement.Add(hudElementEnemy.transform);
+                
 
                 if (IsShootingEnemy(enemyData.enemyType))
                 {
@@ -90,6 +96,28 @@ namespace Gameplay
                 }
             }
         }
+
+        private IEnumerator Initialize()
+        {
+            /*missions[dataController.GetSelectedLevel()].waves[waveToKeepActive].waveCutscene.SetActive(true);
+            yield return new WaitForSecondsRealtime(missions[dataController.GetSelectedLevel()].waves[waveToKeepActive]
+                .cutsceneDuration);
+            missions[dataController.GetSelectedLevel()].waves[waveToKeepActive].waveCutscene.SetActive(false);*/
+            yield return new WaitForSeconds(0.10f);
+            SpawnEnemies();
+        }
+
+        /*
+        private HUDNavigationElement StoreEnemyHUDComponent(HUDNavigationElement hudElement)
+        {
+            int i;
+            int enemiesInLevelLength = enemiesInLevel.Count;
+            for ( i = 0; i < enemiesInLevelLength; i++)
+            {
+              hudElement =enemiesInLevel[i].GetComponentInChildren<HUDNavigationElement>();
+            }
+        }
+        */
 
         private bool IsShootingEnemy(EnemyType enemyType)
         {

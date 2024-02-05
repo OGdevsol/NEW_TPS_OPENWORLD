@@ -109,8 +109,9 @@ namespace EnemyAI
 		void Awake()
 		{
 			instance = this;
-			gameplayManager=GameplayManager.instance;
-			aimTarget =gameplayManager .targetForEnemy.transform;
+			aimTarget =GameplayManager.instance .targetForEnemy.transform;
+		//	gameplayManager=GameplayManager.instance;
+			
 			// Setup the references.
 			coverSpot ??= new Dictionary<int, Vector3>();
 			coverSpot[this.GetHashCode()] = Vector3.positiveInfinity;
@@ -139,6 +140,7 @@ namespace EnemyAI
 			}
 			// Ensure the target has a health manager component to receive shots.
 			Debug.Assert(aimTarget.root.GetComponent<HealthManager>(), "You must add a health manager to the target");
+		
 		
 			
 		}

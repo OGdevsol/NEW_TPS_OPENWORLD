@@ -36,6 +36,8 @@ public class EnemiesInLevel
 public class Wave
 {
     public List<EnemiesInLevel> enemiesInLevel;
+    public GameObject waveCutscene;
+    public float cutsceneDuration;
     public string waveObjective;
     public GameObject waveMissionIndicator;
 }

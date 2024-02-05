@@ -20,6 +20,7 @@ public class SimplePlayerHealth : HealthManager
     private Rigidbody[] playerRigidBodies;
     private Animator playerAnimator;
     public ControlFreak2.TouchButton aim;
+    private ShootBehaviour shootBehaviour;
 
     private void OnEnable()
     {
@@ -43,6 +44,7 @@ public class SimplePlayerHealth : HealthManager
         playerRigidBodies = gameObject.GetComponentsInChildren<Rigidbody>();
         playerAnimator = gameObject.GetComponent<Animator>();
         aimBehaviour = gameObject.GetComponent<AimBehaviour>();
+        shootBehaviour=ShootBehaviour.instance;
         gameUIManager=GameUIManager.instance;
         
     }
@@ -80,6 +82,10 @@ public class SimplePlayerHealth : HealthManager
     {
         yield return new WaitForSecondsRealtime(0.3f);
         aim.toggle = false;
+        if (shootBehaviour)
+        {
+            ShootBehaviour.instance.DropWeaponOnDeath();
+        }
         playerAnimator.Play("Death");
     }
     
@@ -90,6 +96,15 @@ public class SimplePlayerHealth : HealthManager
         Debug.Log("Mission Failed, You Died");
         StartCoroutine(KillPlayer());
         gameUIManager.DisableObjectsOnPlayerDeath();
+        
+        StartCoroutine(PlayerDeathSlowmotion());
+    }
+
+    private IEnumerator PlayerDeathSlowmotion()
+    {
+        Time.timeScale = 0.45f;
+        yield return new WaitForSeconds(1.5f);
+        Time.timeScale = 1;
     }
 
     private IEnumerator ReloadScene()

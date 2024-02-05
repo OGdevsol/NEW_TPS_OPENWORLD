@@ -58,10 +58,12 @@ public class ShootBehaviour : GenericBehaviour
 	private bool isShooting = false;                               // Boolean to determine if player is holding shoot button.
 	private bool isChangingWeapon = false;                         // Boolean to determine if player is holding change weapon button.
 	private bool isShotAlive = false;                              // Boolean to determine if there is any active shot on scene.
+	public static ShootBehaviour instance;
 
 	// Start is always called after any Awake functions.
 	void Start()
 	{
+		instance = this;
 		// Set up the references.
 		weaponTypeInt = Animator.StringToHash("Weapon");
 		aimBool = Animator.StringToHash("Aim");
@@ -223,6 +225,16 @@ public class ShootBehaviour : GenericBehaviour
 			shotDecay = originalShotDecay;
 			isShotAlive = true;
 		}
+	}
+
+	public void DropWeaponOnDeath()
+	{
+		// End reload paramters, drop weapon and change to another one in inventory.
+		EndReloadWeapon();
+		int weaponToDrop = activeWeapon;
+		ChangeWeapon(activeWeapon, 0);
+		weapons[weaponToDrop].Drop();
+		weapons[weaponToDrop] = null;
 	}
 
 	// Manage the shot visual effects.

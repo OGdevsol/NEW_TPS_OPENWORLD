@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using ControlFreak2;
 
 // AimBehaviour inherits from GenericBehaviour. This class corresponds to aim and strafe behaviour.
 public class AimBehaviour : GenericBehaviour
@@ -19,6 +22,7 @@ public class AimBehaviour : GenericBehaviour
 	private Vector3 initialHipsRotation;                                  // Initial hips rotation related to the root bone.
 	private Vector3 initialSpineRotation;                                 // Initial spine rotation related to the root bone.
 
+	private ShootBehaviour shootBehavior;
 	// Start is always called after any Awake functions.
 	void Start ()
 	{
@@ -40,6 +44,9 @@ public class AimBehaviour : GenericBehaviour
 		initialRootRotation = (root == transform) ? Vector3.zero : root.localEulerAngles;
 		initialHipsRotation = hips.localEulerAngles;
 		initialSpineRotation = behaviourManager.GetAnim.GetBoneTransform(HumanBodyBones.Spine).localEulerAngles;
+		shootBehavior = ShootBehaviour.instance;
+	
+		
 	}
 
 	// Update is used to set features regardless the active behaviour.
@@ -123,11 +130,36 @@ public class AimBehaviour : GenericBehaviour
 		AimManagement();
 	}
 
+	private int weapon;
+
+	private bool Boolean;
+	
+	private List<InteractiveWeapon> weapons;   
+	
+	
 	// Handle aim parameters when aiming is active.
 	void AimManagement()
 	{
 		// Deal with the player orientation when aiming.
 		Rotating();
+		Ray ray = new Ray(behaviourManager.playerCamera.position, behaviourManager.playerCamera.forward *1000);
+		RaycastHit hit;
+		// Target was hit.
+		if (Physics.Raycast(ray, out hit, 1000f))
+		{
+			if (hit.collider.transform != this.transform)
+			{
+				if (hit.collider.tag=="Enemy")
+				{
+					Debug.Log("calling" + hit.collider.name);
+					//ShootBehaviour.instance.ShootWeapon(ShootBehaviour.instance.activeWeapon);
+					//GameUIManager.instance.shootButton.JustPressed();
+				//	ControlFreak2.CF2Input.GetAxisRaw(shootBehavior.shootButton);
+					//Debug.Log("ButtonPressed");
+				}
+			
+			}
+		}
 	}
 
 	// Rotate the player to match correct orientation, according to camera.
@@ -160,9 +192,16 @@ public class AimBehaviour : GenericBehaviour
 			behaviourManager.SetLastDirection(forward);
 			transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, minSpeed * Time.deltaTime);
 		}
+		//Debug.Log("CALLED");
+		
 	}
 
- 	// Draw the crosshair when aiming.
+	private void FixedUpdate()
+	{
+		
+	}
+
+	// Draw the crosshair when aiming.
 	void OnGUI () 
 	{
 		if (crosshair)
@@ -172,6 +211,7 @@ public class AimBehaviour : GenericBehaviour
 				GUI.DrawTexture(new Rect(Screen.width / 2 - (crosshair.width * 0.5f),
 										 Screen.height / 2 - (crosshair.height * 0.5f),
 										 crosshair.width, crosshair.height), crosshair);
+			
 		}
 	}
 }

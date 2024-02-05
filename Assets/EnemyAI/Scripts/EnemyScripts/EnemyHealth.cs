@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Gameplay;
 using SickscoreGames.HUDNavigationSystem;
 using UnityEngine;
@@ -30,13 +31,18 @@ namespace EnemyAI
 		private StateController controller;                         // The NPC AI FSM controller.
 		private static readonly int Hit = Animator.StringToHash("Hit");
 		private int x;
+	
 		private GameplayManager gameplayManager;
 		private MissionCompleteManager missionCompleteManager;
+		private GameUIManager gameUIManager;
+		private HUDNavigationElement hudElement;
 
 		private void Awake()
 		{
 			instance = this;
 			missionCompleteManager = MissionCompleteManager.Instance;
+			gameUIManager=GameUIManager.instance;
+			
 			// Create the health HUD.
 			hud = GameObject.Instantiate(healthHUD, transform).transform;
 
@@ -59,6 +65,7 @@ namespace EnemyAI
 			}
 			weapon = weapon.parent;
 			gameplayManager=GameplayManager.instance;
+			hudElement = gameObject.GetComponentInChildren<HUDNavigationElement>();
 		}
 		/*private void OnEnable()
 		{
@@ -74,6 +81,7 @@ namespace EnemyAI
 				damage *= 10;
 				// Call headshot HUD callback, if any.
 				GameObject.FindGameObjectWithTag("GameController").SendMessage("HeadShotCallback", SendMessageOptions.DontRequireReceiver);
+				StartCoroutine(HeadshotSlowmotion());
 			}
 
 			// Create spouted blood particle on shot location.
@@ -127,13 +135,31 @@ namespace EnemyAI
 			dead = true;
 			gameplayManager.enemiesInLevel.RemoveAt(x);
 			print("Enemy Removed from list");
+			if (hudElement)
+			{
+				hudElement.enabled = false;
+			}
+		
 			CheckEnemiesInLevel();
 		}
 
-		
-		
+
+		private IEnumerator HeadshotSlowmotion()
+		{
+			Time.timeScale = 0.45f;
+			gameUIManager.headshotEffect.SetActive(true);
+			yield return new WaitForSeconds(1.25f);
+			gameUIManager.headshotEffect.SetActive(false);
+			Time.timeScale = 1;
+			
+			
+			
+
+		}
 
 		
+
+
 
 		private void CheckEnemiesInLevel()
 		{
