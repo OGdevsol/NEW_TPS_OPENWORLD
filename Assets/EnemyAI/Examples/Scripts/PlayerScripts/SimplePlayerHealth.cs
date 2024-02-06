@@ -85,10 +85,12 @@ public class SimplePlayerHealth : HealthManager
     {
         yield return new WaitForSecondsRealtime(0.3f);
         aim.toggle = false;
-        if (shootBehaviour)
+        if (!shootBehaviour)
         {
+            shootBehaviour = ShootBehaviour.instance;
             ShootBehaviour.instance.DropWeaponOnDeath();
         }
+       
         playerAnimator.Play("Death");
     }
     

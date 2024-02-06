@@ -60,6 +60,9 @@ public class ShootBehaviour : GenericBehaviour
 	public bool isShotAlive = false;                              // Boolean to determine if there is any active shot on scene.
 	public static ShootBehaviour instance;
 
+	private WeaponUIManager weaponUIManager;
+	
+	
 	// Start is always called after any Awake functions.
 	void Start()
 	{
@@ -117,6 +120,8 @@ public class ShootBehaviour : GenericBehaviour
 		shotDecay = originalShotDecay;
 		castRelativeOrigin = neck.position - this.transform.position;
 		distToHand = (rightHand.position - neck.position).magnitude * 1.5f;
+
+		weaponUIManager = WeaponUIManager.instance;
 	}
 
 	// Update is used to set features regardless the active behaviour.
@@ -224,6 +229,17 @@ public class ShootBehaviour : GenericBehaviour
 			// Reset shot lifetime.
 			shotDecay = originalShotDecay;
 			isShotAlive = true;
+			
+			if (weaponUIManager.bulletsLeftInMag <= 0)
+			{
+				if (weapons[activeWeapon].StartReload())
+				{
+					AudioSource.PlayClipAtPoint(
+						weapons[activeWeapon].reloadSound,
+						gunMuzzle.position, 0.5f);
+					behaviourManager.GetAnim.SetBool(reloadBool, true);
+				}
+			}
 		}
 	}
 

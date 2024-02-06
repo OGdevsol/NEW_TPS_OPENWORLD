@@ -18,11 +18,11 @@ namespace Gameplay
         public static GameplayManager instance;
 
         public GameObject targetForEnemy;
-        
+
         public GameObject[] enemyVariantsPrefab;
         public Mission[] missions;
         [SerializeField] public List<Transform> enemiesInLevel;
-         public List<Transform> hudElement;
+        public List<Transform> hudElement;
 
         public enum EnemyType
         {
@@ -49,7 +49,8 @@ namespace Gameplay
 
             DataCache();
             dataController.SetSelectedLevel(0);
-          
+            Time.timeScale = 1;
+
 //            Debug.Log(dataController.GetSelectedLevel());
         }
 
@@ -62,7 +63,6 @@ namespace Gameplay
         {
             dataController = DataController.instance;
             stateController = StateController.instance;
-           
         }
 
 
@@ -77,10 +77,9 @@ namespace Gameplay
 
                 var enemy = Instantiate(enemyVariantsPrefab[enemyTypeIndex], enemyData.enemyPosition);
                 enemiesInLevel.Add(enemy.transform);
-                HUDNavigationElement hudElementEnemy = enemiesInLevel[j].GetComponentInChildren<HUDNavigationElement>(); 
+                HUDNavigationElement hudElementEnemy = enemiesInLevel[j].GetComponentInChildren<HUDNavigationElement>();
                 hudElement.Add(hudElementEnemy.transform);
-               
-                
+
 
                 if (IsShootingEnemy(enemyData.enemyType))
                 {
@@ -94,7 +93,7 @@ namespace Gameplay
                 }
                 else
                 {
-                //    Debug.Log("Interactable Spawned");   //Interactable logic and assignment here
+                    //    Debug.Log("Interactable Spawned");   //Interactable logic and assignment here
                 }
             }
         }
