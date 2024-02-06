@@ -3,6 +3,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 // This class is created for the example scene. There is no support for this script.
 public class SimplePlayerHealth : HealthManager
@@ -21,6 +22,7 @@ public class SimplePlayerHealth : HealthManager
     private Animator playerAnimator;
     public ControlFreak2.TouchButton aim;
     private ShootBehaviour shootBehaviour;
+    public Slider healthSlider;
 
     private void OnEnable()
     {
@@ -68,6 +70,7 @@ public class SimplePlayerHealth : HealthManager
             };
             textStyle.normal.textColor = Color.white;
             GUI.Label(new Rect(0, Screen.height - 60, 30, 30), health.ToString(), textStyle);
+            healthSlider.value = health;
         }
         else if (!dead)
         {

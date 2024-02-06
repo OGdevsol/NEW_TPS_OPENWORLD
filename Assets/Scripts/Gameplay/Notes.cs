@@ -137,3 +137,85 @@
                
     }
 }*/
+
+
+/*void SetShootBehavior()
+{
+    if (shootBehavior == null)
+    {
+        shootBehavior = ShootBehaviour.instance;
+
+        if (shootBehavior == null)
+        {
+            Debug.LogError("ShootBehaviour not found or not initialized properly. Make sure ShootBehaviour is present in the scene.");
+            return; // Exit the method if shootBehavior is still null
+        }
+    }
+}
+
+public void AutoFire()
+{
+    Ray ray = new Ray(behaviourManager.playerCamera.position, behaviourManager.playerCamera.forward *1000);
+    RaycastHit hit;
+    if (Physics.Raycast(ray, out hit, 1000f))
+    {
+        if (hit.collider.transform != this.transform)
+        {
+            if (hit.collider.tag=="Enemy")
+            {
+                //	Debug.Log("calling " + hit.collider.name);
+					
+                if (shootBehavior == null)
+                {
+                    Debug.LogError("ShootBehaviour not found or not initialized properly. Make sure ShootBehaviour is present in the scene.");
+                }
+                shootBehavior.ShootWeapon(shootBehavior.activeWeapon);
+            }
+			
+        }
+    }
+}*/
+
+
+/*
+public void AutoFire()
+{
+    Ray ray = new Ray(behaviourManager.playerCamera.position, behaviourManager.playerCamera.forward *1000);
+    RaycastHit hit;
+    if (Physics.Raycast(ray, out hit, 500f))
+    {
+        if (hit.collider.transform != this.transform)
+        {
+            if (hit.collider.tag=="Enemy")
+            {
+				
+					
+                if (shootBehavior == null)
+                {
+                    Debug.LogError("ShootBehaviour not found or not initialized properly. Make sure ShootBehaviour is present in the scene.");
+                }
+					
+                if (! shootBehavior.isShooting && shootBehavior. activeWeapon > 0 && shootBehavior. burstShotCount == 0)
+                {
+                    shootBehavior. isShooting = true;
+                    shootBehavior. ShootWeapon(shootBehavior. activeWeapon);
+
+                    if (weaponUIManager.bulletsLeftInMag<=0)
+                    {
+                        if (shootBehavior.weapons[shootBehavior.activeWeapon].StartReload())
+                        {
+                            AudioSource.PlayClipAtPoint(shootBehavior.weapons[shootBehavior.activeWeapon].reloadSound, shootBehavior.gunMuzzle.position, 0.5f);
+                            behaviourManager.GetAnim.SetBool(shootBehavior.reloadBool, true);
+                        }
+                    }
+
+						
+						
+                }
+					
+					
+            }
+			
+        }
+    }
+}*/

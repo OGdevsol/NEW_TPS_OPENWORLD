@@ -4,6 +4,7 @@ using UnityEngine.UI;
 // This class corresponds to any in-game weapon interactions.
 public class InteractiveWeapon : MonoBehaviour
 {
+	public static InteractiveWeapon instance;
 	public string label;                                      // The weapon name. Same name will treat weapons as same regardless game object's name.
 	public AudioClip shotSound, reloadSound,                  // Audio clips for shoot and reload.
 		pickSound, dropSound, noBulletSound;                  // Audio clips for pickweapon , drop weapon, and no bullet shot try.
@@ -28,8 +29,8 @@ public class InteractiveWeapon : MonoBehaviour
 	public WeaponMode mode = WeaponMode.SEMI;                 // Default weapon mode, change in Inspector.
 	public int burstSize = 0;                                 // How many shot are fired on burst mode.
 	[SerializeField]
-	private int mag, totalBullets;                            // Current mag capacity and total amount of bullets being carried.
-	private int fullMag, maxBullets;                          // Default mag capacity and total bullets for reset purposes.
+	public int mag, totalBullets;                            // Current mag capacity and total amount of bullets being carried.
+	public int fullMag, maxBullets;                          // Default mag capacity and total bullets for reset purposes.
 	private GameObject player, gameController;                // References to the player and the game controller.
 	private ShootBehaviour playerInventory;                   // Player's inventory to store weapons.
 	private SphereCollider interactiveRadius;                 // In-game radius of interaction with player.
@@ -41,6 +42,7 @@ public class InteractiveWeapon : MonoBehaviour
 
 	void Awake()
 	{
+		instance = this;
 		// Set up the references.
 		this.gameObject.name = this.label;
 		this.gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");

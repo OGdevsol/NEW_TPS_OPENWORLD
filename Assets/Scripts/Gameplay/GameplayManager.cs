@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Cinemachine;
 using EnemyAI;
 using Gameplay;
 using SickscoreGames.HUDNavigationSystem;
@@ -49,7 +50,7 @@ namespace Gameplay
             DataCache();
             dataController.SetSelectedLevel(0);
           
-            Debug.Log(dataController.GetSelectedLevel());
+//            Debug.Log(dataController.GetSelectedLevel());
         }
 
         private void Start()
@@ -78,6 +79,7 @@ namespace Gameplay
                 enemiesInLevel.Add(enemy.transform);
                 HUDNavigationElement hudElementEnemy = enemiesInLevel[j].GetComponentInChildren<HUDNavigationElement>(); 
                 hudElement.Add(hudElementEnemy.transform);
+               
                 
 
                 if (IsShootingEnemy(enemyData.enemyType))
@@ -87,12 +89,12 @@ namespace Gameplay
                     if (stateController != null && enemyData.enemyWaypoints != null)
                     {
                         stateController.patrolWayPoints.AddRange(enemyData.enemyWaypoints);
-                        Debug.Log("Enemies With Waypoints Spawned");
+//                        Debug.Log("Enemies With Waypoints Spawned");
                     }
                 }
                 else
                 {
-                    Debug.Log("Interactable Spawned");   //Interactable logic and assignment here
+                //    Debug.Log("Interactable Spawned");   //Interactable logic and assignment here
                 }
             }
         }

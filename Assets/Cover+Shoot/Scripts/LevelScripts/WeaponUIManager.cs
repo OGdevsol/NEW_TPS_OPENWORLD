@@ -1,16 +1,25 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 // This class corresponds to the weapon screen HUD features.
 public class WeaponUIManager : MonoBehaviour
 {
+	public static WeaponUIManager instance;
 	public Color bulletColor = Color.white;             // Color of the available bullets inside weapon HUD.
 	public Color emptyBulletColor = Color.black;        // Color of the empty  bullets inside weapon HUD.
 
 	private Color nobulletColor;                        // Transparent color to hide extra capacity bullet slots.
 	private Image weaponHud;                            // The weapon draw inside HUD.
 	private GameObject bulletMag;                       // The bullets draw inside HUD.
-	private Text totalBulletsHud;                       // The bullets amount label inside HUD.
+	private Text totalBulletsHud;
+
+	public int bulletsLeftInMag;
+	// The bullets amount label inside HUD.
+	private void Awake()
+	{
+		instance = this;
+	}
 
 	void Start ()
 	{
@@ -61,5 +70,6 @@ public class WeaponUIManager : MonoBehaviour
 
 		// Update bullet count label.
 		totalBulletsHud.text = bulletsLeft + "/" + extraBullets;
+		bulletsLeftInMag = bulletsLeft;
 	}
 }

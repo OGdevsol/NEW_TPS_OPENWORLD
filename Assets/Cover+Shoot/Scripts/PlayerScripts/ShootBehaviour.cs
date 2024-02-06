@@ -30,17 +30,17 @@ public class ShootBehaviour : GenericBehaviour
 	public Vector3 RightHandCover;                                 // Local right hand rotation when holding a long gun and covering.
 	public Vector3 LeftArmLongGuard;                               // Local left arm rotation when guarding with a long gun.
 
-	private int activeWeapon = 0;                                  //  Index of the active weapon.
+	public int activeWeapon = 0;                                  //  Index of the active weapon.
 	private int weaponTypeInt;                                     // Animator variable related to the weapon type.
 	private int changeWeaponTrigger;                               // Animator trigger for changing weapon.
 	private int shootingTrigger;                                   // Animator trigger for shooting weapon.
-	private List<InteractiveWeapon> weapons;                       // Weapons inventory.
-	private int coveringBool, aimBool,                             // Animator variables related to covering and aiming.
+	public List<InteractiveWeapon> weapons;                       // Weapons inventory.
+	public int coveringBool, aimBool,                             // Animator variables related to covering and aiming.
 		blockedAimBool,                                            // Animator variable related to blocked aim.
 		reloadBool;                                                // Animator variable related to reloading.
 	public bool isAiming,                                         // Boolean to get whether or not the player is aiming.
 		isAimBlocked;                                              // Boolean to determine whether or not the aim is blocked.
-	private Transform gunMuzzle;                                   // World position of the gun muzzle.
+	public Transform gunMuzzle;                                   // World position of the gun muzzle.
 	private float distToHand;                                      // Distance from neck to hand.
 	private Vector3 castRelativeOrigin;                            // Position of neck to cast for blocked aim test.
 	private Dictionary<InteractiveWeapon.WeaponType, int> slotMap; // Map to designate weapon types to inventory slots.
@@ -52,12 +52,12 @@ public class ShootBehaviour : GenericBehaviour
 	private float shotDecay, originalShotDecay = 0.5f;             // Default shot lifetime. Use shotRateFactor to modify speed.
 	private List<GameObject> bulletHoles;                          // Bullet holes scene buffer.
 	private int bulletHoleSlot = 0;                                // Number of active bullet holes on scene.
-	private int burstShotCount = 0;                                // Number of burst shots fired.
+	public int burstShotCount = 0;                                // Number of burst shots fired.
 	private AimBehaviour aimBehaviour;                             // Reference to the aim behaviour.
 	private Texture2D originalCrosshair;                           // Original unarmed aim behaviour crosshair.
-	private bool isShooting = false;                               // Boolean to determine if player is holding shoot button.
+	public bool isShooting = false;                               // Boolean to determine if player is holding shoot button.
 	private bool isChangingWeapon = false;                         // Boolean to determine if player is holding change weapon button.
-	private bool isShotAlive = false;                              // Boolean to determine if there is any active shot on scene.
+	public bool isShotAlive = false;                              // Boolean to determine if there is any active shot on scene.
 	public static ShootBehaviour instance;
 
 	// Start is always called after any Awake functions.
@@ -174,7 +174,7 @@ public class ShootBehaviour : GenericBehaviour
 	}
 
 	// Shoot the weapon.
-	private void ShootWeapon(int weapon, bool firstShot = true)
+	public void ShootWeapon(int weapon, bool firstShot = true)
 	{
 		// Check conditions to shoot.
 		if (!isAiming || isAimBlocked || behaviourManager.GetAnim.GetBool(reloadBool) || !weapons[weapon].Shoot(firstShot))
@@ -330,7 +330,7 @@ public class ShootBehaviour : GenericBehaviour
 	}
 
 	// Handle the shot parameters during its lifetime.
-	private void ShotDecay()
+	public void ShotDecay()
 	{
 		// Update parameters on imminent shot death.
 		if (shotDecay > 0.2)
