@@ -1,0 +1,101 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using Gameplay;
+using TMPro;
+using Unity.VisualScripting;
+using UnityEngine;
+
+public class DetectAndEnterCar : MonoBehaviour
+{
+    private Animator animator;
+    private GameUIManager gameUIManager;
+    private GameplayCarController gameplayCarController;
+    private ShootBehaviour shootBehaviour;
+    public TMP_Text pickUpWeaponText;
+    private GameplayManager gameplayManager;
+    private DataController dataController;
+
+
+  
+        private void Awake()
+    {
+      
+    }
+
+        private void Start()
+        {
+            animator = gameObject.GetComponent<Animator>();
+            gameUIManager = GameUIManager.instance;
+            gameplayCarController=GameplayCarController.instance;
+            shootBehaviour=ShootBehaviour.instance;
+            gameplayManager=GameplayManager.instance;
+            dataController=DataController.instance;
+        }
+
+        private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "CarDoor")
+        {
+            Debug.Log("Entering Door Node Region");
+            AssureReferences();
+
+            gameUIManager.getInCarButton.gameObject.SetActive(true);
+          //  gameplayCarController.SwitchCameraToCar();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "CarDoor")
+        {
+            Debug.Log("Exiting Door Node Region");
+            gameUIManager.getInCarButton.gameObject.SetActive(false);
+          //  gameplayCarController.SwitchCameraToPlayer();
+        }
+    }
+
+    public void FaceAndEnterCar()
+    {
+        /*transform.rotation = GameObject.FindWithTag("DoorNode").gameObject.transform.rotation;
+        transform.position = GameObject.FindWithTag("DoorNode").gameObject.transform.position;
+        animator.Play("EnteringCar");*/
+        if ( gameplayManager.missions[dataController.GetSelectedLevel()].weaponNeeded  && shootBehaviour.activeWeapon==0)
+        {
+            StartCoroutine(PickUpWeaponText());
+        }
+        else
+        {
+            gameplayCarController.SwitchCameraToCar();
+            gameplayManager.playerCar[dataController.GetSelectedVehicle()].GetComponent<Rigidbody>().drag = 0;
+        }
+        
+    }
+    
+    private IEnumerator PickUpWeaponText () 
+    {
+        pickUpWeaponText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(3f);
+        pickUpWeaponText.gameObject.SetActive(false);
+        
+    }
+
+    public void FaceAndExitCar()
+    {
+        gameplayCarController.SwitchCameraToPlayer();
+        gameplayManager.playerCar[dataController.GetSelectedVehicle()].GetComponent<Rigidbody>().drag = 5;
+    }
+
+    private void AssureReferences()
+    {
+        if (gameUIManager == null)
+        {
+            gameUIManager = GameUIManager.instance;
+        }
+
+        if (gameplayCarController==null)
+        {
+            gameplayCarController=GameplayCarController.instance;
+        }
+    }
+}

@@ -253,7 +253,7 @@ public class AimBehaviour : GenericBehaviour
     }
 
     // Draw the crosshair when aiming.
-    void OnGUI()
+    /*void OnGUI()
     {
         if (crosshair)
         {
@@ -264,5 +264,21 @@ public class AimBehaviour : GenericBehaviour
                     crosshair.width, crosshair.height), crosshair);
             //	GUI.color=Color.red;
         }
+    }*/
+    void OnGUI()
+    {
+        if (shootBehavior==null)
+        {
+            shootBehavior=ShootBehaviour.instance;
+        }
+
+        if (shootBehavior.activeWeapon==0) return;
+        float mag = behaviourManager.GetCamScript.GetCurrentPivotMagnitude(aimPivotOffset);
+            
+                GUI.DrawTexture(new Rect(Screen.width / 2 - (crosshair.width * 0.75f),
+                    Screen.height / 2 - (crosshair.height * 0.75f),
+                    crosshair.width, crosshair.height), crosshair);
+            //	GUI.color=Color.red;
+        
     }
 }

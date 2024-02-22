@@ -4,15 +4,14 @@ using UnityEngine;
 using TMPro;
 
 
-
 public class TypewriterEffectTextMeshPro : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI _textMeshPro;
 
     public string[] stringArray;
 
-    [SerializeField] float timeBtwnChars;
-    [SerializeField] float timeBtwnWords;
+    [SerializeField] public float timeBtwnChars;
+    [SerializeField] public float timeBtwnWords;
 
     int i = 0;
 
@@ -50,8 +49,6 @@ public class TypewriterEffectTextMeshPro : MonoBehaviour
 
             counter += 1;
             yield return new WaitForSeconds(timeBtwnChars);
-
-
         }
     }
 }

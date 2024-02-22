@@ -120,6 +120,7 @@ public class ShootBehaviour : GenericBehaviour
 		shotDecay = originalShotDecay;
 		castRelativeOrigin = neck.position - this.transform.position;
 		distToHand = (rightHand.position - neck.position).magnitude * 1.5f;
+		
 
 		weaponUIManager = WeaponUIManager.instance;
 	}

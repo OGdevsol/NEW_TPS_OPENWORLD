@@ -8,6 +8,7 @@ public class DataController : MonoBehaviour
   
    public static DataController instance;
     private string selectedLevel = "SelectedLevel";
+    private string selectedVehicle = "SelectedVehicle";
 
     private void Awake()
     {
@@ -23,5 +24,15 @@ public class DataController : MonoBehaviour
     public int GetSelectedLevel()
     {
         return PlayerPrefs.GetInt(selectedLevel);
+    }
+    
+    public void SetSelectedVehicle(int selectedVehicleIndex)
+    {
+        PlayerPrefs.SetInt(selectedVehicle, selectedVehicleIndex);
+    }
+
+    public int GetSelectedVehicle()
+    {
+        return PlayerPrefs.GetInt(selectedVehicle);
     }
 }

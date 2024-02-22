@@ -19,6 +19,7 @@ namespace Gameplay
 public class Mission
 {
     //   public MissionType missionType;
+    public bool weaponNeeded;
     public string missionObjective;
     public Transform playerPosition;
     public List<Wave> waves;

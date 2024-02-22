@@ -109,7 +109,7 @@ namespace EnemyAI
 		void Awake()
 		{
 			instance = this;
-			aimTarget =GameplayManager.instance .targetForEnemy.transform;
+			// aimTarget =GameplayManager.instance .targetForEnemy.transform;
 		//	gameplayManager=GameplayManager.instance;
 			
 			// Setup the references.

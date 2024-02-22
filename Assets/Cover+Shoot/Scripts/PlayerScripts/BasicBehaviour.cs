@@ -370,4 +370,5 @@ public abstract class GenericBehaviour : MonoBehaviour
 	{
 		return canSprint;
 	}
+	
 }
