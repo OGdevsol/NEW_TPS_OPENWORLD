@@ -70,3 +70,11 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+Assets/GameAssets/Environment/UMAR SAB ENVIR/UAMR SAB.prefab.meta
+Assets/GameAssets/ganster envir (1).prefab
+*.anim
+*.mat
+*.prefab
+*.fbx
+*.tif
+*.jpg

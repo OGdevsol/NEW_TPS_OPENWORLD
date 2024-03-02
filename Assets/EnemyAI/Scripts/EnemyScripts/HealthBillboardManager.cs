@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace EnemyAI
@@ -6,13 +7,19 @@ namespace EnemyAI
 	// HealthBillboardManager aligns the health HUD above the object to always face the main camera.
 	public class HealthBillboardManager : MonoBehaviour
 	{
+		public static HealthBillboardManager instance;
 		[Tooltip("How many time health HUD is displayed after the object is shot?")]
 		public float decayDuration = 2f;
 
-		private Camera m_Camera;                                    // Main camera reference.
+	[HideInInspector]	public Camera m_Camera;                                     // Main camera reference.
 		private Image hud, bar;                                     // Health HUD and bar references.
 		private float decayTimer;                                   // Current decay timer.
 		private Color originalColor, noAlphaColor;                  // Health HUD color references.
+
+		private void Awake()
+		{
+			instance = this;
+		}
 
 		private void Start()
 		{
@@ -30,6 +37,10 @@ namespace EnemyAI
 		//Orient billboard after all camera movement is completed in this frame to avoid jittering
 		void LateUpdate()
 		{
+			if (m_Camera==null)
+			{
+				m_Camera = GameplayCarController.instance.playerCamera.GetComponent<Camera>();
+			}
 			if (!gameObject.activeSelf) return;
 			// Orientate HUD.
 			transform.LookAt(transform.position + m_Camera.transform.rotation * Vector3.forward,

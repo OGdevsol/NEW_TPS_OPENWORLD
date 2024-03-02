@@ -70,6 +70,7 @@ namespace EnemyAI
             weapon = weapon.parent;
             gameplayManager = GameplayManager.instance;
             hudElement = gameObject.GetComponentInChildren<HUDNavigationElement>();
+            NullChecker();
         }
 
         /*private void OnEnable()
@@ -80,15 +81,18 @@ namespace EnemyAI
         public override void TakeDamage(Vector3 location, Vector3 direction, float damage, Collider bodyPart,
             GameObject origin = null)
         {
+           
+            
             // Headshot multiplier. On default values, instantly kills NPC.
             if (!dead && headshot && bodyPart.transform == anim.GetBoneTransform(HumanBodyBones.Head))
             {
+              
                 // Default damage multiplier is 10x.
                 damage *= 10;
                 // Call headshot HUD callback, if any.
                 GameObject.FindGameObjectWithTag("GameController")
                     .SendMessage("HeadShotCallback", SendMessageOptions.DontRequireReceiver);
-                StartCoroutine(HeadshotSlowmotion());
+                // StartCoroutine(HeadshotSlowmotion());
             }
 
             // Create spouted blood particle on shot location.
@@ -127,7 +131,9 @@ namespace EnemyAI
         // Remove unnecessary components on killed NPC and set as dead.
         public void Kill()
         {
-            x = gameplayManager.enemiesInLevel
+            NullChecker();
+            
+            x =  GameplayManager.instance.enemiesInLevel
                 .IndexOf(transform);
             // Destroy all other MonoBehaviour scripts attached to the NPC.
             foreach (MonoBehaviour mb in this.GetComponents<MonoBehaviour>())
@@ -142,20 +148,22 @@ namespace EnemyAI
             Destroy(weapon.gameObject);
             Destroy(hud.gameObject);
             dead = true;
-            gameplayManager.enemiesInLevel.RemoveAt(x);
+           GameplayManager.instance.enemiesInLevel.RemoveAt(x);
+      //     Debug.Log("Removed Enemy" +  GameplayManager.instance.enemiesInLevel[x] );
             print("Enemy Removed from list");
             if (hudElement)
             {
                 hudElement.enabled = false;
             }
 
-            CheckEnemiesInLevel();
+          //  CheckEnemiesInLevel();
         }
 
 
-        private IEnumerator HeadshotSlowmotion()
+        /*private IEnumerator HeadshotSlowmotion()
         {
-            x = gameplayManager.enemiesInLevel
+           NullChecker();
+            x = gameplayManager .enemiesInLevel
                 .IndexOf(transform);
             Time.timeScale = 0.45f;
             gameUIManager.headshotEffect.SetActive(true);
@@ -163,12 +171,12 @@ namespace EnemyAI
             yield return new WaitForSeconds(1.25f);
             gameUIManager.headshotEffect.SetActive(false);
             Time.timeScale = 1;
-        }
+        }*/
 
 
         private void CheckEnemiesInLevel()
         {
-            if (gameplayManager.enemiesInLevel.Count == 0)
+            if (gameplayManager .enemiesInLevel.Count == 0)
             {
                 missionCompleteManager.CompleteMission();
             }
@@ -198,6 +206,14 @@ namespace EnemyAI
         /*private void OnDisable()
         {
             MissionCompleteManager.onMissionComplete -= HandleLevelComplete;
+            
         }*/
+        private void NullChecker()
+        {
+            gameplayManager??=GameplayManager.instance;
+            gameUIManager??=GameUIManager.instance;
+            hudElement ??= GetComponent<HUDNavigationElement>();
+        }
     }
+    
 }

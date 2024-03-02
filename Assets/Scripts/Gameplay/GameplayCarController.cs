@@ -11,7 +11,7 @@ public class GameplayCarController : MonoBehaviour
     public Transform rccCam;
     public Transform playerCamera;
     private bool isSwitchingCamera = false; // Flag to track if camera is currently being switched.
-    private float switchDuration = 1.5f; // Duration of camera switch animation.
+    private float switchDuration = 1.530f; // Duration of camera switch animation.
    
     public GameObject getInCarPlayer;
     public GameObject getOutOfCarPlayer;
@@ -56,6 +56,7 @@ public class GameplayCarController : MonoBehaviour
     {
        
         GameplayManager.instance.player.GetComponentInChildren<SkinnedMeshRenderer>().enabled  = false;
+        
         getInCarPlayer.SetActive(true);
         ShootBehaviour.instance.activeWeapon = 0;
         inCar = true;
@@ -89,7 +90,7 @@ public class GameplayCarController : MonoBehaviour
         switchTimer += Time.deltaTime;
         if (fromTransform==rccCam.transform)
         {
-            Debug.Log("SWITCHING FROM RCCCCCCCCCCCCC");
+//            Debug.Log("SWITCHING FROM RCCCCCCCCCCCCC");
             ShowPlayerExitingCar();
           
         }
@@ -194,8 +195,7 @@ private void UpdateGameState(Transform fromTransform, Transform toTransform)
 
 
 
-
-    private void NullChecker()
+private void NullChecker()
     {
         gameUIManager??=GameUIManager.instance;
         hns??= FindObjectOfType<HUDNavigationSystem>();

@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 // This class corresponds to any in-game weapon interactions.
@@ -39,7 +42,7 @@ public class InteractiveWeapon : MonoBehaviour
 	private WeaponUIManager weaponHud;                        // Reference to on-screen weapon HUD.
 	private bool pickable;                                    // Boolean to store whether or not the weapon is pickable (player within radius).
 	private Transform pickupHUD;                              // Reference to the weapon pickup in-game label.
-
+	private GameUIManager gameUIManager;
 	void Awake()
 	{
 		instance = this;
@@ -82,7 +85,8 @@ public class InteractiveWeapon : MonoBehaviour
 		// Set default values.
 		fullMag = mag;
 		maxBullets = totalBullets;
-		pickupHUD.gameObject.SetActive(false);
+	//	pickupHUD.gameObject.SetActive(false);
+		gameUIManager=GameUIManager.instance;
 	}
 
 	// Create the sphere of interaction with player.
@@ -92,6 +96,33 @@ public class InteractiveWeapon : MonoBehaviour
 		interactiveRadius.center = center;
 		interactiveRadius.radius = 1f;
 		interactiveRadius.isTrigger = true;
+	}
+
+	private void Start()
+	{
+		//StartCoroutine(WeaponCoroutine());
+	}
+
+	public IEnumerator  WeaponCoroutine()
+	{
+		yield return new WaitForSeconds(1f);
+		// Disable weapon physics.
+		rbody.isKinematic = true;
+		this.col.enabled = false;
+			
+		// Setup weapon and add in player inventory.
+		if (playerInventory==null)
+		{
+			playerInventory =ShootBehaviour.instance;
+		}
+		playerInventory.AddWeapon(this);
+		Destroy(interactiveRadius);
+		this.Toggle(true);
+		this.pickable = false;
+		
+
+		// Change active weapon HUD.
+	//	TooglePickupHUD(false);
 	}
 
 	void Update()
@@ -108,9 +139,16 @@ public class InteractiveWeapon : MonoBehaviour
 			Destroy(interactiveRadius);
 			this.Toggle(true);
 			this.pickable = false;
+			ShootBehaviour.instance.activeWeapon = 0;
 
 			// Change active weapon HUD.
-			TooglePickupHUD(false);
+		//	TooglePickupHUD(false);
+			if (gameUIManager==null)
+			{
+				gameUIManager=GameUIManager.instance;
+			}
+			gameUIManager.pickWeaponButton.gameObject.SetActive(false);
+			
 		}
 	}
 
@@ -129,7 +167,12 @@ public class InteractiveWeapon : MonoBehaviour
 		if (other.gameObject == player)
 		{
 			pickable = false;
-			TooglePickupHUD(false);
+		//	TooglePickupHUD(false);
+			if (gameUIManager==null)
+			{
+				gameUIManager=GameUIManager.instance;
+			}
+			gameUIManager.pickWeaponButton.gameObject.SetActive(false);
 		}
 	}
 
@@ -139,12 +182,17 @@ public class InteractiveWeapon : MonoBehaviour
 		if (other.gameObject == player && playerInventory && playerInventory.isActiveAndEnabled)
 		{
 			pickable = true;
-			TooglePickupHUD(true);
+			//TooglePickupHUD(true);
+			if (gameUIManager==null)
+			{
+				gameUIManager=GameUIManager.instance;
+			}
+			gameUIManager.pickWeaponButton.gameObject.SetActive(true);
 		}
 	}
 
 	// Draw in-game weapon pickup label.
-	private void TooglePickupHUD(bool toogle)
+	/*private void TooglePickupHUD(bool toogle)
 	{
 		pickupHUD.gameObject.SetActive(toogle);
 		if (toogle)
@@ -155,7 +203,7 @@ public class InteractiveWeapon : MonoBehaviour
 			pickupHUD.rotation = Quaternion.LookRotation(direction);
 			pickupHUD.Find("Label").GetComponent<Text>().text = "Pick "+this.gameObject.name;
 		}
-	}
+	}*/
 
 	// Manage weapon active status.
 	public void Toggle(bool active)

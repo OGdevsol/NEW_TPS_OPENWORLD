@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Gameplay;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,7 +28,12 @@ public class HurtHUD : MonoBehaviour
 		this.hurtPrefab = hurtPrefab;
 		this.decayFactor = decayFactor;
 		this.player = player;
-		cam = Camera.main.transform;
+		if (cam==null)
+		{
+			cam = GameplayCarController.instance.playerCamera;
+		}
+		//cam = Camera.main.transform;
+		cam = GameplayCarController.instance.playerCamera;
 	}
 
 	void Update()
