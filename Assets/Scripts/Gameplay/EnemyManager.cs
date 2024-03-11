@@ -23,6 +23,7 @@ public class Mission
     public string missionObjective;
     public Transform playerPosition;
     public List<Wave> waves;
+    public List<Transform> enemiesInLevel;
 }
 
 [Serializable]
@@ -41,6 +42,12 @@ public class Wave
     public float cutsceneDuration;
     public string waveObjective;
     public GameObject waveMissionIndicator;
+}
+
+[Serializable]
+public class EnemiesInLevelTransforms
+{
+    public List<Transform>  enemiesInLevels;
 }
 
 /*[System.Serializable]

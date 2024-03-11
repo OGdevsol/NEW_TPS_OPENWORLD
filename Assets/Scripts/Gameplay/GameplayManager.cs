@@ -15,17 +15,24 @@ namespace Gameplay
 {
     public class GameplayManager : MonoBehaviour
     {
+      
        
         #region Variables
         [Tooltip("Remove this bool and functionality before final build as this is for testing purposes only")]
 
         public bool bShouldPlayCutscene;
 
+        public bool bShouldSpawnEnemies;
+
         public static GameplayManager instance;
         public GameObject environment;
      
         [Header("____Player And Enemy Data____"), Space(10)]
         public GameObject player;
+
+        public Transform impactDirection;
+       
+        
 
         public GameObject targetForEnemy;
         public GameObject[] enemyVariantsPrefab;
@@ -45,7 +52,8 @@ namespace Gameplay
         [Header("______________")]
         [Header("____DO NOT MODIFY, DEBUG DATA____"), Space(10)]
         [SerializeField]
-        public List<Transform> enemiesInLevel;
+      //   public List<Transform> enemiesInLevel;
+      //  public List<EnemiesInLevelTransforms> enemiesList;
 
         public List<Transform> hudElement;
         [SerializeField]private GameObject postProcessVolume;
@@ -80,7 +88,7 @@ namespace Gameplay
           //  QualitySettings.SetQualityLevel(3);
             instance = this;
             DataCache();
-            dataController.SetSelectedLevel(0);
+            dataController.SetSelectedLevel(dataController.GetSelectedLevel());
             Time.timeScale = 1;
             environment.SetActive(true);
             ActivateCurrentLevel();
@@ -96,6 +104,11 @@ namespace Gameplay
           
             Debug.Log(QualitySettings.currentLevel);
             Debug.Log(QualitySettings.GetQualityLevel());
+            if (bShouldSpawnEnemies)
+            {
+                SpawnEnemies();
+            }
+            
 
 
         }
@@ -140,6 +153,7 @@ namespace Gameplay
 
         private void SpawnEnemies()
         {
+            
             int j;
             var selectedWave = missions[dataController.GetSelectedLevel()].waves[waveToKeepActive];
 
@@ -149,9 +163,10 @@ namespace Gameplay
                 var enemyTypeIndex = CheckEnemyType(j);
 
                 var enemy = Instantiate(enemyVariantsPrefab[enemyTypeIndex], enemyData.enemyPosition);
-                enemiesInLevel.Add(enemy.transform);
-                HUDNavigationElement hudElementEnemy = enemiesInLevel[j].GetComponentInChildren<HUDNavigationElement>();
-                hudElement.Add(hudElementEnemy.transform);
+                
+               missions[dataController.GetSelectedLevel()].enemiesInLevel.Add(enemy.transform);
+               HUDNavigationElement hudElementEnemy =   missions[dataController.GetSelectedLevel()].enemiesInLevel[j].GetComponentInChildren<HUDNavigationElement>();
+               hudElement.Add(hudElementEnemy.transform);
 
 
                 if (IsShootingEnemy(enemyData.enemyType))
@@ -211,6 +226,10 @@ namespace Gameplay
                 }*/
 
                 missions[dataController.GetSelectedLevel()].waves[waveToKeepActive].waveCutscene.SetActive(false);
+                yield return new WaitForSecondsRealtime(0.25f);
+                Debug.LogError("CHANGING");
+                ShootBehaviour.instance.ChangeWeapon(ShootBehaviour.instance.activeWeapon,0);
+                Debug.LogError("CHANGINGDone");
 
 
             }
@@ -248,35 +267,17 @@ namespace Gameplay
                 }*/
 
                 missions[dataController.GetSelectedLevel()].waves[waveToKeepActive].waveCutscene.SetActive(false);
+                yield return new WaitForSecondsRealtime(0.25f);
+                Debug.Log("CHANGING");
+                ShootBehaviour.instance.ChangeWeapon(ShootBehaviour.instance.activeWeapon,0);
+                Debug.Log("CHANGINGDone");
+
 
 
             }
          }
 
-         public void SetUltra()
-        {
-           // postProcessVolume.SetActive(true);
-         //   postProcessVolume.GetComponent<PostProcessVolume>().weight = 1f;
-            QualitySettings.SetQualityLevel(4);
-            Debug.Log(QualitySettings.currentLevel);
-            Debug.Log(QualitySettings.GetQualityLevel());
-        }
-        public void SetMedium()
-        {
-           // postProcessVolume.SetActive(true);
-        //    postProcessVolume.GetComponent<PostProcessVolume>().weight = 0.5f;
-            QualitySettings.SetQualityLevel(3);
-            Debug.Log(QualitySettings.currentLevel);
-            Debug.Log(QualitySettings.GetQualityLevel());
-        }
         
-        public void SetLow()
-        {// postProcessVolume.SetActive(false);
-       
-            QualitySettings.SetQualityLevel(0);
-            Debug.Log(QualitySettings.currentLevel);
-            Debug.Log(QualitySettings.GetQualityLevel());
-        }
 
 
 
@@ -301,7 +302,33 @@ namespace Gameplay
                 _ => -1
             };
         }
+        public void SetUltra()
+        {
+            // postProcessVolume.SetActive(true);
+            //   postProcessVolume.GetComponent<PostProcessVolume>().weight = 1f;
+            QualitySettings.SetQualityLevel(4);
+            Debug.Log(QualitySettings.currentLevel);
+            Debug.Log(QualitySettings.GetQualityLevel());
+        }
+        public void SetMedium()
+        {
+            // postProcessVolume.SetActive(true);
+            //    postProcessVolume.GetComponent<PostProcessVolume>().weight = 0.5f;
+            QualitySettings.SetQualityLevel(3);
+            Debug.Log(QualitySettings.currentLevel);
+            Debug.Log(QualitySettings.GetQualityLevel());
+        }
+        
+        public void SetLow()
+        {// postProcessVolume.SetActive(false);
+       
+            QualitySettings.SetQualityLevel(0);
+            Debug.Log(QualitySettings.currentLevel);
+            Debug.Log(QualitySettings.GetQualityLevel());
+        }
     }
+    
+    
 
   
 }

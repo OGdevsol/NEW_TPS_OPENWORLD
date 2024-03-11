@@ -29,14 +29,15 @@ public class MissionInstructionsAndEffects : MonoBehaviour
             yield return new WaitForSecondsRealtime(gameplayManager.missions[dataController.GetSelectedLevel()].waves[0]
                 .cutsceneDuration);
             yield return new WaitForSecondsRealtime(playAfterWaitDuration);
-            audios[0].Play();
+            audios?[0].Play();
         }
         
         if (!gameplayManager.bShouldPlayCutscene)
         {
            
             yield return new WaitForSecondsRealtime(playAfterWaitDuration);
-            audios[0].Play();
+            audios?[0].Play();
+
         }
        
     }

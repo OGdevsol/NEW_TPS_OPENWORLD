@@ -133,7 +133,7 @@ namespace EnemyAI
         {
             NullChecker();
             
-            x =  GameplayManager.instance.enemiesInLevel
+            x =  GameplayManager.instance. missions[DataController.instance.GetSelectedLevel()].enemiesInLevel
                 .IndexOf(transform);
             // Destroy all other MonoBehaviour scripts attached to the NPC.
             foreach (MonoBehaviour mb in this.GetComponents<MonoBehaviour>())
@@ -148,7 +148,7 @@ namespace EnemyAI
             Destroy(weapon.gameObject);
             Destroy(hud.gameObject);
             dead = true;
-           GameplayManager.instance.enemiesInLevel.RemoveAt(x);
+           GameplayManager.instance. missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.RemoveAt(x);
       //     Debug.Log("Removed Enemy" +  GameplayManager.instance.enemiesInLevel[x] );
             print("Enemy Removed from list");
             if (hudElement)
@@ -176,7 +176,7 @@ namespace EnemyAI
 
         private void CheckEnemiesInLevel()
         {
-            if (gameplayManager .enemiesInLevel.Count == 0)
+            if (gameplayManager . missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.Count == 0)
             {
                 missionCompleteManager.CompleteMission();
             }
@@ -214,6 +214,43 @@ namespace EnemyAI
             gameUIManager??=GameUIManager.instance;
             hudElement ??= GetComponent<HUDNavigationElement>();
         }
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.tag=="Player")
+            {
+                //   Instantiate(bloodSample, location, Quaternion.LookRotation(-direction), this.transform);
+                // Take damage received from current health.
+                health -= 110;
+
+                // Is the NPC alive?
+                if (!dead)
+                {
+                    // Trigger hit animation.
+                    if (!anim.IsInTransition(3) && anim.GetCurrentAnimatorStateInfo(3).IsName("No hit"))
+                        anim.SetTrigger(Hit);
+                    // Show Health bar HUD.
+                    healthUI.SetVisible();
+                    UpdateHealthBar();
+                    // Update FSM related references.
+                    controller.variables.feelAlert = true;
+                    controller.personalTarget = controller.aimTarget.position;
+                }
+
+                // Time to die.
+                if (health <= 0)
+                {
+                    // Kill the NPC?
+                    if (!dead)
+                        Kill();
+
+                    // Shooting a dead body? Just apply shot force on the ragdoll part.
+                    //  bodyPart.GetComponent<Rigidbody>().AddForce(120f * direction.normalized, ForceMode.Impulse);
+                    Debug.Log("THIS ENEMY IS DEAD");
+                    //gameObject.GetComponent<HUDNavigationElement>().enabled = false;
+                }
+            }
+        }
     }
+    
     
 }

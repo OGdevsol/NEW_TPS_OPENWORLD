@@ -311,7 +311,7 @@ public class ShootBehaviour : GenericBehaviour
 	}
 
 	// Change the active weapon.
-	private void ChangeWeapon(int oldWeapon, int newWeapon)
+	public void ChangeWeapon(int oldWeapon, int newWeapon)
 	{
 		// Previously armed? Disable weapon.
 		if (oldWeapon > 0)

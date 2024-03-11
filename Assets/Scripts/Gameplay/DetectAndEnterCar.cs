@@ -16,6 +16,7 @@ public class DetectAndEnterCar : MonoBehaviour
     private GameplayManager gameplayManager;
     private DataController dataController;
     public GameObject carDoor;
+  
 
 
   
@@ -77,9 +78,14 @@ public class DetectAndEnterCar : MonoBehaviour
     public void CarDoorOpenAnimation()
     {
          gameplayManager.playerCar[dataController.GetSelectedVehicle()].GetComponentInChildren<CarDoorElement>().transform.gameObject.GetComponent<Animator>().Play("OpenAnimation",-1,0f);
-         Debug.Log("Playing Door Animation");
+         Debug.Log("Playing Opening Door Animation");
     }
-    
+    public void CarDoorOpenAnimationFast()
+    {
+        gameplayManager.playerCar[dataController.GetSelectedVehicle()].GetComponentInChildren<CarDoorElement>().transform.gameObject.GetComponent<Animator>().Play("CloseAnimation",-1,0f);
+        Debug.Log("Playing Closing Door Animation");
+    }
+
     
     
     

@@ -177,6 +177,7 @@ public class AimBehaviour : GenericBehaviour
         }
     }
 
+    private Vector3 direction;
     public void AutoFire()
     {
         Ray ray = new Ray(behaviourManager.playerCamera.position, behaviourManager.playerCamera.forward * 1000);
@@ -211,10 +212,67 @@ public class AimBehaviour : GenericBehaviour
                         }
                     }
                 }
+                if (hit.collider.tag == "Population" && shootBehavior != null)
+                {
+                    if (!shootBehavior.isShooting && shootBehavior.activeWeapon > 0 &&
+                        shootBehavior.burstShotCount == 0)
+                    {
+                        shootBehavior.isShooting = true;
+                        shootBehavior.ShootWeapon(shootBehavior.activeWeapon);
+                        Debug.Log("Shooting at population");
+                        Debug.Log("Shooting at" + hit.collider.name);
+                        if (hit.transform.gameObject.GetComponent<Animator>())
+                        {
+                            Debug.Log("OBJECTS FOUNd");
+                            hit.transform.gameObject.GetComponent<Animation>().enabled = false;
+                            hit.transform.gameObject.GetComponent<WaypointMover>().enabled = false;
+                         //   hit.transform.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+                         //   hit.transform.gameObject.GetComponent<BoxCollider>().isTrigger = false;
+                           hit.transform.gameObject.GetComponent<BoxCollider>().enabled = false;
+                            foreach (Rigidbody member in hit.transform.gameObject.GetComponentsInChildren<Rigidbody>())
+                            {
+                                member.isKinematic = false;
+                                member.velocity = Vector3.zero;
+                            }
+                            StartCoroutine(DeadBodyRoutine(hit.collider));
+                        }
+                       
+
+                        if (weaponUIManager.bulletsLeftInMag <= 0)
+                        {
+                            if (shootBehavior.weapons[shootBehavior.activeWeapon].StartReload())
+                            {
+                                AudioSource.PlayClipAtPoint(
+                                    shootBehavior.weapons[shootBehavior.activeWeapon].reloadSound,
+                                    shootBehavior.gunMuzzle.position, 0.5f);
+                                behaviourManager.GetAnim.SetBool(shootBehavior.reloadBool, true);
+                             
+                            }
+                        }
+
+                        if ( hit.transform.gameObject.GetComponent<Rigidbody>())
+                        {
+                            hit.transform.gameObject.GetComponent<Rigidbody>().AddForce(20f * direction.normalized, ForceMode.Impulse);
+                        }
+
+                       
+                    }
+                }
+
+                
             }
         }
     }
+    private IEnumerator DeadBodyRoutine(Collider other)
+    {
+        yield return new WaitForSeconds(1.5f);
+        if (other!=null)
+        {
+            Destroy(other.gameObject);
 
+        }
+      
+    }
     // Rotate the player to match correct orientation, according to camera.
     void Rotating()
     {

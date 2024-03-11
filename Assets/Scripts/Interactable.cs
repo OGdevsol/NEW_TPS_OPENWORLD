@@ -16,9 +16,9 @@ public class Interactable : MonoBehaviour
 
    private void OnTriggerEnter(Collider other)
    {
-      x = GameplayManager.instance.enemiesInLevel
+      x = GameplayManager.instance. missions[DataController.instance.GetSelectedLevel()].enemiesInLevel
          .IndexOf(transform);
-      GameplayManager.instance .enemiesInLevel.RemoveAt(x);
+      GameplayManager.instance . missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.RemoveAt(x);
       print("File Removed from list");
 //      print(gameplayManager.enemiesInLevel.Count);
       gameObject.SetActive(false);
