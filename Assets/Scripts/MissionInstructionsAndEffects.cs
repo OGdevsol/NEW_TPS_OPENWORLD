@@ -19,7 +19,7 @@ public class MissionInstructionsAndEffects : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(MissionIntroductionCoRoutine());
+    //    StartCoroutine(MissionIntroductionCoRoutine());
     }
 
     private IEnumerator MissionIntroductionCoRoutine()

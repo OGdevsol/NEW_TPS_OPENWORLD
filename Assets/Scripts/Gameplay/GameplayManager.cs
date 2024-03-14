@@ -88,7 +88,7 @@ namespace Gameplay
           //  QualitySettings.SetQualityLevel(3);
             instance = this;
             DataCache();
-            dataController.SetSelectedLevel(dataController.GetSelectedLevel());
+            dataController.SetSelectedLevel(2);
             Time.timeScale = 1;
             environment.SetActive(true);
             ActivateCurrentLevel();

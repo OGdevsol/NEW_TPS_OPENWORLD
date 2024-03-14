@@ -14,14 +14,23 @@ public class Interactable : MonoBehaviour
       gameplayManager=GameplayManager.instance;
    }
 
+   private void Start()
+   {
+      
+   }
+
    private void OnTriggerEnter(Collider other)
    {
-      x = GameplayManager.instance. missions[DataController.instance.GetSelectedLevel()].enemiesInLevel
-         .IndexOf(transform);
-      GameplayManager.instance . missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.RemoveAt(x);
-      print("File Removed from list");
+      if (other.CompareTag("Player"))
+      {
+         x = GameplayManager.instance. missions[DataController.instance.GetSelectedLevel()].enemiesInLevel
+            .IndexOf(transform);
+         GameplayManager.instance . missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.RemoveAt(x);
+         print("File Removed from list");
 //      print(gameplayManager.enemiesInLevel.Count);
-      gameObject.SetActive(false);
+         gameObject.SetActive(false);
+      }
+     
       
    }
 }

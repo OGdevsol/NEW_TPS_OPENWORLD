@@ -26,10 +26,13 @@ public class AimBehaviour : GenericBehaviour
     private InteractiveWeapon interactiveWeapon;
 
     private WeaponUIManager weaponUIManager;
+    private IEnumerator myCoroutine;
 
+    private Collider coll;
     // Start is always called after any Awake functions.
     void Start()
     {
+        
         // Set up the references.
         aimBool = Animator.StringToHash("Aim");
 
@@ -58,6 +61,7 @@ public class AimBehaviour : GenericBehaviour
 
         interactiveWeapon = InteractiveWeapon.instance;
         weaponUIManager = WeaponUIManager.instance;
+        myCoroutine = CollisionScript.instance.GestureCoRoutine(coll);
     }
 
     // Update is used to set features regardless the active behaviour.
@@ -177,6 +181,8 @@ public class AimBehaviour : GenericBehaviour
         }
     }
 
+   
+
     private Vector3 direction;
     public void AutoFire()
     {
@@ -212,52 +218,62 @@ public class AimBehaviour : GenericBehaviour
                         }
                     }
                 }
-                if (hit.collider.tag == "Population" && shootBehavior != null)
+                if (hit.collider.CompareTag("Population") && shootBehavior != null)
                 {
-                    if (!shootBehavior.isShooting && shootBehavior.activeWeapon > 0 &&
-                        shootBehavior.burstShotCount == 0)
+                    WaypointMover waypointMover = hit.collider.GetComponent<WaypointMover>();
+                    Animator animator = hit.collider.GetComponent<Animator>();
+                    Animation animation = hit.collider.GetComponent<Animation>();
+
+                    if (!waypointMover.isDead && !shootBehavior.isShooting && shootBehavior.activeWeapon > 0 && shootBehavior.burstShotCount == 0)
                     {
+                        waypointMover.isDead = true;
+                        
+                        CollisionScript.instance.StopCoroutine(CollisionScript.instance.GestureCoRoutine(coll));
                         shootBehavior.isShooting = true;
                         shootBehavior.ShootWeapon(shootBehavior.activeWeapon);
                         Debug.Log("Shooting at population");
-                        Debug.Log("Shooting at" + hit.collider.name);
-                        if (hit.transform.gameObject.GetComponent<Animator>())
-                        {
-                            Debug.Log("OBJECTS FOUNd");
-                            hit.transform.gameObject.GetComponent<Animation>().enabled = false;
-                            hit.transform.gameObject.GetComponent<WaypointMover>().enabled = false;
-                         //   hit.transform.gameObject.GetComponent<Rigidbody>().isKinematic = false;
-                         //   hit.transform.gameObject.GetComponent<BoxCollider>().isTrigger = false;
-                           hit.transform.gameObject.GetComponent<BoxCollider>().enabled = false;
-                            foreach (Rigidbody member in hit.transform.gameObject.GetComponentsInChildren<Rigidbody>())
-                            {
-                                member.isKinematic = false;
-                                member.velocity = Vector3.zero;
-                            }
-                            StartCoroutine(DeadBodyRoutine(hit.collider));
-                        }
-                       
+                        Debug.Log("Shooting at " + hit.collider.name);
 
-                        if (weaponUIManager.bulletsLeftInMag <= 0)
+                        if (animator)
                         {
-                            if (shootBehavior.weapons[shootBehavior.activeWeapon].StartReload())
-                            {
-                                AudioSource.PlayClipAtPoint(
-                                    shootBehavior.weapons[shootBehavior.activeWeapon].reloadSound,
-                                    shootBehavior.gunMuzzle.position, 0.5f);
-                                behaviourManager.GetAnim.SetBool(shootBehavior.reloadBool, true);
-                             
-                            }
+                            animator.enabled = false;
+                            Debug.Log("OBJECTS FOUND");
+                        }
+                        if (animation)
+                        {
+                            animation.enabled = false;
                         }
 
-                        if ( hit.transform.gameObject.GetComponent<Rigidbody>())
+                        if (waypointMover)
                         {
-                            hit.transform.gameObject.GetComponent<Rigidbody>().AddForce(20f * direction.normalized, ForceMode.Impulse);
+                            waypointMover.enabled = false;
                         }
 
-                       
+                        hit.collider.enabled = false;
+                        foreach (Rigidbody member in hit.collider.GetComponentsInChildren<Rigidbody>())
+                        {
+                            member.isKinematic = false;
+                            member.velocity = Vector3.zero;
+                        }
+
+                        StartCoroutine(DeadBodyRoutine(hit.collider));
+
+                        if (weaponUIManager.bulletsLeftInMag <= 0 && shootBehavior.weapons[shootBehavior.activeWeapon].StartReload())
+                        {
+                            AudioSource.PlayClipAtPoint(
+                                shootBehavior.weapons[shootBehavior.activeWeapon].reloadSound,
+                                shootBehavior.gunMuzzle.position, 0.5f);
+                            behaviourManager.GetAnim.SetBool(shootBehavior.reloadBool, true);
+                        }
+
+                        Rigidbody hitRigidbody = hit.collider.GetComponent<Rigidbody>();
+                        if (hitRigidbody)
+                        {
+                            hitRigidbody.AddForce(20f * direction.normalized, ForceMode.Impulse);
+                        }
                     }
                 }
+               
 
                 
             }
@@ -265,10 +281,10 @@ public class AimBehaviour : GenericBehaviour
     }
     private IEnumerator DeadBodyRoutine(Collider other)
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2.5f);
         if (other!=null)
         {
-            Destroy(other.gameObject);
+           other.gameObject.SetActive(false);
 
         }
       
@@ -340,3 +356,57 @@ public class AimBehaviour : GenericBehaviour
         
     }
 }
+
+
+
+ /*if (hit.collider.tag == "Population" && shootBehavior != null && !hit.collider.gameObject.GetComponent<WaypointMover>().isDead)
+                {
+                    if (!shootBehavior.isShooting && shootBehavior.activeWeapon > 0 &&
+                        shootBehavior.burstShotCount == 0)
+                    {
+
+                        hit.collider.gameObject.GetComponent<WaypointMover>().isDead = true;
+                        StopCoroutine(CollisionScript.instance.GestureCoRoutine(coll));
+                        shootBehavior.isShooting = true;
+                        shootBehavior.ShootWeapon(shootBehavior.activeWeapon);
+                        Debug.Log("Shooting at population");
+                        Debug.Log("Shooting at" + hit.collider.name);
+                        if (hit.transform.gameObject.GetComponent<Animator>())
+                        {
+                            hit.collider.gameObject.GetComponent<Animator>().enabled = false;
+                            Debug.Log("OBJECTS FOUNd");
+                            hit.transform.gameObject.GetComponent<Animation>().enabled = false;
+                            hit.transform.gameObject.GetComponent<WaypointMover>().enabled = false;
+                         //   hit.transform.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+                         //   hit.transform.gameObject.GetComponent<BoxCollider>().isTrigger = false;
+                         //  hit.transform.gameObject.GetComponent<BoxCollider>().enabled = false;
+                            foreach (Rigidbody member in hit.transform.gameObject.GetComponentsInChildren<Rigidbody>())
+                            {
+                                member.isKinematic = false;
+                                member.velocity = Vector3.zero;
+                            }
+                            StartCoroutine(DeadBodyRoutine(hit.collider));
+                        }
+                       
+
+                        if (weaponUIManager.bulletsLeftInMag <= 0)
+                        {
+                            if (shootBehavior.weapons[shootBehavior.activeWeapon].StartReload())
+                            {
+                                AudioSource.PlayClipAtPoint(
+                                    shootBehavior.weapons[shootBehavior.activeWeapon].reloadSound,
+                                    shootBehavior.gunMuzzle.position, 0.5f);
+                                behaviourManager.GetAnim.SetBool(shootBehavior.reloadBool, true);
+                             
+                            }
+                        }
+
+                        if ( hit.transform.gameObject.GetComponent<Rigidbody>())
+                        {
+                            hit.transform.gameObject.GetComponent<Rigidbody>().AddForce(20f * direction.normalized, ForceMode.Impulse);
+                        }
+
+                       
+                    }
+                }
+                */

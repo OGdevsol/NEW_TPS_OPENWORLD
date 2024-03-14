@@ -8,8 +8,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class WaypointMover : MonoBehaviour 
+public class WaypointMover : MonoBehaviour
 {
+	public bool isDead;
 	// List of following types
 	public enum FollowType 
 	{ 
