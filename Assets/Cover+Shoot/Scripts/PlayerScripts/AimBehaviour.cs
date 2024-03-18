@@ -123,7 +123,7 @@ public class AimBehaviour : GenericBehaviour
     // Co-rountine to end aiming mode with delay.
     public IEnumerator ToggleAimOff()
     {
-        Debug.Log("Turning Off Aim");
+       // Debug.Log("Turning Off Aim");
         aim = false;
         yield return new WaitForSeconds(0.3f);
         behaviourManager.GetCamScript.ResetTargetOffsets();

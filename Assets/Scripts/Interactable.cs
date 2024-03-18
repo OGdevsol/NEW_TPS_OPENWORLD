@@ -8,10 +8,12 @@ public class Interactable : MonoBehaviour
 {
    private int x;
    private GameplayManager gameplayManager;
+   private DataController dataController;
 
    private void Awake()
    {
       gameplayManager=GameplayManager.instance;
+      dataController=DataController.instance;
    }
 
    private void Start()
@@ -23,11 +25,10 @@ public class Interactable : MonoBehaviour
    {
       if (other.CompareTag("Player"))
       {
-         x = GameplayManager.instance. missions[DataController.instance.GetSelectedLevel()].enemiesInLevel
+         x = gameplayManager. missions[dataController.GetSelectedLevel()].enemiesInLevel
             .IndexOf(transform);
-         GameplayManager.instance . missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.RemoveAt(x);
-         print("File Removed from list");
-//      print(gameplayManager.enemiesInLevel.Count);
+         gameplayManager . missions[dataController.GetSelectedLevel()].enemiesInLevel.RemoveAt(x);
+         print("Interactable Removed from list");
          gameObject.SetActive(false);
       }
      

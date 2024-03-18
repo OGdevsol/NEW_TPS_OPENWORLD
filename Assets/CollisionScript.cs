@@ -42,6 +42,8 @@ private void OnTriggerEnter(Collider other)
     
 }
 
+
+
 private void HandleStreetLightCollision(GameObject streetLight)
 {
     Rigidbody streetLightRigidbody = streetLight.GetComponent<Rigidbody>();

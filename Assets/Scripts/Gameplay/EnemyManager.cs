@@ -19,6 +19,16 @@ namespace Gameplay
 public class Mission
 {
     //   public MissionType missionType;
+    [Serializable]
+    public enum MissionType
+    {
+        CutsceneAtStart,
+        CarAtStart,
+        Other,
+        
+    }
+
+    public MissionType missionType;
     public bool weaponNeeded;
     public string missionObjective;
     public Transform playerPosition;

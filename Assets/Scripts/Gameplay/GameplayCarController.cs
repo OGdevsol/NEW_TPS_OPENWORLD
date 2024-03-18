@@ -103,7 +103,7 @@ public class GameplayCarController : MonoBehaviour
     else if (fromTransform==playerCamera.transform)
     {
         switchDuration = getInCarDuration;
-        Debug.Log(getInCarDuration);
+//        Debug.Log(getInCarDuration);
     }
     NullChecker();
     isSwitchingCamera = true;
@@ -143,38 +143,38 @@ public class GameplayCarController : MonoBehaviour
     if (fromTransform.GetComponent<Camera>() != null)
     {
         fromTransform.GetComponent<Camera>().enabled = false;
-        Debug.Log("Disabled camera component on fromTransform.");
+      //  Debug.Log("Disabled camera component on fromTransform.");
     }
     else if (fromTransform.GetComponentInChildren<Camera>() != null)
     {
         fromTransform.GetComponentInChildren<Camera>().enabled = false;
-        Debug.Log("Disabled camera component on a child of fromTransform.");
+      //  Debug.Log("Disabled camera component on a child of fromTransform.");
     }
     else
     {
-        Debug.LogWarning("No camera component found on fromTransform or its children.");
+       /// Debug.LogWarning("No camera component found on fromTransform or its children.");
     }
 
     // Enable the camera component of the `toTransform`.
     if (toTransform.GetComponent<Camera>() != null)
     {
         toTransform.GetComponent<Camera>().enabled = true;
-        Debug.Log("Enabled camera component on toTransform.");
+      //  Debug.Log("Enabled camera component on toTransform.");
     }
     else if (toTransform.GetComponentInChildren<Camera>() != null)
     {
         toTransform.GetComponentInChildren<Camera>().enabled = true;
-        Debug.Log("Enabled camera component on a child of toTransform.");
+//        Debug.Log("Enabled camera component on a child of toTransform.");
     }
     else
     {
-        Debug.LogWarning("No camera component found on toTransform or its children.");
+       // Debug.LogWarning("No camera component found on toTransform or its children.");
     }
 
     // Additional debug logs to check the camera transition.
-    Debug.Log("Camera transition complete.");
-    Debug.Log("From transform: " + fromTransform.name);
-    Debug.Log("To transform: " + toTransform.name);
+  //  Debug.Log("Camera transition complete.");
+   // Debug.Log("From transform: " + fromTransform.name);
+  //  Debug.Log("To transform: " + toTransform.name);
 
     // Update other game state based on camera transition.
     UpdateGameState(fromTransform, toTransform);

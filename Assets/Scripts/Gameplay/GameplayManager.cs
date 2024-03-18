@@ -15,24 +15,21 @@ namespace Gameplay
 {
     public class GameplayManager : MonoBehaviour
     {
-      
-       
         #region Variables
-        [Tooltip("Remove this bool and functionality before final build as this is for testing purposes only")]
 
+        [Tooltip("Remove this bool and functionality before final build as this is for testing purposes only")]
         public bool bShouldPlayCutscene;
 
         public bool bShouldSpawnEnemies;
 
         public static GameplayManager instance;
         public GameObject environment;
-     
+
         [Header("____Player And Enemy Data____"), Space(10)]
         public GameObject player;
 
         public Transform impactDirection;
-       
-        
+
 
         public GameObject targetForEnemy;
         public GameObject[] enemyVariantsPrefab;
@@ -52,11 +49,11 @@ namespace Gameplay
         [Header("______________")]
         [Header("____DO NOT MODIFY, DEBUG DATA____"), Space(10)]
         [SerializeField]
-      //   public List<Transform> enemiesInLevel;
-      //  public List<EnemiesInLevelTransforms> enemiesList;
-
+        //   public List<Transform> enemiesInLevel;
+        //  public List<EnemiesInLevelTransforms> enemiesList;
         public List<Transform> hudElement;
-        [SerializeField]private GameObject postProcessVolume;
+
+        [SerializeField] private GameObject postProcessVolume;
         private RCC_CarControllerV3 rccCar;
 
         public enum EnemyType
@@ -73,7 +70,7 @@ namespace Gameplay
         private GameUIManager gameUIManager;
         private GameplayCarController gameplayCarController;
         private InteractiveWeapon interactiveWeapon;
-       
+
         private int y;
 
         private int
@@ -84,8 +81,7 @@ namespace Gameplay
 
         private void Awake()
         {
-            
-          //  QualitySettings.SetQualityLevel(3);
+            //  QualitySettings.SetQualityLevel(3);
             instance = this;
             DataCache();
             dataController.SetSelectedLevel(2);
@@ -101,59 +97,57 @@ namespace Gameplay
             {
                 StartCoroutine(noCutsceneRoutine());
             }
-          
-            Debug.Log(QualitySettings.currentLevel);
-            Debug.Log(QualitySettings.GetQualityLevel());
+
+            else if (missions[dataController.GetSelectedLevel()].missionType == Mission.MissionType.CutsceneAtStart)
+            {
+                StartCoroutine(CutsceneRoutine());
+            }
+            else if (missions[dataController.GetSelectedLevel()].missionType == Mission.MissionType.CarAtStart)
+            {
+                StartCoroutine(CarAtStartRoutine());
+            }
+
             if (bShouldSpawnEnemies)
             {
                 SpawnEnemies();
             }
-            
-
-
         }
-
-
-
 
 
         private void ActivateCurrentLevel()
         {
             int i;
             int missionLength = missionsGameObjects.Length;
-            for ( i = 0; i < missionLength; i++)
+            for (i = 0; i < missionLength; i++)
             {
                 missionsGameObjects[i].SetActive(false);
             }
+
             missionsGameObjects[dataController.GetSelectedLevel()].SetActive(true);
         }
-       
+
 
         private void DataCache()
         {
             dataController = DataController.instance;
             stateController = StateController.instance;
-            gameUIManager=GameUIManager.instance;
-            gameplayCarController=GameplayCarController.instance;
-            interactiveWeapon=InteractiveWeapon.instance;
-            
-        }
-        private void NullCheck()
-        {
-            dataController??= DataController.instance;
-            stateController??= StateController.instance;
-            gameUIManager??=GameUIManager.instance;
-            gameplayCarController??=GameplayCarController.instance;
-            interactiveWeapon??=InteractiveWeapon.instance;
-            
+            gameUIManager = GameUIManager.instance;
+            gameplayCarController = GameplayCarController.instance;
+            interactiveWeapon = InteractiveWeapon.instance;
         }
 
-       
+        private void NullCheck()
+        {
+            dataController ??= DataController.instance;
+            stateController ??= StateController.instance;
+            gameUIManager ??= GameUIManager.instance;
+            gameplayCarController ??= GameplayCarController.instance;
+            interactiveWeapon ??= InteractiveWeapon.instance;
+        }
 
 
         private void SpawnEnemies()
         {
-            
             int j;
             var selectedWave = missions[dataController.GetSelectedLevel()].waves[waveToKeepActive];
 
@@ -163,10 +157,11 @@ namespace Gameplay
                 var enemyTypeIndex = CheckEnemyType(j);
 
                 var enemy = Instantiate(enemyVariantsPrefab[enemyTypeIndex], enemyData.enemyPosition);
-                
-               missions[dataController.GetSelectedLevel()].enemiesInLevel.Add(enemy.transform);
-               HUDNavigationElement hudElementEnemy =   missions[dataController.GetSelectedLevel()].enemiesInLevel[j].GetComponentInChildren<HUDNavigationElement>();
-               hudElement.Add(hudElementEnemy.transform);
+
+                missions[dataController.GetSelectedLevel()].enemiesInLevel.Add(enemy.transform);
+                HUDNavigationElement hudElementEnemy = missions[dataController.GetSelectedLevel()].enemiesInLevel[j]
+                    .GetComponentInChildren<HUDNavigationElement>();
+                hudElement.Add(hudElementEnemy.transform);
 
 
                 if (IsShootingEnemy(enemyData.enemyType))
@@ -176,25 +171,21 @@ namespace Gameplay
                     if (stateController != null && enemyData.enemyWaypoints != null)
                     {
                         stateController.patrolWayPoints.AddRange(enemyData.enemyWaypoints);
-                      //  Debug.Log(stateController.patrolWayPoints[0].name);
-//                        Debug.Log("Enemies With Waypoints Spawned");
                     }
                 }
                 else
                 {
                     Debug.Log("SpawningFile");
-                    //    Spawn interactable with its properties here
                 }
             }
         }
-         private IEnumerator CutsceneRoutine()
+
+        private IEnumerator CutsceneRoutine()
         {
             NullCheck();
             yield return new WaitForSeconds(0.05f);
-            if (missions[dataController.GetSelectedLevel()].waves[waveToKeepActive].waveCutscene!=null)
+            if (missions[dataController.GetSelectedLevel()].waves[waveToKeepActive].waveCutscene != null)
             {
-                
-              //  Debug.Log("Has Cutscene: " + missions[dataController.GetSelectedLevel()].waves[waveToKeepActive].waveCutscene);
                 gameUIManager.DisableAllCanvases();
                 player.gameObject.SetActive(false);
                 playerCar[dataController.GetSelectedVehicle()].SetActive(false);
@@ -203,7 +194,7 @@ namespace Gameplay
                 missions[dataController.GetSelectedLevel()].waves[waveToKeepActive].waveCutscene.SetActive(true);
                 yield return new WaitForSeconds(missions[dataController.GetSelectedLevel()].waves[waveToKeepActive]
                     .cutsceneDuration);
-                
+
                 playerCar[dataController.GetSelectedVehicle()].SetActive(true);
                 GameplayCarController.instance.playerCamera.gameObject.SetActive(true);
                 GameplayCarController.instance.rccCam.gameObject.SetActive(true);
@@ -211,39 +202,26 @@ namespace Gameplay
                 gameUIManager.pickupCanvas.enabled = true;
                 gameUIManager.gameplayUICanvas.enabled = true;
                 gameUIManager.hUDNavigationCanvas.enabled = true;
-              
-              //  HealthBillboardManager.instance.m_Camera = GameplayCarController.instance.playerCamera.GetComponent<Camera>();
+
+
                 StartCoroutine(interactiveWeapon.WeaponCoroutine());
                 gameUIManager.playerControllerCanvas.enabled = true;
                 player.gameObject.SetActive(true);
-                /*if (gameplayCarController.inCar)
-                {
-                    gameUIManager.rccCanvas.enabled = true;
-                }
-                else
-                {
-                    gameUIManager.playerControllerCanvas.enabled = true;
-                }*/
+
 
                 missions[dataController.GetSelectedLevel()].waves[waveToKeepActive].waveCutscene.SetActive(false);
                 yield return new WaitForSecondsRealtime(0.25f);
-                Debug.LogError("CHANGING");
-                ShootBehaviour.instance.ChangeWeapon(ShootBehaviour.instance.activeWeapon,0);
-                Debug.LogError("CHANGINGDone");
 
-
+                ShootBehaviour.instance.ChangeWeapon(ShootBehaviour.instance.activeWeapon, 0);
             }
         }
 
-         private IEnumerator noCutsceneRoutine()
-         {
-             NullCheck();
-             yield return new WaitForSeconds(0.05f);
-              if (missions[dataController.GetSelectedLevel()].waves[waveToKeepActive].waveCutscene!=null)
+        private IEnumerator noCutsceneRoutine()
+        {
+            NullCheck();
+            yield return new WaitForSeconds(0.05f);
+            if (missions[dataController.GetSelectedLevel()].waves[waveToKeepActive].waveCutscene != null)
             {
-                
-              //  Debug.Log("Has Cutscene: " + missions[dataController.GetSelectedLevel()].waves[waveToKeepActive].waveCutscene);
-         
                 playerCar[dataController.GetSelectedVehicle()].SetActive(true);
                 GameplayCarController.instance.playerCamera.gameObject.SetActive(true);
                 GameplayCarController.instance.rccCam.gameObject.SetActive(true);
@@ -251,37 +229,47 @@ namespace Gameplay
                 gameUIManager.pickupCanvas.enabled = true;
                 gameUIManager.gameplayUICanvas.enabled = true;
                 gameUIManager.hUDNavigationCanvas.enabled = true;
-              
-              //  HealthBillboardManager.instance.m_Camera = GameplayCarController.instance.playerCamera.GetComponent<Camera>();
+
+
                 StartCoroutine(interactiveWeapon.WeaponCoroutine());
                 gameUIManager.playerControllerCanvas.enabled = true;
                 gameUIManager.cutSceneUICanvas.enabled = false;
                 player.gameObject.SetActive(true);
-                /*if (gameplayCarController.inCar)
-                {
-                    gameUIManager.rccCanvas.enabled = true;
-                }
-                else
-                {
-                    gameUIManager.playerControllerCanvas.enabled = true;
-                }*/
+
 
                 missions[dataController.GetSelectedLevel()].waves[waveToKeepActive].waveCutscene.SetActive(false);
                 yield return new WaitForSecondsRealtime(0.25f);
-                Debug.Log("CHANGING");
-                ShootBehaviour.instance.ChangeWeapon(ShootBehaviour.instance.activeWeapon,0);
-                Debug.Log("CHANGINGDone");
 
-
-
+                ShootBehaviour.instance.ChangeWeapon(ShootBehaviour.instance.activeWeapon, 0);
             }
-         }
-
-        
+        }
 
 
+        private IEnumerator CarAtStartRoutine()
+        {
+            yield return new WaitForSecondsRealtime(0.1f);
+            playerCar[dataController.GetSelectedVehicle()].SetActive(true);
+            GameplayCarController.instance.playerCamera.gameObject.SetActive(false);
+            GameplayCarController.instance.playerCamera.gameObject.GetComponent<Camera>().enabled = false;
+            GameplayCarController.instance.rccCam.gameObject.SetActive(true);
+            GameplayCarController.instance.rccCam.gameObject.GetComponentInChildren<Camera>().enabled = true;
+            //   gameUIManager.screenHudCanvas.enabled = true;
+            //  gameUIManager.pickupCanvas.enabled = true;
+            gameUIManager.gameplayUICanvas.enabled = true;
+            gameUIManager.hUDNavigationCanvas.enabled = true;
 
-      
+
+            //   StartCoroutine(interactiveWeapon.WeaponCoroutine());
+            gameUIManager.playerControllerCanvas.enabled = false;
+            player.gameObject.SetActive(false);
+
+
+            //   missions[dataController.GetSelectedLevel()].waves[waveToKeepActive].waveCutscene.SetActive(false);
+            //   yield return new WaitForSecondsRealtime(0.25f);
+
+            //  ShootBehaviour.instance.ChangeWeapon(ShootBehaviour.instance.activeWeapon,0);
+        }
+
 
         private bool IsShootingEnemy(EnemyType enemyType)
         {
@@ -302,33 +290,20 @@ namespace Gameplay
                 _ => -1
             };
         }
+
         public void SetUltra()
         {
-            // postProcessVolume.SetActive(true);
-            //   postProcessVolume.GetComponent<PostProcessVolume>().weight = 1f;
             QualitySettings.SetQualityLevel(4);
-            Debug.Log(QualitySettings.currentLevel);
-            Debug.Log(QualitySettings.GetQualityLevel());
         }
+
         public void SetMedium()
         {
-            // postProcessVolume.SetActive(true);
-            //    postProcessVolume.GetComponent<PostProcessVolume>().weight = 0.5f;
             QualitySettings.SetQualityLevel(3);
-            Debug.Log(QualitySettings.currentLevel);
-            Debug.Log(QualitySettings.GetQualityLevel());
         }
-        
+
         public void SetLow()
-        {// postProcessVolume.SetActive(false);
-       
+        {
             QualitySettings.SetQualityLevel(0);
-            Debug.Log(QualitySettings.currentLevel);
-            Debug.Log(QualitySettings.GetQualityLevel());
         }
     }
-    
-    
-
-  
 }
