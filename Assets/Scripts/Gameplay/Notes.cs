@@ -219,3 +219,106 @@ public void AutoFire()
         }
     }
 }*/
+
+/*
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class MainMenuController : MonoBehaviour
+{
+    public Button continueButton;
+    public Image mainCharacterReferenceImage;
+    public List<Button> genderButtons;
+    public List<Button> characterButtons;
+    public Sprite redMark;
+    public Sprite greenMark;
+    public GameObject[] genderPanels;
+
+    public void OnClickGenderSelection(int index)
+    {
+        int i;
+        int genderButtonsLegth=genderButtons.Count;
+        for (i = 0; i < genderButtonsLegth; i++)
+        {
+            genderButtons[i].image.sprite = redMark;
+            genderPanels[i].SetActive(false);
+        }
+
+        genderButtons[index].image.sprite = greenMark;
+        genderPanels[index].SetActive(true);
+       
+    }
+
+    public void OnClickCharacterSelection(int index)
+    {
+        int i;
+        int characterSelectionButtonsLength = characterButtons.Count;
+        for (i = 0; i < characterSelectionButtonsLength; i++)
+        {
+            characterButtons[i].gameObject.transform.GetChild(0).gameObject.SetActive(false);
+        }
+        characterButtons[index].gameObject.transform.GetChild(0).gameObject.SetActive(true);
+        mainCharacterReferenceImage.sprite = characterButtons[index].image.sprite;
+        continueButton.interactable = true;
+    }
+}
+*/
+
+/*
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class MainMenuController : MonoBehaviour
+{
+    public Button continueButton;
+    public Image mainCharacterReferenceImage;
+    public List<Button> genderButtons;
+    public List<Button> characterButtons;
+    public Sprite redMark;
+    public Sprite greenMark;
+    public GameObject[] genderPanels;
+
+    private List<GameObject>
+        characterChildObjects = new List<GameObject>(); // Cache for child objects of character buttons
+
+    private void Start()
+    {
+        StoreChildren();
+    }
+
+    public void OnClickGenderSelection(int index)
+    {
+        for (var i = 0; i < genderButtons.Count; i++)
+        {
+            genderButtons[i].image.sprite = redMark;
+            genderPanels[i].SetActive(false);
+        }
+        genderButtons[index].image.sprite = greenMark;
+        genderPanels[index].SetActive(true);
+    }
+
+    public void OnClickCharacterSelection(int index)
+    {
+        foreach (var childObject in characterChildObjects)
+        {
+            childObject.SetActive(false);
+        }
+        characterChildObjects[index].SetActive(true);
+        mainCharacterReferenceImage.sprite = characterButtons[index].image.sprite;
+        continueButton.interactable = true;
+    }
+
+    private void StoreChildren()
+    {
+        foreach (var childObject in characterButtons.Select(button => button.gameObject.transform.GetChild(0).gameObject))
+        {
+            characterChildObjects.Add(childObject);
+        }
+    }
+}
+*/

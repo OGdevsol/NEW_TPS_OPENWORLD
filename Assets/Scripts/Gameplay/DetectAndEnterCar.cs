@@ -39,7 +39,7 @@ public class DetectAndEnterCar : MonoBehaviour
     {
         if (other.gameObject.tag == "CarDoor")
         {
-//            Debug.Log("Entering Door Node Region");
+
             AssureReferences();
 
             gameUIManager.getInCarButton.gameObject.SetActive(true);
@@ -51,7 +51,7 @@ public class DetectAndEnterCar : MonoBehaviour
     {
         if (other.gameObject.tag == "CarDoor")
         {
-           // Debug.Log("Exiting Door Node Region");
+         
             gameUIManager.getInCarButton.gameObject.SetActive(false);
           //  gameplayCarController.SwitchCameraToPlayer();
         }
@@ -70,12 +70,12 @@ public class DetectAndEnterCar : MonoBehaviour
     public void CarDoorOpenAnimation()
     {
          gameplayManager.playerCar[dataController.GetSelectedVehicle()].GetComponentInChildren<CarDoorElement>().transform.gameObject.GetComponent<Animator>().Play("OpenAnimation",-1,0f);
-      //   Debug.Log("Playing Opening Door Animation");
+     
     }
     public void CarDoorOpenAnimationFast()
     {
         gameplayManager.playerCar[dataController.GetSelectedVehicle()].GetComponentInChildren<CarDoorElement>().transform.gameObject.GetComponent<Animator>().Play("CloseAnimation",-1,0f);
-      //  Debug.Log("Playing Closing Door Animation");
+     
     }
 
     
@@ -97,14 +97,7 @@ public class DetectAndEnterCar : MonoBehaviour
 
     private void AssureReferences()
     {
-        if (gameUIManager == null)
-        {
-            gameUIManager = GameUIManager.instance;
-        }
-
-        if (gameplayCarController==null)
-        {
-            gameplayCarController=GameplayCarController.instance;
-        }
+        gameUIManager??=GameUIManager.instance;
+       gameplayCarController??=GameplayCarController.instance;
     }
 }

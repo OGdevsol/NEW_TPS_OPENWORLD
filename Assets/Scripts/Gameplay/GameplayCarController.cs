@@ -143,38 +143,36 @@ public class GameplayCarController : MonoBehaviour
     if (fromTransform.GetComponent<Camera>() != null)
     {
         fromTransform.GetComponent<Camera>().enabled = false;
-      //  Debug.Log("Disabled camera component on fromTransform.");
+     
     }
     else if (fromTransform.GetComponentInChildren<Camera>() != null)
     {
         fromTransform.GetComponentInChildren<Camera>().enabled = false;
-      //  Debug.Log("Disabled camera component on a child of fromTransform.");
+      
     }
     else
     {
-       /// Debug.LogWarning("No camera component found on fromTransform or its children.");
+        Debug.LogWarning("No camera component found on fromTransform or its children.");
     }
 
     // Enable the camera component of the `toTransform`.
     if (toTransform.GetComponent<Camera>() != null)
     {
         toTransform.GetComponent<Camera>().enabled = true;
-      //  Debug.Log("Enabled camera component on toTransform.");
+      
     }
     else if (toTransform.GetComponentInChildren<Camera>() != null)
     {
         toTransform.GetComponentInChildren<Camera>().enabled = true;
-//        Debug.Log("Enabled camera component on a child of toTransform.");
+
     }
     else
     {
-       // Debug.LogWarning("No camera component found on toTransform or its children.");
+        Debug.LogWarning("No camera component found on toTransform or its children.");
     }
 
     // Additional debug logs to check the camera transition.
-  //  Debug.Log("Camera transition complete.");
-   // Debug.Log("From transform: " + fromTransform.name);
-  //  Debug.Log("To transform: " + toTransform.name);
+ 
 
     // Update other game state based on camera transition.
     UpdateGameState(fromTransform, toTransform);
@@ -195,7 +193,7 @@ private void UpdateGameState(Transform fromTransform, Transform toTransform)
     
       
         // Update game state when transitioning from player to car camera.
-       // Debug.Log("Switching From Player To RCC");
+   
         gameUIManager.rccCanvas.enabled = true;
         gameUIManager.playerControllerCanvas.enabled = false;
         gameUIManager.gameplayUICanvas.enabled = true;
@@ -216,18 +214,12 @@ private void UpdateGameState(Transform fromTransform, Transform toTransform)
         gameUIManager.getOutOfCarButton.gameObject.SetActive(false);
       
         gameplayManager.player.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
-        /*if (ShootBehaviour.instance.activeWeapon != 0)
-        {
-            gameplayManager.player.GetComponentInChildren<MeshRenderer>().enabled = true;
-        }*/
-
        
-      //  gameplayManager.player.GetComponentInChildren<HUDNavigationElement>().enabled = true;
         getOutOfCarPlayer.SetActive(false);
         gameplayManager.player.transform.position=playerOutOfCarPosition.position;
           hns.PlayerCamera = playerCamera.GetComponent<Camera>();
         hns.PlayerController = gameplayManager.player.transform;
-      //  shootBehaviour.activeWeapon = 1;
+     
       Debug.Log("Active Weapon Is " + ShootBehaviour.instance.activeWeapon);
 
         if (ShootBehaviour.instance.activeWeapon != 0)

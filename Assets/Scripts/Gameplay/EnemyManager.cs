@@ -18,11 +18,11 @@ namespace Gameplay
 [Serializable]
 public class Mission
 {
-    //   public MissionType missionType;
+ 
     [Serializable]
     public enum MissionType
     {
-        CutsceneAtStart,
+        ThirdPersonAtStart,
         CarAtStart,
         Other,
         
@@ -60,69 +60,3 @@ public class EnemiesInLevelTransforms
     public List<Transform>  enemiesInLevels;
 }
 
-/*[System.Serializable]
-public class Levels
-{
-    [Serializable]
-    public enum CuttSenEnum
-    {
-        Yes,
-        No,
-    }
-
-    public Enemy[] enemies;
-    public CuttSenEnum cutSceneEnum;
-    public Transform startPos, endPos;
-   // public GameObject  levels; 
-    public GameObject cutsceen;
-    public float cutsceneDuration;
-
-}
-
-[Serializable]
-public class Enemy
-{
-    public Transform position;
-    public GameObject weapon;
-    
-}
-
-[Serializable]
-public class Weapon
-{
-    public GameObject weaponMesh;
-    seria
-    public enum MyEnum
-    {
-        
-    }
-}*/
-
-
-/*
-[System.Serializable]*/
-/*public class Levels
-{
-    [Serializable]
-    public enum levelLogic
-    {
-        hasCutscene,
-        noCutscene,
-    }
-
-    public levelLogic LevelLogic;
-    public GameObject cutscene;
-    public Transform pickPos;
-    public Transform dropPos;
-    public PickupPeople[] pickpPeople;
-    public GameObject[] dropPeople;
-    
-
-}
-
-[Serializable]
-public class PickupPeople
-{
-    public Transform thisPersonTransform;
-    public Transform[] waypoints;
-}*/

@@ -5,27 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class ResetScene : MonoBehaviour
 {
-   public void RestartScene()
-   {
-      if (DataController.instance.GetSelectedLevel()==0)
-      {
-         Debug.LogError("Selected Level Was" + DataController.instance.GetSelectedLevel());
+    public void RestartScene()
+    {
+        int selectedLevel = DataController.instance.GetSelectedLevel();
+        int nextLevel = (selectedLevel + 1) % 5; // Assuming there are 4 levels, adjust accordingly if necessary
 
-         DataController.instance.SetSelectedLevel(1);
-         SceneManager.LoadScene(0);
-      }
-    else  if (DataController.instance.GetSelectedLevel()==1)
-      {
-         Debug.LogError("Selected Level Was" + DataController.instance.GetSelectedLevel());
-         DataController.instance.SetSelectedLevel(2);
-         SceneManager.LoadScene(0);
-      }
-      else  if (DataController.instance.GetSelectedLevel()==2)
-      {
-         Debug.LogError("Selected Level Was" + DataController.instance.GetSelectedLevel());
-         DataController.instance.SetSelectedLevel(0);
-         SceneManager.LoadScene(0);
-      }
-   }
-
+        Debug.LogError("Selected Level Was " + selectedLevel);
+        DataController.instance.SetSelectedLevel(nextLevel);
+        SceneManager.LoadScene(0);
+       
+    }
 }
