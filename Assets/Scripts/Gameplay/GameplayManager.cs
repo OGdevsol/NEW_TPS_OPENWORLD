@@ -9,7 +9,9 @@ using SickscoreGames.HUDNavigationSystem;
 using UnityEditor;
 //using OpenCover.Framework.Model;
 using UnityEngine;
+using UnityEngine.InputSystem.HID;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.UI;
 
 namespace Gameplay
 {
@@ -84,24 +86,27 @@ namespace Gameplay
             instance = this;
             DataCache();
             Debug.LogError(missions[dataController.GetSelectedLevel()].missionType);
-//            dataController.SetSelectedLevel(3);
+       //    dataController.SetSelectedLevel(5);
             Time.timeScale = 1;
             environment.SetActive(true);
             ActivateCurrentLevel();
             rccCar = FindObjectOfType<RCC_CarControllerV3>();
             hns = FindObjectOfType<HUDNavigationSystem>();
+            
+
+            switch (bShouldPlayCutscene)
+            {
+                case true:
+                    StartCoroutine(CutsceneRoutine());
+                    break;
+                case false:
+                    StartCoroutine(noCutsceneRoutine());
+                    break;
+            }
+            
             if (bShouldSpawnEnemies)
             {
                 SpawnEnemies();
-            }
-
-            if (bShouldPlayCutscene)
-            {
-                StartCoroutine(CutsceneRoutine());
-            }
-            else if (!bShouldPlayCutscene)
-            {
-                StartCoroutine(noCutsceneRoutine());
             }
         }
 
@@ -308,7 +313,40 @@ namespace Gameplay
         private bool IsShootingEnemy(EnemyType enemyType)
         {
             return enemyType is EnemyType.Enemy_ak47 or EnemyType.Enemy_m16 or EnemyType.Enemy_Pistol;
+            
         }
+
+        /*
+        [SerializeField] private List<GameObject> rccCars;
+
+        [SerializeField]
+        private GameObject button;
+
+        public GameObject carInTrigger;
+
+        private void OnTriggerStay(Collider other)
+        {
+            if (other.tag=="GrabCar")
+            {
+                button.SetActive(true);
+            }
+
+            carInTrigger = other.gameObject;
+        }
+
+        private void buttonFunction()
+        {
+            for (int i = 0; i < rccCars.Count; i++)
+            {
+                rccCars[i].GetComponent<RCC_CarControllerV3>().enabled = false;
+                rccCars[i].GetComponent<RCC_CarControllerV3>().canControl = false;
+                
+            }
+
+            carInTrigger.GetComponent<RCC_CarControllerV3>().enabled = true;
+
+        }
+        */
 
         private int CheckEnemyType(int enemyIndex)
         {

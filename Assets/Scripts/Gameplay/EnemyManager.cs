@@ -28,6 +28,7 @@ public class Mission
         
     }
 
+    public float missionTime;
     public MissionType missionType;
     public bool weaponNeeded;
     public string missionObjective;

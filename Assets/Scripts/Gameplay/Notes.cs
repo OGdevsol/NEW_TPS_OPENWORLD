@@ -322,3 +322,94 @@ public class MainMenuController : MonoBehaviour
     }
 }
 */
+
+
+/*private void OnPlayerGetInVehicle()
+{
+    for (int i = 0; i < theCar.length; i++)
+    {
+        theCar[i].GetComponent<RCC_CarControllerV3>().enabled = false;
+        theCar[i].GetComponent<Rigidbody>().mass = 2500f;
+        theCar[i].GetComponent<CarAI>().enabled = false;
+        theCar[i].GetComponent<Vehicle>().enabled = false;
+        theCar[i].GetComponent<WheelDrive>().enabled = false;
+        theCar[i].GetComponent<EasySuspension>().enabled = false;
+        
+    }
+       
+    getInVehichleUI.SetActive(false);
+    getOutVehicleUI.SetActive(true);
+    theCar[0].GetComponent<RCC_CarControllerV3>().enabled = true;
+    theCar[0].GetComponent<Rigidbody>().mass = 2500f;
+    theCar[0].GetComponent<CarAI>().enabled = false;
+    carCam.SetActive(true);
+    playerCam.SetActive(false);
+    rccCanvesButton.SetActive(true);
+    rccCanves.SetActive(true);
+    driver.SetActive(true);
+    otherCanvas.SetActive(false);
+    theCar[0].GetComponent<Vehicle>().enabled = false;
+    theCar[0].GetComponent<WheelDrive>().enabled = false;
+    theCar[0].GetComponent<EasySuspension>().enabled = false;
+         
+}*/
+
+/*void CheckTimerStatus()
+{
+    if (!levelIsFail)
+    {
+        if (currentTime > 0)
+        {
+            currentTime -= Time.deltaTime;
+            UpdateTimerDisplay();
+            if (!beyondWarning)
+            {
+                if (Mathf.FloorToInt(currentTime) == 10)
+                {
+                    // Trigger the warning animation
+                    timerAnimator.Play("Warning");
+                    Debug.LogError("10 SECONDS REMAINING");
+                    beyondWarning = true;
+                }
+            }
+        
+            // Check if there are exactly 10 seconds remaining
+               
+        }
+        else if (currentTime <= 0)
+        {
+            levelIsFail = true;
+            timerObject.SetActive(false);
+            Debug.LogError("Level Fail");           
+        } 
+    }
+        
+}*/
+
+/*void CheckTimerStatus()
+{
+    if (levelIsFail || currentTime <= 0)
+    {
+        // If the level has already failed or the timer has run out, no need to proceed further
+        return;
+    }
+
+    currentTime -= Time.deltaTime;
+    UpdateTimerDisplay();
+
+    if (!beyondWarning && Mathf.FloorToInt(currentTime) == 10)
+    {
+        // Trigger the warning animation when there are exactly 10 seconds remaining
+        timerAnimator.Play("Warning");
+        Debug.LogError("10 SECONDS REMAINING");
+        beyondWarning = true;
+    }
+
+    if (currentTime <= 0)
+    {
+        // Handle level fail when timer runs out
+        levelIsFail = true;
+        timerObject.SetActive(false);
+        Debug.LogError("Level Fail");
+    }
+}*/

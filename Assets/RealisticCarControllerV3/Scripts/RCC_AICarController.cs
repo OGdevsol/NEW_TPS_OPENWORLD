@@ -12,13 +12,18 @@ using UnityEngine.AI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Gameplay;
 
 /// <summary>
 /// AI Controller of RCC. It's not professional, but it does the job. Follows all waypoints, or follows/chases the target gameobject.
 /// </summary>
 [RequireComponent(typeof(RCC_CarControllerV3))]
 [AddComponentMenu("BoneCracker Games/Realistic Car Controller/AI/RCC AI Car Controller")]
-public class RCC_AICarController : MonoBehaviour {
+public class RCC_AICarController : MonoBehaviour
+{
+    private DataController dataController;
+    private GameplayManager gameplayManager;
+    
 
     // Car controller.
     public RCC_CarControllerV3 CarController {
@@ -32,7 +37,7 @@ public class RCC_AICarController : MonoBehaviour {
 
     public RCC_AIWaypointsContainer waypointsContainer;                 // Waypoints Container.
     public int currentWaypointIndex = 0;                                            // Current index in Waypoint Container.
-    public string targetTag = "Player";                                 // Search and chase Gameobjects with tags.
+    public string targetTag = "PlayerCar";                                 // Search and chase Gameobjects with tags.
 
     // AI Type
     public NavigationMode navigationMode = NavigationMode.FollowWaypoints;
@@ -111,6 +116,8 @@ public class RCC_AICarController : MonoBehaviour {
         navigator.acceleration = 100000f;
         navigator.height = 1;
         navigator.avoidancePriority = 0;
+        gameplayManager=GameplayManager.instance;
+        dataController=DataController.instance;
 
     }
 
@@ -257,14 +264,28 @@ public class RCC_AICarController : MonoBehaviour {
                 }
 
                 break;
+                Timer timer;
 
             case NavigationMode.ChaseTarget:
+                
+                if (DataController.instance.GetSelectedLevel()==5)
+                {
+                    if ( gameplayManager.playerCar[dataController.GetSelectedVehicle()].activeInHierarchy)
+                    {
+                        targetChase =gameplayManager.playerCar[dataController.GetSelectedVehicle()].transform;
+                    }
+                    
+                
+                }
 
                 // If our scene doesn't have a target to chase, stop and return.
                 if (!targetChase) {
 
                     Stop();
+                   
+                 //   Debug.LogError("RETURNING");
                     return;
+                 
 
                 }
 
