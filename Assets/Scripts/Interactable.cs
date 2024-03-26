@@ -23,7 +23,7 @@ public class Interactable : MonoBehaviour
 
    private void OnTriggerEnter(Collider other)
    {
-      if (other.CompareTag("Player"))
+      if (other.CompareTag("Player") || other.CompareTag("PlayerCar"))
       {
          x = gameplayManager. missions[dataController.GetSelectedLevel()].enemiesInLevel
             .IndexOf(transform);

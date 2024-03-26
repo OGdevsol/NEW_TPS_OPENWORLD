@@ -216,7 +216,7 @@ namespace EnemyAI
         }
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.tag=="Player")
+            if (other.gameObject.tag=="PlayerCar")
             {
                 //   Instantiate(bloodSample, location, Quaternion.LookRotation(-direction), this.transform);
                 // Take damage received from current health.

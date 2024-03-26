@@ -20,6 +20,7 @@ public class LevelFinishTrigger : MonoBehaviour
       if (other.gameObject.tag=="Player" || other.gameObject.tag=="PlayerCar")
       {
         Debug.Log("Level Complete");
+        gameplayManager??=GameplayManager.instance;
         gameplayManager.playerCar[dataController.GetSelectedVehicle()].gameObject.GetComponent<Rigidbody>().drag = 6;
 
       }

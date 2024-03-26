@@ -55,6 +55,7 @@ public class GameplayCarController : MonoBehaviour
         }
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private void ShowPlayerEnteringCar()
     {
         if (shootBehaviour.activeWeapon!=0)
@@ -79,6 +80,7 @@ public class GameplayCarController : MonoBehaviour
 
     }
     
+    // ReSharper disable Unity.PerformanceAnalysis
     private void ShowPlayerExitingCar()
     {
         GameplayManager.instance.player.GetComponentInChildren<SkinnedMeshRenderer>().enabled  = false;
@@ -92,6 +94,7 @@ public class GameplayCarController : MonoBehaviour
 
     }
 
+    // ReSharper disable Unity.PerformanceAnalysis
     private IEnumerator InterpolateCamera(Transform fromTransform, Transform toTransform)
 {
     if (fromTransform == rccCam.transform)

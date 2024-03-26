@@ -7,8 +7,9 @@ public class ResetScene : MonoBehaviour
 {
     public void RestartScene()
     {
-        int selectedLevel = DataController.instance.GetSelectedLevel();
-        int nextLevel = (selectedLevel + 1) % 6; // Assuming there are 4 levels, adjust accordingly if necessary
+        var selectedLevel = DataController.instance.GetSelectedLevel();
+        var nextLevel = (selectedLevel + 1) % 7; // Assuming there are 4 levels, adjust accordingly if necessary
+        
 
         Debug.LogError("Selected Level Was " + selectedLevel);
         DataController.instance.SetSelectedLevel(nextLevel);

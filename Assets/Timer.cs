@@ -28,12 +28,12 @@ public class Timer : MonoBehaviour
     }
 
 
-    void Start()
+    private void Start()
     {
         Initialize();
     }
 
-    void Update()
+    private void Update()
     {
         CheckTimerStatus();
     }
@@ -75,7 +75,7 @@ public class Timer : MonoBehaviour
     }
 
 
-    void UpdateTimerDisplay()
+    private void UpdateTimerDisplay()
     {
         int minutes = Mathf.FloorToInt(currentTime / 60);
         int seconds = Mathf.FloorToInt(currentTime % 60);
@@ -83,7 +83,7 @@ public class Timer : MonoBehaviour
         timerText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
     }
 
-    void CheckTimerStatus()
+    private void CheckTimerStatus()
     {
         if (levelIsFail || currentTime <= 0)  // If the level has already failed or the timer has run out, no need to proceed further
         {
@@ -95,7 +95,7 @@ public class Timer : MonoBehaviour
         currentTime -= Time.deltaTime;
         UpdateTimerDisplay();
 
-        if (!beyondWarning && Mathf.FloorToInt(currentTime) == 50)  // Trigger the warning animation when there are exactly 10 seconds remaining
+        if (!beyondWarning && Mathf.FloorToInt(currentTime) == 15)  // Trigger the warning animation when there are exactly 10 seconds remaining
         {
            
             timerAnimator.Play("Warning");

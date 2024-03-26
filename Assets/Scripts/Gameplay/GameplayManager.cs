@@ -86,13 +86,13 @@ namespace Gameplay
             instance = this;
             DataCache();
             Debug.LogError(missions[dataController.GetSelectedLevel()].missionType);
-       //    dataController.SetSelectedLevel(5);
+            // dataController.SetSelectedLevel(6);
             Time.timeScale = 1;
             environment.SetActive(true);
             ActivateCurrentLevel();
             rccCar = FindObjectOfType<RCC_CarControllerV3>();
             hns = FindObjectOfType<HUDNavigationSystem>();
-            
+
 
             switch (bShouldPlayCutscene)
             {
@@ -103,7 +103,7 @@ namespace Gameplay
                     StartCoroutine(noCutsceneRoutine());
                     break;
             }
-            
+
             if (bShouldSpawnEnemies)
             {
                 SpawnEnemies();
@@ -177,7 +177,6 @@ namespace Gameplay
             }
         }
 
-        
 
         #region CoRoutines
 
@@ -197,14 +196,16 @@ namespace Gameplay
                 GameplayCarController.instance.rccCam.gameObject.SetActive(false);
                 waveCutscene.SetActive(true);
                 yield return new WaitForSeconds(selectedWave.cutsceneDuration);
-             
+
                 if (waveCutscene != null)
                     waveCutscene.SetActive(false);
-                StartCoroutine(selectedLevel.missionType == Mission.MissionType.CarAtStart ? CarAtStartRoutine() : PlayerAtStartRoutine());
+                StartCoroutine(selectedLevel.missionType == Mission.MissionType.CarAtStart
+                    ? CarAtStartRoutine()
+                    : PlayerAtStartRoutine());
             }
         }
-        
-         private IEnumerator noCutsceneRoutine()
+
+        private IEnumerator noCutsceneRoutine()
         {
             NullCheck();
             yield return new WaitForSeconds(0.05f);
@@ -264,10 +265,11 @@ namespace Gameplay
             playerCamera.GetComponent<AudioListener>().enabled = false;
             playerControllerCanvas.enabled = false;
             player.gameObject.SetActive(false);
-            hns.PlayerCamera = playerCamera.GetComponent<Camera>();
+            hns.PlayerCamera = rccCam.GetComponentInChildren<Camera>();
             hns.PlayerController = playerCarInstance.transform;
             Debug.LogError("Calling End");
         }
+
         private IEnumerator PlayerAtStartRoutine()
         {
             var selectedVehicleIndex = dataController.GetSelectedVehicle();
@@ -308,12 +310,11 @@ namespace Gameplay
         }
 
         #endregion
-       
+
 
         private bool IsShootingEnemy(EnemyType enemyType)
         {
             return enemyType is EnemyType.Enemy_ak47 or EnemyType.Enemy_m16 or EnemyType.Enemy_Pistol;
-            
         }
 
         /*

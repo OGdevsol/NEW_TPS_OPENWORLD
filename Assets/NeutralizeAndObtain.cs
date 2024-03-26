@@ -8,21 +8,21 @@ public class NeutralizeAndObtain : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("PlayerCar"))
         {
             Debug.Log("Milton Detecting Player");
 
-            WaypointMover wpm = GetComponent<WaypointMover>();
-            Animator animator = GetComponent<Animator>();
-            HUDNavigationElement hne = GetComponent<HUDNavigationElement>();
+            var wpm = GetComponent<WaypointMover>();
+            var animator = GetComponent<Animator>();
+            var hne = GetComponent<HUDNavigationElement>();
 
             if (!wpm.isDead)
             {
                 animator.enabled = false;
                 hne.enabled = false;
 
-                Rigidbody[] rigidbodies = GetComponentsInChildren<Rigidbody>();
-                foreach (Rigidbody rb in rigidbodies)
+                var rigidbodies = GetComponentsInChildren<Rigidbody>();
+                foreach (var rb in rigidbodies)
                 {
                     rb.isKinematic = false;
                 }
