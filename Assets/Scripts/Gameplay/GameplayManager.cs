@@ -64,6 +64,7 @@ namespace Gameplay
             Interactable,
         }
 
+       
 
         private StateController stateController;
         private DataController dataController;
@@ -77,6 +78,8 @@ namespace Gameplay
         private int
             waveToKeepActive; //Introduce removeAt0 functionality by adding the wave to a list and then initializing waves again if waves are >0
 
+       
+
         #endregion
 
 
@@ -85,8 +88,8 @@ namespace Gameplay
             //  QualitySettings.SetQualityLevel(3);
             instance = this;
             DataCache();
-            Debug.LogError(missions[dataController.GetSelectedLevel()].missionType);
-            // dataController.SetSelectedLevel(6);
+            Debug.LogError(missions[dataController.GetSelectedLevel()].missionControllerType);
+            // dataController.SetSelectedLevel(1);
             Time.timeScale = 1;
             environment.SetActive(true);
             ActivateCurrentLevel();
@@ -199,7 +202,7 @@ namespace Gameplay
 
                 if (waveCutscene != null)
                     waveCutscene.SetActive(false);
-                StartCoroutine(selectedLevel.missionType == Mission.MissionType.CarAtStart
+                StartCoroutine(selectedLevel.missionControllerType == Mission.MissionControllerType.CarAtStart
                     ? CarAtStartRoutine()
                     : PlayerAtStartRoutine());
             }
@@ -317,37 +320,7 @@ namespace Gameplay
             return enemyType is EnemyType.Enemy_ak47 or EnemyType.Enemy_m16 or EnemyType.Enemy_Pistol;
         }
 
-        /*
-        [SerializeField] private List<GameObject> rccCars;
-
-        [SerializeField]
-        private GameObject button;
-
-        public GameObject carInTrigger;
-
-        private void OnTriggerStay(Collider other)
-        {
-            if (other.tag=="GrabCar")
-            {
-                button.SetActive(true);
-            }
-
-            carInTrigger = other.gameObject;
-        }
-
-        private void buttonFunction()
-        {
-            for (int i = 0; i < rccCars.Count; i++)
-            {
-                rccCars[i].GetComponent<RCC_CarControllerV3>().enabled = false;
-                rccCars[i].GetComponent<RCC_CarControllerV3>().canControl = false;
-                
-            }
-
-            carInTrigger.GetComponent<RCC_CarControllerV3>().enabled = true;
-
-        }
-        */
+     
 
         private int CheckEnemyType(int enemyIndex)
         {
@@ -368,5 +341,29 @@ namespace Gameplay
         {
             QualitySettings.SetQualityLevel(index);
         }
+
+        #region Level Complete/LevelFail
+
+        public IEnumerator LevelCompleteRoutine()
+        {
+            yield return new WaitForSecondsRealtime(2f);
+            gameUIManager.levelCompletePanel.SetActive(true);
+            yield return new WaitForSecondsRealtime(1.5f);
+            //Show Ad here
+        }
+        public IEnumerator LevelFailRoutine(GameObject panelToActivate)
+        {
+            yield return new WaitForSecondsRealtime(2f);
+            panelToActivate.SetActive(true);
+            gameUIManager.rccCanvas.enabled = false;
+            gameUIManager.hUDNavigationCanvas.enabled = false;
+            gameUIManager.playerControllerCanvas.enabled = false;
+            
+            yield return new WaitForSecondsRealtime(1.5f);
+            //Show Ad here
+        }
+
+        #endregion
     }
+    
 }

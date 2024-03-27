@@ -20,7 +20,13 @@ public class Mission
 {
  
     [Serializable]
-    public enum MissionType
+    public enum MissionEndingType
+    {
+        EliminateAllEnemies,
+        ReachDestination,
+    }
+    [Serializable]
+    public enum MissionControllerType
     {
         ThirdPersonAtStart,
         CarAtStart,
@@ -28,11 +34,12 @@ public class Mission
         
     }
 
+    public MissionEndingType missionEndingType;
     public float missionTime;
-    public MissionType missionType;
+    public MissionControllerType missionControllerType;
     public bool weaponNeeded;
-    public string missionObjective;
-    public Transform playerPosition;
+  //  public string missionObjective;
+ //   public Transform playerPosition;
     public List<Wave> waves;
     public List<Transform> enemiesInLevel;
 }
@@ -51,8 +58,8 @@ public class Wave
     public List<EnemiesInLevel> enemiesInLevel;
     public GameObject waveCutscene;
     public float cutsceneDuration;
-    public string waveObjective;
-    public GameObject waveMissionIndicator;
+  //  public string waveObjective;
+  //  public GameObject waveMissionIndicator;
 }
 
 [Serializable]

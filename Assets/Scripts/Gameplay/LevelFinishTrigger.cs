@@ -11,18 +11,23 @@ public class LevelFinishTrigger : MonoBehaviour
 
     private void Awake()
     {
-        gameplayManager=GameplayManager.instance;
-        dataController=DataController.instance;
+        gameplayManager = GameplayManager.instance;
+        dataController = DataController.instance;
     }
 
     private void OnTriggerEnter(Collider other)
-   {
-      if (other.gameObject.tag=="Player" || other.gameObject.tag=="PlayerCar")
-      {
-        Debug.Log("Level Complete");
-        gameplayManager??=GameplayManager.instance;
-        gameplayManager.playerCar[dataController.GetSelectedVehicle()].gameObject.GetComponent<Rigidbody>().drag = 6;
-
-      }
-   }
+    {
+        if (other.gameObject.tag is "Player" or "PlayerCar")
+        {
+            if (gameplayManager.missions[dataController.GetSelectedLevel()].missionEndingType ==
+                Mission.MissionEndingType.ReachDestination)
+            {
+                Debug.Log("Level Complete After Reaching Destination");
+                gameplayManager ??= GameplayManager.instance;
+                gameplayManager.playerCar[dataController.GetSelectedVehicle()].gameObject.GetComponent<Rigidbody>()
+                    .drag = 6;
+                StartCoroutine(gameplayManager.LevelCompleteRoutine());
+            }
+        }
+    }
 }

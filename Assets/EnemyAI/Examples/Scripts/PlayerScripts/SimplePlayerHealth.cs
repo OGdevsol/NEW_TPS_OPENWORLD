@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using Gameplay;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,6 +23,7 @@ public class SimplePlayerHealth : HealthManager
     private Animator playerAnimator;
     public ControlFreak2.TouchButton aim;
     private ShootBehaviour shootBehaviour;
+    private GameplayManager gameplayManager;
     public Slider healthSlider;
 
     private void OnEnable()
@@ -48,6 +50,8 @@ public class SimplePlayerHealth : HealthManager
         aimBehaviour = gameObject.GetComponent<AimBehaviour>();
         shootBehaviour=ShootBehaviour.instance;
         gameUIManager=GameUIManager.instance;
+        gameplayManager=GameplayManager.instance;
+        
         
     }
 
@@ -88,10 +92,23 @@ public class SimplePlayerHealth : HealthManager
         if (!shootBehaviour)
         {
             shootBehaviour = ShootBehaviour.instance;
-            ShootBehaviour.instance.DropWeaponOnDeath();
+            if (shootBehaviour.activeWeapon!=0)
+            {
+                ShootBehaviour.instance.DropWeaponOnDeath();
+                playerAnimator.Play("Death");
+
+                StartCoroutine(GameplayManager.instance.LevelFailRoutine(gameUIManager.levelFailPanelDeath));
+            }
+            else
+            {
+                playerAnimator.Play("Death");
+
+                StartCoroutine(GameplayManager.instance.LevelFailRoutine(gameUIManager.levelFailPanelDeath));
+            }
+           
         }
        
-        playerAnimator.Play("Death");
+     
     }
     
     public void FailMission()

@@ -247,7 +247,7 @@ public class ShootBehaviour : GenericBehaviour
 	public void DropWeaponOnDeath()
 	{
 		// End reload paramters, drop weapon and change to another one in inventory.
-		EndReloadWeapon();
+		//EndReloadWeapon();
 		int weaponToDrop = activeWeapon;
 		ChangeWeapon(activeWeapon, 0);
 		weapons[weaponToDrop].Drop();

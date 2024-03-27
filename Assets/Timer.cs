@@ -13,6 +13,7 @@ public class Timer : MonoBehaviour
 
     private GameplayManager gameplayManager;
     private DataController dataController;
+    private GameUIManager gameUIManager;
     private float currentTime;
     [SerializeField] private DOTweenAnimation warningAnim;
     [SerializeField] private GameObject timerObject;
@@ -25,6 +26,7 @@ public class Timer : MonoBehaviour
     {
         gameplayManager = GameplayManager.instance;
         dataController = DataController.instance;
+        gameUIManager = GameUIManager.instance;
     }
 
 
@@ -44,6 +46,7 @@ public class Timer : MonoBehaviour
 
         gameplayManager ??= GameplayManager.instance;
         dataController ??= DataController.instance;
+        gameUIManager??=GameUIManager.instance;
 
         timerAnimator = timerObject.GetComponent<Animator>();
         totalTime = gameplayManager.missions[dataController.GetSelectedLevel()].missionTime;
@@ -99,7 +102,7 @@ public class Timer : MonoBehaviour
         {
            
             timerAnimator.Play("Warning");
-            Debug.LogError("10 SECONDS REMAINING");
+            Debug.Log("10 SECONDS REMAINING");
             beyondWarning = true;
         }
 
@@ -107,8 +110,9 @@ public class Timer : MonoBehaviour
         {
          
             levelIsFail = true;
-            // timerObject.SetActive(false);
-            Debug.LogError("Level Fail");
+          //   timerObject.SetActive(false);
+            Debug.Log("Level Fail");
+            StartCoroutine(gameplayManager.LevelFailRoutine(gameUIManager.levelFailPanelTime));
         }
     }
 }

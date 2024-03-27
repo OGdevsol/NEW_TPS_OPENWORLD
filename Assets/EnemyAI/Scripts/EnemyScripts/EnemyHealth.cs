@@ -156,7 +156,11 @@ namespace EnemyAI
                 hudElement.enabled = false;
             }
 
-          //  CheckEnemiesInLevel();
+            if (gameplayManager.missions[DataController.instance.GetSelectedLevel()].missionEndingType == Mission.MissionEndingType.EliminateAllEnemies)
+            {
+                CheckEnemiesInLevel();
+            }
+           
         }
 
 
@@ -176,9 +180,10 @@ namespace EnemyAI
 
         private void CheckEnemiesInLevel()
         {
+            
             if (gameplayManager . missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.Count == 0)
             {
-                missionCompleteManager.CompleteMission();
+                StartCoroutine(gameplayManager.LevelCompleteRoutine());
             }
             else
             {

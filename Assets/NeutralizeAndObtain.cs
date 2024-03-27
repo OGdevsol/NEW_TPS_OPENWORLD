@@ -1,13 +1,24 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Gameplay;
 using SickscoreGames.HUDNavigationSystem;
 using UnityEngine;
 
 public class NeutralizeAndObtain : MonoBehaviour
 {
+    private int x;
+    private GameplayManager gameplayManager;
+
+    private void Awake()
+    {
+        gameplayManager=GameplayManager.instance;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
+        x =  GameplayManager.instance. missions[DataController.instance.GetSelectedLevel()].enemiesInLevel
+            .IndexOf(transform);
         if (other.CompareTag("PlayerCar"))
         {
             Debug.Log("Milton Detecting Player");
@@ -35,6 +46,23 @@ public class NeutralizeAndObtain : MonoBehaviour
             }
 
             wpm.isDead = true;
+            GameplayManager.instance. missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.RemoveAt(x);
+            CheckEnemiesInLevel();
+            
+            
+            
+        }
+    }
+    private void CheckEnemiesInLevel()
+    {
+            
+        if (gameplayManager.missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.Count == 0)
+        {
+            StartCoroutine(GameplayManager.instance.LevelCompleteRoutine());
+        }
+        else
+        {
+            print("Enemies Still Remaining");
         }
     }
 }
