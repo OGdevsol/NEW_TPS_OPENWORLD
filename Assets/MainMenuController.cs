@@ -1,7 +1,11 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem.Composites;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -9,8 +13,11 @@ public class MainMenuController : MonoBehaviour
 {
     [Header("____Main Menu____"), Space(10)]
     public GameObject[] panels;
+    public GameObject loadingPanel;
+    public float waitTime;
 [SerializeField] private Image selectedPlayerProfilePic;
 [SerializeField]   private TMP_Text selectedPlayerName;
+public Button[] controllerTypeButtons;
     [Header("____Character Selection____"), Space(10)]
     public Button continueButton;
     public Image mainCharacterReferenceImage;
@@ -27,6 +34,11 @@ public class MainMenuController : MonoBehaviour
     private string player = "SelectedPlayer";
     private string playerName = "playerName";
 
+    /*private void Awake()
+    {
+        AdsManager.instance.InitializeAdmob();
+    }*/
+
     private void Start()
     {
        CheckForPlayerData();
@@ -35,20 +47,79 @@ public class MainMenuController : MonoBehaviour
 
     #region Main Menu
 
-    public void EnablePanel(int index)
+    public void EnablePanel(int panelIndex)
     {
-        foreach (var uiPanel in panels)
-        {
-            uiPanel.SetActive(false);
-        }
 
-        panels[index].SetActive(true);
-  
+        StartCoroutine(EnablePanelRoutine(panelIndex));
+
     }
 
-    public void LoadGameScene()
+    public IEnumerator EnablePanelRoutine(int index)
+    {
+        Debug.LogError("Index is" + index);
+        
+            if (index==2)
+            {
+                Debug.Log("SHOWING AD HERE");
+                //AdsManager.instance.showAdmobInterstitial();
+            }
+
+            if (index!=6 && index!=2)
+            {
+                loadingPanel.SetActive(true);
+                yield return new WaitForSecondsRealtime(waitTime);
+            }
+          
+           
+            foreach (var uiPanel in panels)
+            {
+                uiPanel.SetActive(false);
+            }
+            panels[index].SetActive(true); 
+        
+       
+    }
+
+    public void LoadGameScene(int index)
+    {
+       SetSelectedLevel(index);
+        StartCoroutine(LoadingToGameRoutine(1));
+    }
+    /*public void LoadGameScene()
     {
         SceneManager.LoadScene(1);
+    }*/
+
+    public void OnClickControllerType(int index)
+    {
+        for (int i = 0; i < controllerTypeButtons.Length; i++)
+        {
+            controllerTypeButtons[i].image.sprite = i == index ? greenMark : redMark;
+            SetController(index);
+            
+        }
+    }
+
+   
+    private IEnumerator LoadingWithinMenuRoutine(bool showAd)
+    {
+        loadingPanel.SetActive(true);
+        yield return new WaitForSecondsRealtime(waitTime);
+        if (showAd)
+        {
+            // Show Ad here
+            Debug.Log("Calling Ad");
+        }
+      
+
+    }
+
+    private IEnumerator LoadingToGameRoutine( int sceneIndex)
+    {
+        loadingPanel.SetActive(true);
+        yield return new WaitForSecondsRealtime(waitTime);
+        SceneManager.LoadScene(sceneIndex);
+
     }
 
     #endregion
@@ -146,6 +217,26 @@ public class MainMenuController : MonoBehaviour
     private string GetPlayerName()
     {
         return PlayerPrefs.GetString(playerName);
+    }
+
+    public void SetController(int index)
+    {
+        PlayerPrefs.SetInt("Controller",index);
+    }
+
+    public int GetController()
+    {
+        return PlayerPrefs.GetInt("Controller");
+    }
+
+    public void SetSelectedLevel(int index)
+    {
+        PlayerPrefs.SetInt("SelectedLevel", index);
+    }
+
+    public int GetSelectedLevel()
+    {
+        return PlayerPrefs.GetInt("SelectedLevel");
     }
 
 

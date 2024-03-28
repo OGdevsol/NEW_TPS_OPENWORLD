@@ -29,9 +29,10 @@ public class Interactable : MonoBehaviour
          x = gameplayManager. missions[dataController.GetSelectedLevel()].enemiesInLevel
             .IndexOf(transform);
          gameplayManager . missions[dataController.GetSelectedLevel()].enemiesInLevel.RemoveAt(x);
-         CheckEnemiesInLevel();
+      
          print("Interactable Removed from list");
          gameObject.SetActive(false);
+            CheckEnemiesInLevel();
       }
      
       

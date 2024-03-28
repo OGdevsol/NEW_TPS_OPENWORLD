@@ -74,7 +74,7 @@ public class AdsManager : MonoBehaviour
     {
         if (StopShowingAdsOnLowEndDevices) {
             if (deviceRam < minRamSize) {
-                UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex + 1);
+              //  UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex + 1);
                 return;
             }
         }
@@ -91,7 +91,7 @@ public class AdsManager : MonoBehaviour
         Invoke("loadAdmobRewardedInterstitial", 6f);
         if (showAppOpenAd)
             LoadAppOpenAd();
-        UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex + 1);
+       // UnityEngine.SceneManagement.SceneManager.LoadSceneAsync(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex + 1);
     }
     bool wentToBackground;  
     

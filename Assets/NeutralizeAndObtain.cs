@@ -38,16 +38,18 @@ public class NeutralizeAndObtain : MonoBehaviour
                     rb.isKinematic = false;
                 }
 
-                Interactable interactable = GetComponentInChildren<Interactable>();
+                /*Interactable interactable = GetComponentInChildren<Interactable>();
                 if (interactable)
                 {
                     interactable.gameObject.SetActive(true);
-                }
+                }*/
+                GameplayManager.instance. missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.RemoveAt(x);
+                
             }
 
             wpm.isDead = true;
-            GameplayManager.instance. missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.RemoveAt(x);
             CheckEnemiesInLevel();
+           
             
             
             

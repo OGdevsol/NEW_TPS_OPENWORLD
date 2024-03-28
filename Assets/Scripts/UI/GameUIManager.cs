@@ -87,9 +87,14 @@ public class GameUIManager : MonoBehaviour
     } 
     public void OnClickNext()
     {
-        if (DataController.instance.GetSelectedLevel()<=8)
+        if (DataController.instance.GetSelectedLevel()<8)
         {
             DataController.instance.SetSelectedLevel(DataController.instance.GetSelectedLevel()+1);
+            SceneManager.LoadScene(1);
+        }
+        else if(DataController.instance.GetSelectedLevel()>=8)
+        {
+            DataController.instance.SetSelectedLevel(0);
             SceneManager.LoadScene(1);
         }
        
