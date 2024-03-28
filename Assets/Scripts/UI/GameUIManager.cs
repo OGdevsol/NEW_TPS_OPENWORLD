@@ -17,6 +17,9 @@ public class GameUIManager : MonoBehaviour
 
     public Button getInCarButton;
     public Button getOutOfCarButton;
+    public Button[] mobileButton;
+    
+    
     
     
     

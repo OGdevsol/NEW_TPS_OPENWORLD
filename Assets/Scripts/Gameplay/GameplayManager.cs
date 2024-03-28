@@ -93,6 +93,7 @@ namespace Gameplay
             Time.timeScale = 1;
             environment.SetActive(true);
             ActivateCurrentLevel();
+            CheckForInstructions();
             rccCar = FindObjectOfType<RCC_CarControllerV3>();
             hns = FindObjectOfType<HUDNavigationSystem>();
 
@@ -180,13 +181,35 @@ namespace Gameplay
             }
         }
 
+        public void CheckForInstructions()
+        {
+            if (!missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>()
+                    .enabled && missionsGameObjects[dataController.GetSelectedLevel()]
+                    .GetComponent<MissionInstructionsAndEffects>().audios == null)
+            {
+                for (int i = 0; i < gameUIManager.mobileButton.Length; i++)
+                {
+                    gameUIManager.mobileButton[i].interactable = false;
+                }
+            }
+            
+        }
+
+        public void OnClickMobile()
+        {
+            if (missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>().enabled && missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>().audios!=null)
+            {
+                missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>().audios[0].Play();
+            }
+            
+        }
 
         #region CoRoutines
 
         private IEnumerator CutsceneRoutine()
         {
             NullCheck();
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.03f);
             var selectedLevel = missions[dataController.GetSelectedLevel()];
             var selectedWave = selectedLevel.waves[waveToKeepActive];
             var waveCutscene = selectedWave.waveCutscene;

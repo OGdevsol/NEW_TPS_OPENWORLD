@@ -9,7 +9,7 @@ public class MissionInstructionsAndEffects : MonoBehaviour
     private GameplayManager gameplayManager;
     private DataController dataController;
     [SerializeField] private float playAfterWaitDuration;
-    [SerializeField] private AudioSource[] audios;
+    [SerializeField] public AudioSource[] audios;
 
     private void Awake()
     {
