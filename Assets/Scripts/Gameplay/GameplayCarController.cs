@@ -8,6 +8,7 @@ using UnityEngine;
 public class GameplayCarController : MonoBehaviour
 {
     public static GameplayCarController instance;
+    private InGameSoundManager inGameSoundManager;
     public Transform rccCam;
     public Transform playerCamera;
     private bool isSwitchingCamera = false; // Flag to track if camera is currently being switched.
@@ -32,6 +33,7 @@ public class GameplayCarController : MonoBehaviour
         rccCam = FindObjectOfType<RCC_Camera>().transform;
         gameUIManager=GameUIManager.instance;
         gameplayManager=GameplayManager.instance;
+        inGameSoundManager=InGameSoundManager.instance;
         hns = FindObjectOfType<HUDNavigationSystem>();
 
 
@@ -75,6 +77,7 @@ public class GameplayCarController : MonoBehaviour
         // FindObjectOfType<InteractiveWeapon>().transform.gameObject.SetActive(false);
         rccCam.gameObject.GetComponentInChildren<AudioListener>().enabled = true;
         playerCamera.GetComponent<AudioListener>().enabled = false;
+        inGameSoundManager.SetInGameListenersVolume();
 
 
 
@@ -90,6 +93,7 @@ public class GameplayCarController : MonoBehaviour
         //  FindObjectOfType<InteractiveWeapon>().transform.gameObject.SetActive(true);
         rccCam.gameObject.GetComponentInChildren<AudioListener>().enabled = false;
         playerCamera.GetComponent<AudioListener>().enabled = true;
+        inGameSoundManager.SetInGameListenersVolume();
 
 
     }

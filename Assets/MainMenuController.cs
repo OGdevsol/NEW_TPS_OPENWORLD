@@ -43,6 +43,7 @@ public Button[] controllerTypeButtons;
     {
        CheckForPlayerData();
         CacheChildren();
+        CheckAndApplyControlsSettingsOnStart();
     }
 
     #region Main Menu
@@ -98,6 +99,38 @@ public Button[] controllerTypeButtons;
             SetController(index);
             
         }
+        if (GetSelectedController()==0)
+        {
+            RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.TouchScreen;
+        }
+        else if(GetSelectedController()==1)
+        {
+            RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.SteeringWheel;
+        }
+    }
+
+    public void CheckAndApplyControlsSettingsOnStart()
+    {
+        for (int i = 0; i < controllerTypeButtons.Length; i++)
+        {
+            controllerTypeButtons[i].image.sprite = redMark;
+          
+            
+        }
+        if (GetSelectedController()==0)
+        {
+            RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.TouchScreen;
+            controllerTypeButtons[GetSelectedController()].image.sprite = greenMark;
+        }
+        else if(GetSelectedController()==1)
+        {
+            RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.SteeringWheel;
+            controllerTypeButtons[GetSelectedController()].image.sprite = greenMark;
+        }
+    }
+    private int GetSelectedController()
+    {
+        return PlayerPrefs.GetInt("Controller");
     }
 
    
@@ -224,10 +257,7 @@ public Button[] controllerTypeButtons;
         PlayerPrefs.SetInt("Controller",index);
     }
 
-    public int GetController()
-    {
-        return PlayerPrefs.GetInt("Controller");
-    }
+    
 
     public void SetSelectedLevel(int index)
     {

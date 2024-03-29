@@ -56,6 +56,8 @@ namespace Gameplay
         [SerializeField] private GameObject postProcessVolume;
         private RCC_CarControllerV3 rccCar;
 
+        private Coroutine myRoutine;
+
         public enum EnemyType
         {
             Enemy_ak47,
@@ -96,15 +98,16 @@ namespace Gameplay
             CheckForInstructions();
             rccCar = FindObjectOfType<RCC_CarControllerV3>();
             hns = FindObjectOfType<HUDNavigationSystem>();
+           
 
 
             switch (bShouldPlayCutscene)
             {
                 case true:
-                    StartCoroutine(CutsceneRoutine());
+                 myRoutine=StartCoroutine(CutsceneRoutine());
                     break;
                 case false:
-                    StartCoroutine(noCutsceneRoutine());
+                 myRoutine=StartCoroutine(noCutsceneRoutine());
                     break;
             }
 
@@ -229,6 +232,21 @@ namespace Gameplay
                     ? CarAtStartRoutine()
                     : PlayerAtStartRoutine());
             }
+        }
+
+        public void StopCutsceneAndGoToGame()
+        {
+            StopCoroutine(myRoutine);
+            var selectedLevel = missions[dataController.GetSelectedLevel()];
+            var selectedWave = selectedLevel.waves[waveToKeepActive];
+            var waveCutscene = selectedWave.waveCutscene;
+            if (waveCutscene != null)
+                waveCutscene.SetActive(false);
+            StartCoroutine(selectedLevel.missionControllerType == Mission.MissionControllerType.CarAtStart
+                ? CarAtStartRoutine()
+                : PlayerAtStartRoutine());
+            gameUIManager.cutSceneUICanvas.enabled = false;
+           Timer.instance.SetTimerValueOnSkip();  
         }
 
         private IEnumerator noCutsceneRoutine()

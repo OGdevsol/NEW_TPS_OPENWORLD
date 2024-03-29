@@ -16,17 +16,19 @@ public class Timer : MonoBehaviour
     private GameUIManager gameUIManager;
     private float currentTime;
     [SerializeField] private DOTweenAnimation warningAnim;
-    [SerializeField] private GameObject timerObject;
-    [SerializeField] private TMP_Text timerText;
+    [SerializeField] public GameObject timerObject;
+    [SerializeField] public TMP_Text timerText;
     private Animator timerAnimator;
     private bool beyondWarning;
     private bool levelIsFail;
+    public static Timer instance;
 
     private void Awake()
     {
         gameplayManager = GameplayManager.instance;
         dataController = DataController.instance;
         gameUIManager = GameUIManager.instance;
+        instance = this;
     }
 
 
@@ -75,6 +77,11 @@ public class Timer : MonoBehaviour
     
         currentTime = totalTime;
      
+    }
+
+    public void SetTimerValueOnSkip()
+    {
+        currentTime = totalTime;
     }
 
 
