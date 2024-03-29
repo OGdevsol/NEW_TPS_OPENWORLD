@@ -413,3 +413,67 @@ public class MainMenuController : MonoBehaviour
         Debug.LogError("Level Fail");
     }
 }*/
+
+
+/*
+public void CheckController()
+{
+       
+    for (int i = 0; i < controllerButtons.Length; i++)
+    {
+        controllerButtons[i].image.sprite = redMark;
+    }
+    if (PlayerPrefs.HasKey("Controller"))
+    {
+        controllerButtons[PlayerPrefs.GetInt("Controller")].image.sprite = greenMark;
+            
+    }
+    else
+    {
+        controllerButtons[defaultIndex].image.sprite = greenMark;
+    }
+}
+
+public void OnClickControllerButton(int index)
+{
+    PlayerPrefs.SetInt("Controller", index);
+    for (int i = 0; i < controllerButtons.Length; i++)
+    {
+        controllerButtons[i].image.sprite = redMark;
+    }
+    controllerButtons[GetSelectedController()].image.sprite = greenMark;
+    if (GetSelectedController()==0)
+    {
+        RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.TouchScreen;
+    }
+    else if(GetSelectedController()==1)
+    {
+        RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.SteeringWheel;
+    }
+       
+      
+
+}
+
+private int GetSelectedController()
+{
+    return PlayerPrefs.GetInt("Controller");
+}
+
+public void CheckAndApplyControlsSettingsOnStart()
+{
+      
+    if (GetSelectedController()==0)
+    {
+        RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.TouchScreen;
+    }
+    else if(GetSelectedController()==1)
+    {
+        RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.SteeringWheel;
+    }
+    foreach (var t in controllerButtons)
+    {
+        t.image.sprite = redMark;
+    }
+    controllerButtons[GetSelectedController()].image.sprite = greenMark;
+}*/

@@ -13,20 +13,23 @@ public class MainMenuController : MonoBehaviour
 {
     [Header("____Main Menu____"), Space(10)]
     public GameObject[] panels;
+
     public GameObject loadingPanel;
     public float waitTime;
-[SerializeField] private Image selectedPlayerProfilePic;
-[SerializeField]   private TMP_Text selectedPlayerName;
-public Button[] controllerTypeButtons;
+    [SerializeField] private Image selectedPlayerProfilePic;
+    [SerializeField] private TMP_Text selectedPlayerName;
+    public Button[] controllerTypeButtons;
+
     [Header("____Character Selection____"), Space(10)]
     public Button continueButton;
+
     public Image mainCharacterReferenceImage;
     public List<Button> genderButtons;
     public List<Button> characterButtons;
     public Sprite redMark;
     public Sprite greenMark;
     public GameObject[] genderPanels;
-    public  TMP_InputField playerNameField;
+    public TMP_InputField playerNameField;
 
     private List<GameObject> characterChildObjects = new List<GameObject>();
 
@@ -41,7 +44,7 @@ public Button[] controllerTypeButtons;
 
     private void Start()
     {
-       CheckForPlayerData();
+        CheckForPlayerData();
         CacheChildren();
         CheckAndApplyControlsSettingsOnStart();
     }
@@ -50,40 +53,37 @@ public Button[] controllerTypeButtons;
 
     public void EnablePanel(int panelIndex)
     {
-
         StartCoroutine(EnablePanelRoutine(panelIndex));
-
     }
 
     public IEnumerator EnablePanelRoutine(int index)
     {
-        Debug.LogError("Index is" + index);
-        
-            if (index==2)
-            {
-                Debug.Log("SHOWING AD HERE");
-                //AdsManager.instance.showAdmobInterstitial();
-            }
+        //Debug.LogError("Index is" + index);
 
-            if (index!=6 && index!=2)
-            {
-                loadingPanel.SetActive(true);
-                yield return new WaitForSecondsRealtime(waitTime);
-            }
-          
-           
-            foreach (var uiPanel in panels)
-            {
-                uiPanel.SetActive(false);
-            }
-            panels[index].SetActive(true); 
-        
-       
+        if (index == 2)
+        {
+            Debug.Log("SHOWING AD HERE");
+            //AdsManager.instance.showAdmobInterstitial();
+        }
+
+        if (index != 6 && index != 2)
+        {
+            loadingPanel.SetActive(true);
+            yield return new WaitForSecondsRealtime(waitTime);
+        }
+
+
+        foreach (var uiPanel in panels)
+        {
+            uiPanel.SetActive(false);
+        }
+
+        panels[index].SetActive(true);
     }
 
     public void LoadGameScene(int index)
     {
-       SetSelectedLevel(index);
+        SetSelectedLevel(index);
         StartCoroutine(LoadingToGameRoutine(1));
     }
     /*public void LoadGameScene()
@@ -93,47 +93,45 @@ public Button[] controllerTypeButtons;
 
     public void OnClickControllerType(int index)
     {
+        SetController(index);
+
         for (int i = 0; i < controllerTypeButtons.Length; i++)
         {
             controllerTypeButtons[i].image.sprite = i == index ? greenMark : redMark;
-            SetController(index);
-            
         }
-        if (GetSelectedController()==0)
+
+        switch (index)
         {
-            RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.TouchScreen;
-        }
-        else if(GetSelectedController()==1)
-        {
-            RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.SteeringWheel;
+            case 0:
+                RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.TouchScreen;
+                break;
+            case 1:
+                RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.SteeringWheel;
+                break;
         }
     }
 
     public void CheckAndApplyControlsSettingsOnStart()
     {
+        int selectedController = GetSelectedController();
+        RCC_Settings.MobileController mobileController = (selectedController == 0)
+            ? RCC_Settings.MobileController.TouchScreen
+            : RCC_Settings.MobileController.SteeringWheel;
+
         for (int i = 0; i < controllerTypeButtons.Length; i++)
         {
-            controllerTypeButtons[i].image.sprite = redMark;
-          
-            
+            controllerTypeButtons[i].image.sprite = (i == selectedController) ? greenMark : redMark;
         }
-        if (GetSelectedController()==0)
-        {
-            RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.TouchScreen;
-            controllerTypeButtons[GetSelectedController()].image.sprite = greenMark;
-        }
-        else if(GetSelectedController()==1)
-        {
-            RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.SteeringWheel;
-            controllerTypeButtons[GetSelectedController()].image.sprite = greenMark;
-        }
-    }
-    private int GetSelectedController()
-    {
-        return PlayerPrefs.GetInt("Controller");
+
+        RCC_Settings.Instance.mobileController = mobileController;
     }
 
-   
+    private int GetSelectedController()
+    {
+        return PlayerPrefs.GetInt("Controller", 0);
+    }
+
+
     private IEnumerator LoadingWithinMenuRoutine(bool showAd)
     {
         loadingPanel.SetActive(true);
@@ -143,21 +141,19 @@ public Button[] controllerTypeButtons;
             // Show Ad here
             Debug.Log("Calling Ad");
         }
-      
-
     }
 
-    private IEnumerator LoadingToGameRoutine( int sceneIndex)
+    private IEnumerator LoadingToGameRoutine(int sceneIndex)
     {
         loadingPanel.SetActive(true);
         yield return new WaitForSecondsRealtime(waitTime);
         SceneManager.LoadScene(sceneIndex);
-
     }
 
     #endregion
 
     #region Character Selection
+
     public void OnClickGenderSelection(int index)
     {
         for (int i = 0; i < genderButtons.Count; i++)
@@ -173,7 +169,7 @@ public Button[] controllerTypeButtons;
     {
         var normalState = new Vector3(1, 1, 1);
         var selectedState = new Vector3(1.1f, 1.1f, 1.1f);
-        
+
         // Iterate through all character buttons
         for (int i = 0; i < characterButtons.Count; i++)
         {
@@ -222,11 +218,7 @@ public Button[] controllerTypeButtons;
         EnablePanel(!PlayerPrefs.HasKey(player) ? 0 : 1);
         selectedPlayerProfilePic.sprite = characterButtons[GetPlayer()].image.sprite;
         selectedPlayerName.text = GetPlayerName();
-        
-        
     }
-
-  
 
     #endregion
 
@@ -234,7 +226,7 @@ public Button[] controllerTypeButtons;
 
     private void SetPlayer(int index)
     {
-        PlayerPrefs.SetInt(player,index);
+        PlayerPrefs.SetInt(player, index);
     }
 
     private int GetPlayer()
@@ -245,8 +237,9 @@ public Button[] controllerTypeButtons;
     public void SetPlayerName(string name)
     {
         name = playerNameField.text;
-        PlayerPrefs.SetString(playerName,name);
+        PlayerPrefs.SetString(playerName, name);
     }
+
     private string GetPlayerName()
     {
         return PlayerPrefs.GetString(playerName);
@@ -254,10 +247,9 @@ public Button[] controllerTypeButtons;
 
     public void SetController(int index)
     {
-        PlayerPrefs.SetInt("Controller",index);
+        PlayerPrefs.SetInt("Controller", index);
     }
 
-    
 
     public void SetSelectedLevel(int index)
     {
@@ -269,10 +261,52 @@ public Button[] controllerTypeButtons;
         return PlayerPrefs.GetInt("SelectedLevel");
     }
 
-
-
-
     #endregion
-  
-    
 }
+
+/*private void SetController(int index)
+   {
+       PlayerPrefs.SetInt("Controller", index);
+   }*/
+/*
+public void OnClickControllerType(int index)
+{
+    for (int i = 0; i < controllerTypeButtons.Length; i++)
+    {
+        controllerTypeButtons[i].image.sprite = i == index ? greenMark : redMark;
+        SetController(index);
+            
+    }
+    if (GetSelectedController()==0)
+    {
+        RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.TouchScreen;
+    }
+    else if(GetSelectedController()==1)
+    {
+        RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.SteeringWheel;
+    }
+}
+
+public void CheckAndApplyControlsSettingsOnStart()
+{
+    for (int i = 0; i < controllerTypeButtons.Length; i++)
+    {
+        controllerTypeButtons[i].image.sprite = redMark;
+          
+            
+    }
+    if (GetSelectedController()==0)
+    {
+        RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.TouchScreen;
+        controllerTypeButtons[GetSelectedController()].image.sprite = greenMark;
+    }
+    else if(GetSelectedController()==1)
+    {
+        RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.SteeringWheel;
+        controllerTypeButtons[GetSelectedController()].image.sprite = greenMark;
+    }
+}
+private int GetSelectedController()
+{
+    return PlayerPrefs.GetInt("Controller");
+}*/

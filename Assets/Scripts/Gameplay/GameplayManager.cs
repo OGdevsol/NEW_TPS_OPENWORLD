@@ -66,7 +66,6 @@ namespace Gameplay
             Interactable,
         }
 
-       
 
         private StateController stateController;
         private DataController dataController;
@@ -79,8 +78,6 @@ namespace Gameplay
 
         private int
             waveToKeepActive; //Introduce removeAt0 functionality by adding the wave to a list and then initializing waves again if waves are >0
-
-       
 
         #endregion
 
@@ -98,16 +95,15 @@ namespace Gameplay
             CheckForInstructions();
             rccCar = FindObjectOfType<RCC_CarControllerV3>();
             hns = FindObjectOfType<HUDNavigationSystem>();
-           
 
 
             switch (bShouldPlayCutscene)
             {
                 case true:
-                 myRoutine=StartCoroutine(CutsceneRoutine());
+                    myRoutine = StartCoroutine(CutsceneRoutine());
                     break;
                 case false:
-                 myRoutine=StartCoroutine(noCutsceneRoutine());
+                    myRoutine = StartCoroutine(noCutsceneRoutine());
                     break;
             }
 
@@ -195,16 +191,17 @@ namespace Gameplay
                     gameUIManager.mobileButton[i].interactable = false;
                 }
             }
-            
         }
 
         public void OnClickMobile()
         {
-            if (missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>().enabled && missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>().audios!=null)
+            if (missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>()
+                    .enabled && missionsGameObjects[dataController.GetSelectedLevel()]
+                    .GetComponent<MissionInstructionsAndEffects>().audios != null)
             {
-                missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>().audios[0].Play();
+                missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>()
+                    .audios[0].Play();
             }
-            
         }
 
         #region CoRoutines
@@ -246,7 +243,7 @@ namespace Gameplay
                 ? CarAtStartRoutine()
                 : PlayerAtStartRoutine());
             gameUIManager.cutSceneUICanvas.enabled = false;
-           Timer.instance.SetTimerValueOnSkip();  
+            Timer.instance.SetTimerValueOnSkip();
         }
 
         private IEnumerator noCutsceneRoutine()
@@ -361,7 +358,6 @@ namespace Gameplay
             return enemyType is EnemyType.Enemy_ak47 or EnemyType.Enemy_m16 or EnemyType.Enemy_Pistol;
         }
 
-     
 
         private int CheckEnemyType(int enemyIndex)
         {
@@ -389,9 +385,11 @@ namespace Gameplay
         {
             yield return new WaitForSecondsRealtime(2f);
             gameUIManager.levelCompletePanel.SetActive(true);
+            gameUIManager.pauseButton.gameObject.SetActive(false);
             yield return new WaitForSecondsRealtime(1.5f);
             //Show Ad here
         }
+
         public IEnumerator LevelFailRoutine(GameObject panelToActivate)
         {
             yield return new WaitForSecondsRealtime(2f);
@@ -399,12 +397,11 @@ namespace Gameplay
             gameUIManager.rccCanvas.enabled = false;
             gameUIManager.hUDNavigationCanvas.enabled = false;
             gameUIManager.playerControllerCanvas.enabled = false;
-            
+            gameUIManager.pauseButton.gameObject.SetActive(false);
             yield return new WaitForSecondsRealtime(1.5f);
             //Show Ad here
         }
 
         #endregion
     }
-    
 }

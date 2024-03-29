@@ -48,7 +48,7 @@ public class Timer : MonoBehaviour
 
         gameplayManager ??= GameplayManager.instance;
         dataController ??= DataController.instance;
-        gameUIManager??=GameUIManager.instance;
+        gameUIManager ??= GameUIManager.instance;
 
         timerAnimator = timerObject.GetComponent<Animator>();
         totalTime = gameplayManager.missions[dataController.GetSelectedLevel()].missionTime;
@@ -64,9 +64,7 @@ public class Timer : MonoBehaviour
         }
         else
         {
-           
             currentTime = totalTime;
-          
         }
     }
 
@@ -74,9 +72,8 @@ public class Timer : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(gameplayManager.missions[dataController.GetSelectedLevel()].waves[0]
             .cutsceneDuration);
-    
+
         currentTime = totalTime;
-     
     }
 
     public void SetTimerValueOnSkip()
@@ -95,29 +92,29 @@ public class Timer : MonoBehaviour
 
     private void CheckTimerStatus()
     {
-        if (levelIsFail || currentTime <= 0)  // If the level has already failed or the timer has run out, no need to proceed further
+        if (levelIsFail ||
+            currentTime <= 0) // If the level has already failed or the timer has run out, no need to proceed further
         {
-           
             return;
         }
-       
+
 
         currentTime -= Time.deltaTime;
         UpdateTimerDisplay();
 
-        if (!beyondWarning && Mathf.FloorToInt(currentTime) == 15)  // Trigger the warning animation when there are exactly 10 seconds remaining
+        if (!beyondWarning &&
+            Mathf.FloorToInt(currentTime) ==
+            15) // Trigger the warning animation when there are exactly 10 seconds remaining
         {
-           
             timerAnimator.Play("Warning");
             Debug.Log("10 SECONDS REMAINING");
             beyondWarning = true;
         }
 
-        if (Mathf.FloorToInt(currentTime) == 0)    // Handle level fail when timer runs out
+        if (Mathf.FloorToInt(currentTime) == 0) // Handle level fail when timer runs out
         {
-         
             levelIsFail = true;
-          //   timerObject.SetActive(false);
+            //   timerObject.SetActive(false);
             Debug.Log("Level Fail");
             StartCoroutine(gameplayManager.LevelFailRoutine(gameUIManager.levelFailPanelTime));
         }

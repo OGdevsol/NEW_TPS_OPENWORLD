@@ -10,10 +10,11 @@ using UnityEngine.UIElements.Experimental;
 public class GameUIManager : MonoBehaviour
 {
     private InGameSoundManager inGameSoundManager;
-    [Header("____BUTTONS+____"), Space(10)]
-   // public Levels[] levelsData;
 
+    [Header("____BUTTONS+____"), Space(10)]
+    // public Levels[] levelsData;
     public GameObject player;
+
     public TouchButton pickWeaponButton;
 
     public Button getInCarButton;
@@ -21,18 +22,17 @@ public class GameUIManager : MonoBehaviour
     public Button[] mobileButton;
     public Button skipButton;
     public Button[] controllerButtons;
+    public Button pauseButton;
     public Sprite redMark;
     public Sprite greenMark;
-    
-    
-    
-    
-    
+
+
     public static GameUIManager instance;
     public List<GameObject> deathDeactivationButtons;
 
     [Header("____Canvases____"), Space(10)]
     public Canvas rccCanvas;
+
     public Canvas playerControllerCanvas;
     public Canvas gameplayUICanvas;
     public Canvas cutSceneUICanvas;
@@ -40,43 +40,39 @@ public class GameUIManager : MonoBehaviour
     public Canvas screenHudCanvas;
     public Canvas hUDNavigationCanvas;
     public GameObject headshotEffect;
+
     public Canvas[] allCanvases;
-  //  public Levels[] levels;
+
+    //  public Levels[] levels;
     public GameObject playerr;
     public GameObject enemyPrefab;
 
-    [Header("____Panels____"), Space(10)]
-    public GameObject levelCompletePanel;
+    [Header("____Panels____"), Space(10)] public GameObject levelCompletePanel;
     public GameObject levelFailPanelTime;
     public GameObject levelFailPanelDeath;
     public GameObject levelFailPanelBusted;
     public GameObject pausePanel;
-    
-    
+
 
     private void Awake()
     {
         instance = this;
         Transform personTransform;
-        inGameSoundManager=InGameSoundManager.instance;
-      
+        inGameSoundManager = InGameSoundManager.instance;
     }
 
     private void Start()
     {
-        CheckAndApplySettingsOnStart();
+        CheckAndApplyControlsSettingsOnStart();
     }
 
-    private IEnumerator CutsceneRoutine(GameObject cutscene ,  float time)
+    private IEnumerator CutsceneRoutine(GameObject cutscene, float time)
     {
         cutscene.SetActive(true);
-      
+
         yield return new WaitForSeconds(time);
         cutscene.SetActive(false);
-        
     }
-
-   
 
 
     public void DisableObjectsOnPlayerDeath()
@@ -86,12 +82,12 @@ public class GameUIManager : MonoBehaviour
             deathDeactivationButtons[i].SetActive(false);
         }
     }
-    
+
     public void DisableAllCanvases()
     {
         int i;
         int canvasesLength = allCanvases.Length;
-        for (i = 0; i < canvasesLength ; i++)
+        for (i = 0; i < canvasesLength; i++)
         {
             allCanvases[i].enabled = false;
         }
@@ -112,23 +108,24 @@ public class GameUIManager : MonoBehaviour
         pausePanel.SetActive(false);
         inGameSoundManager.SetInGameListenersVolume();
     }
+
     public void OnClickRestart()
     {
         SceneManager.LoadScene(1);
-    } 
+    }
+
     public void OnClickNext()
     {
-        if (DataController.instance.GetSelectedLevel()<9)
+        if (DataController.instance.GetSelectedLevel() < 9)
         {
-            DataController.instance.SetSelectedLevel(DataController.instance.GetSelectedLevel()+1);
+            DataController.instance.SetSelectedLevel(DataController.instance.GetSelectedLevel() + 1);
             SceneManager.LoadScene(1);
         }
-        else if(DataController.instance.GetSelectedLevel()>=9)
+        else if (DataController.instance.GetSelectedLevel() >= 9)
         {
             DataController.instance.SetSelectedLevel(0);
             SceneManager.LoadScene(1);
         }
-       
     }
 
     public void OnClickHome()
@@ -136,74 +133,43 @@ public class GameUIManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    private int defaultIndex=0;
+    private readonly int defaultIndex = 0;
+
     public void CheckController()
     {
-       
+        var selectedController = GetSelectedController();
         for (int i = 0; i < controllerButtons.Length; i++)
         {
-            controllerButtons[i].image.sprite = redMark;
-        }
-        if (PlayerPrefs.HasKey("Controller"))
-        {
-            controllerButtons[PlayerPrefs.GetInt("Controller")].image.sprite = greenMark;
-            
-        }
-        else
-        {
-            controllerButtons[defaultIndex].image.sprite = greenMark;
+            controllerButtons[i].image.sprite = (i == selectedController) ? greenMark : redMark;
         }
     }
 
     public void OnClickControllerButton(int index)
     {
         PlayerPrefs.SetInt("Controller", index);
-        for (int i = 0; i < controllerButtons.Length; i++)
+        CheckController();
+        RCC_Settings.Instance.mobileController = index switch
         {
-            controllerButtons[i].image.sprite = redMark;
-        }
-        controllerButtons[GetSelectedController()].image.sprite = greenMark;
-        if (GetSelectedController()==0)
-        {
-            RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.TouchScreen;
-        }
-        else if(GetSelectedController()==1)
-        {
-            RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.SteeringWheel;
-        }
-       
-      
+            0 => RCC_Settings.MobileController.TouchScreen,
+            1 => RCC_Settings.MobileController.SteeringWheel,
+            _ => RCC_Settings.Instance.mobileController
+        };
+    }
 
+    public void CheckAndApplyControlsSettingsOnStart()
+    {
+        int selectedController = GetSelectedController();
+        RCC_Settings.Instance.mobileController = (selectedController == 0)
+            ? RCC_Settings.MobileController.TouchScreen
+            : RCC_Settings.MobileController.SteeringWheel;
+        CheckController();
     }
 
     private int GetSelectedController()
     {
-        return PlayerPrefs.GetInt("Controller");
+        return PlayerPrefs.GetInt("Controller", defaultIndex);
     }
-
-    public void CheckAndApplySettingsOnStart()
-    {
-      
-        if (GetSelectedController()==0)
-        {
-            RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.TouchScreen;
-        }
-        else if(GetSelectedController()==1)
-        {
-            RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.SteeringWheel;
-        }
-        foreach (var t in controllerButtons)
-        {
-            t.image.sprite = redMark;
-        }
-        controllerButtons[GetSelectedController()].image.sprite = greenMark;
-    }
-
-
 }
-
-
-
 
 
 /*if (levelsData[DataController.instance.GetSelectedLevel()].LevelLogic==Levels.levelLogic.hasCutscene)
@@ -227,7 +193,7 @@ public class GameUIManager : MonoBehaviour
           }
       }*/
 
-      
+
 /*
 if (levels[1].cutSceneEnum==Levels.CuttSenEnum.Yes)
 {
@@ -260,3 +226,66 @@ else if (levels[1].cutSceneEnum==Levels.CuttSenEnum.No)
        }
    }
    */
+
+/*
+public void CheckController()
+{
+       
+    for (int i = 0; i < controllerButtons.Length; i++)
+    {
+        controllerButtons[i].image.sprite = redMark;
+    }
+    if (PlayerPrefs.HasKey("Controller"))
+    {
+        controllerButtons[PlayerPrefs.GetInt("Controller")].image.sprite = greenMark;
+            
+    }
+    else
+    {
+        controllerButtons[defaultIndex].image.sprite = greenMark;
+    }
+}
+
+public void OnClickControllerButton(int index)
+{
+    PlayerPrefs.SetInt("Controller", index);
+    for (int i = 0; i < controllerButtons.Length; i++)
+    {
+        controllerButtons[i].image.sprite = redMark;
+    }
+    controllerButtons[GetSelectedController()].image.sprite = greenMark;
+    if (GetSelectedController()==0)
+    {
+        RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.TouchScreen;
+    }
+    else if(GetSelectedController()==1)
+    {
+        RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.SteeringWheel;
+    }
+       
+      
+
+}
+
+private int GetSelectedController()
+{
+    return PlayerPrefs.GetInt("Controller");
+}
+
+public void CheckAndApplyControlsSettingsOnStart()
+{
+      
+    if (GetSelectedController()==0)
+    {
+        RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.TouchScreen;
+    }
+    else if(GetSelectedController()==1)
+    {
+        RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.SteeringWheel;
+    }
+    foreach (var t in controllerButtons)
+    {
+        t.image.sprite = redMark;
+    }
+    controllerButtons[GetSelectedController()].image.sprite = greenMark;
+}#1#*/
