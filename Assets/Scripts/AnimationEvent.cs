@@ -7,27 +7,59 @@ public class AnimationEvent : MonoBehaviour
     
     public void GetInCarStartAnimationEvent()
     {
-    
-        GameplayCarController.instance.getInCarPlayer.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
+
+        if (GameUIManager.instance.modeState==GameUIManager.ModeState.Missions)
+        {
+            GameplayCarController.instance.getInCarPlayer.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
+        }
+        else  if (GameUIManager.instance.modeState==GameUIManager.ModeState.FreeMode)
+        {
+            GameplayCarControllerFreeMode.instance.getInCarPlayer.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
+        }
+       
 
     }
     public void GetInCarEndAnimationEvent()
     {
+        if (GameUIManager.instance.modeState==GameUIManager.ModeState.Missions)
+        {
+            GameplayCarController.instance.getInCarPlayer.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+        }
+        else   if (GameUIManager.instance.modeState==GameUIManager.ModeState.FreeMode)
+        {
+            GameplayCarControllerFreeMode.instance.getInCarPlayer.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+        }
     
-        GameplayCarController.instance.getInCarPlayer.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+       
     
     }
     public void GetOutOfCarStartAnimationEvent()
     {
+        if (GameUIManager.instance.modeState==GameUIManager.ModeState.Missions)
+        {
+            GameplayCarController.instance.getOutOfCarPlayer.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+        }
+        else   if (GameUIManager.instance.modeState==GameUIManager.ModeState.FreeMode)
+        {
+            GameplayCarControllerFreeMode.instance.getOutOfCarPlayer.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+        }
     
-        GameplayCarController.instance.getOutOfCarPlayer.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+       
     
     }
     
     public void GetOutOfCarMidAnimationEvent()
     {
+        if (GameUIManager.instance.modeState==GameUIManager.ModeState.Missions)
+        {
+            GameplayCarController.instance.getOutOfCarPlayer.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
+        }
+        else   if (GameUIManager.instance.modeState==GameUIManager.ModeState.FreeMode)
+        {
+            GameplayCarControllerFreeMode.instance.getOutOfCarPlayer.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
+        }
     
-        GameplayCarController.instance.getOutOfCarPlayer.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
+      
     
     }
 

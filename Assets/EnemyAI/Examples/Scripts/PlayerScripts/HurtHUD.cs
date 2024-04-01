@@ -28,12 +28,29 @@ public class HurtHUD : MonoBehaviour
 		this.hurtPrefab = hurtPrefab;
 		this.decayFactor = decayFactor;
 		this.player = player;
-		if (cam==null)
+		if (DataController.instance.GetMode()==0)
 		{
+			if (cam==null)
+			{
+				cam = GameplayCarController.instance.playerCamera;
+				
+			}
 			cam = GameplayCarController.instance.playerCamera;
+			//cam = Camera.main.transform;
+			
 		}
-		//cam = Camera.main.transform;
-		cam = GameplayCarController.instance.playerCamera;
+
+		if (DataController.instance.GetMode() == 1)
+		{
+			if (cam==null)
+			{
+				cam = GameplayCarControllerFreeMode.instance.playerCamera;
+			}
+			//cam = Camera.main.transform;
+			cam = GameplayCarControllerFreeMode.instance.playerCamera;
+		}
+
+	
 	}
 
 	void Update()

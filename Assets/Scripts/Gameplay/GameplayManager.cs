@@ -11,6 +11,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem.HID;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Gameplay
@@ -95,21 +96,31 @@ namespace Gameplay
             CheckForInstructions();
             rccCar = FindObjectOfType<RCC_CarControllerV3>();
             hns = FindObjectOfType<HUDNavigationSystem>();
+            GameUIManager.instance.modeState = GameUIManager.ModeState.Missions;
+          //  dataController.SetMode(1);
 
 
-            switch (bShouldPlayCutscene)
-            {
-                case true:
-                    myRoutine = StartCoroutine(CutsceneRoutine());
-                    break;
-                case false:
-                    myRoutine = StartCoroutine(noCutsceneRoutine());
-                    break;
-            }
+          
+                switch (bShouldPlayCutscene)
+                {
+                    case true:
+                        myRoutine = StartCoroutine(CutsceneRoutine());
+                        break;
+                    case false:
+                        myRoutine = StartCoroutine(noCutsceneRoutine());
+                        break;
+                }
+            
+           
 
             if (bShouldSpawnEnemies)
             {
                 SpawnEnemies();
+            }
+            Debug.LogError("Mode is " + dataController.GetMode());
+            if (dataController.GetMode()==1)
+            {
+             gameUIManager.FreeModeDeactivations();   
             }
         }
 
@@ -386,6 +397,19 @@ namespace Gameplay
             yield return new WaitForSecondsRealtime(2f);
             gameUIManager.levelCompletePanel.SetActive(true);
             gameUIManager.pauseButton.gameObject.SetActive(false);
+            if (dataController.GetMode()==1)
+            {
+                for (int i = 0; i < gameUIManager.winPanelDeactivations.Length; i++)
+                {
+                    gameUIManager.winPanelDeactivations[i].interactable = false;
+                }
+                yield return new WaitForSecondsRealtime(3f);
+                gameUIManager.loadingPanel.SetActive(true);
+                yield return new WaitForSecondsRealtime(3f);
+
+                SceneManager.LoadScene(2);
+            }
+           
             yield return new WaitForSecondsRealtime(1.5f);
             //Show Ad here
         }
@@ -398,9 +422,20 @@ namespace Gameplay
             gameUIManager.hUDNavigationCanvas.enabled = false;
             gameUIManager.playerControllerCanvas.enabled = false;
             gameUIManager.pauseButton.gameObject.SetActive(false);
+            if (dataController.GetMode()==1)
+            {
+                for (int i = 0; i < gameUIManager.losePanelDeactivations.Length; i++)
+                {
+                    gameUIManager.losePanelDeactivations[i].interactable = false;
+                }
+                yield return new WaitForSecondsRealtime(2f);
+                Debug.Log("Retruning to open world");
+                
+            }
             yield return new WaitForSecondsRealtime(1.5f);
             //Show Ad here
         }
+        
 
         #endregion
     }

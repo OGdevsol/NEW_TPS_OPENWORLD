@@ -35,4 +35,13 @@ public class DataController : MonoBehaviour
     {
         return PlayerPrefs.GetInt(selectedVehicle);
     }
+    public void SetMode(int index)
+    {
+        PlayerPrefs.SetInt("Mode",index);
+    }
+
+    public int GetMode()
+    {
+        return PlayerPrefs.GetInt("Mode");
+    }
 }

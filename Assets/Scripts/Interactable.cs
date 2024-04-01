@@ -37,6 +37,10 @@ public class Interactable : MonoBehaviour
 
     private void CheckEnemiesInLevel()
     {
+        if (dataController.GetMode()!=1)
+        {
+            
+        }
         if (this.gameObject.activeInHierarchy)
         {
             if (gameplayManager.missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.Count == 0)

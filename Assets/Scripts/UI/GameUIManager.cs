@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using ControlFreak2;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -9,6 +10,7 @@ using UnityEngine.UIElements.Experimental;
 
 public class GameUIManager : MonoBehaviour
 {
+    public ModeState modeState;
     private InGameSoundManager inGameSoundManager;
 
     [Header("____BUTTONS+____"), Space(10)]
@@ -23,6 +25,15 @@ public class GameUIManager : MonoBehaviour
     public Button skipButton;
     public Button[] controllerButtons;
     public Button pauseButton;
+    public Button[] winPanelDeactivations;
+    public Button[] losePanelDeactivations;
+    public Button[] pausePanelDeactivations;
+    public Button accept;
+    public Button reject;
+    public GameObject freeModePanel;
+    public TMP_Text freeModePanelText;
+   
+    
     public Sprite redMark;
     public Sprite greenMark;
 
@@ -52,6 +63,14 @@ public class GameUIManager : MonoBehaviour
     public GameObject levelFailPanelDeath;
     public GameObject levelFailPanelBusted;
     public GameObject pausePanel;
+    public GameObject loadingPanel;
+    
+    
+    public enum ModeState
+    {
+        Missions,
+        FreeMode
+    }
 
 
     private void Awake()
@@ -75,6 +94,21 @@ public class GameUIManager : MonoBehaviour
     }
 
 
+    public void FreeModeDeactivations()
+    {
+        for (int i = 0; i < winPanelDeactivations.Length; i++)
+        {
+            winPanelDeactivations[i].interactable = false;
+        }
+        for (int i = 0; i < losePanelDeactivations.Length; i++)
+        {
+            losePanelDeactivations[i].interactable = false;
+        }
+        for (int i = 0; i < pausePanelDeactivations.Length; i++)
+        {
+            pausePanelDeactivations[i].interactable = false;
+        }
+    }
     public void DisableObjectsOnPlayerDeath()
     {
         for (int i = 0; i < deathDeactivationButtons.Count; i++)
