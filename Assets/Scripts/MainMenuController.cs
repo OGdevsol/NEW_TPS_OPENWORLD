@@ -134,7 +134,7 @@ public class MainMenuController : MonoBehaviour
     public void OnClickMissions()
     {
         SetMode(0);
-        SceneManager.LoadScene(1);
+       // SceneManager.LoadScene(1);
     }
     public void OnClickOpenWorld()
     {

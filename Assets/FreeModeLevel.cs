@@ -8,10 +8,12 @@ public class FreeModeLevel : MonoBehaviour
 {
   private GameUIManager gameUiManager;
   private DataController dataController;
+ 
   
   public string levelObjective;
   public int levelNo;
   private int level;
+  private Coroutine myRoutine;
 
   private void Awake()
   {
@@ -24,15 +26,23 @@ public class FreeModeLevel : MonoBehaviour
   
     if (other.gameObject.tag is "Player" or "PlayerCar")
     {
+      GameplayManagerFreeMode.instance.missionSound.Play();
       GameplayManagerFreeMode.instance.freeModeLevel = levelNo;
       GameUIManager.instance.freeModePanel.SetActive(true);
       GameUIManager.instance.freeModePanelText.text = levelObjective;
-      Time.timeScale = 0;
-      AudioListener.volume = 0;
-     
-    
+     myRoutine= StartCoroutine(GeneralWait());
+
+
     }
   
+  }
+
+  private IEnumerator GeneralWait()
+  {
+    yield return new WaitForSecondsRealtime(0.25f);
+    Time.timeScale = 0;
+    AudioListener.volume = 0;
+
   }
 
   private void OnTriggerExit(Collider other)
@@ -41,7 +51,8 @@ public class FreeModeLevel : MonoBehaviour
     if (other.gameObject.tag is "Player" or "PlayerCar")
     {
       GameUIManager.instance.freeModePanel.SetActive(false);
-      
+     
+
     }
   }
 

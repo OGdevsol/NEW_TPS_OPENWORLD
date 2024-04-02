@@ -70,7 +70,7 @@ public class SimplePlayerHealth : HealthManager
         {
             GUIStyle textStyle = new GUIStyle
             {
-                fontSize = 50
+                fontSize = 1
             };
             textStyle.normal.textColor = Color.white;
             GUI.Label(new Rect(0, Screen.height - 60, 30, 30), health.ToString(), textStyle);

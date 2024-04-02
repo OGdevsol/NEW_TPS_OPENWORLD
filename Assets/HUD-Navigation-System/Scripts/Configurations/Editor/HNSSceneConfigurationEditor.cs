@@ -266,7 +266,7 @@ public class HNSSceneConfigurationEditor : HUDNavigationBaseEditor
 					if (hudTarget.minimapProfile != null) {
 						EditorGUILayout.PropertyField (_pMinimapMode);
 						EditorGUILayout.Slider (_pMinimapScale, .01f, 1f, "Minimap Scale");
-						EditorGUILayout.Slider (_pMinimapRadius, 1f, 500f, "Minimap Radius");
+						EditorGUILayout.Slider (_pMinimapRadius, 1f, 1000f, "Minimap Radius");
 
 						// minimap scaling settings
 						GUILayout.Space(4); // SPACE

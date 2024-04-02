@@ -237,8 +237,5 @@ public class GameplayCarController : MonoBehaviour
         shootBehaviour ??= ShootBehaviour.instance;
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        throw new NotImplementedException();
-    }
+  
 }

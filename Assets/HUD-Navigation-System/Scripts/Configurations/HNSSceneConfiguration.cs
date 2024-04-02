@@ -57,7 +57,7 @@ namespace SickscoreGames.HUDNavigationSystem
 		public HNSMapProfile minimapProfile;
 		public MinimapModes minimapMode = MinimapModes.RotatePlayer;
 		public float minimapScale = .25f;
-		public float minimapRadius = 75f;
+		public float minimapRadius = 1000f;
 		public bool useMinimapScaling = true;
 		public float minimapScaleDistance = 15f;
 		public float minimapMinScale = .8f;

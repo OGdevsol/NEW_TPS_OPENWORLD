@@ -313,6 +313,7 @@ public class ShootBehaviour : GenericBehaviour
 	// Change the active weapon.
 	public void ChangeWeapon(int oldWeapon, int newWeapon)
 	{
+	
 		// Previously armed? Disable weapon.
 		if (oldWeapon > 0)
 		{
@@ -344,6 +345,8 @@ public class ShootBehaviour : GenericBehaviour
 
 		// Set crosshair if armed.
 		SetWeaponCrosshair(newWeapon > 0);
+		Debug.Log(oldWeapon);
+		Debug.Log(newWeapon);
 	}
 
 	// Handle the shot parameters during its lifetime.

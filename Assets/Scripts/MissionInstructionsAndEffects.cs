@@ -30,7 +30,11 @@ public class MissionInstructionsAndEffects : MonoBehaviour
             yield return new WaitForSecondsRealtime(gameplayManager.missions[dataController.GetSelectedLevel()].waves[0]
                 .cutsceneDuration);
             yield return new WaitForSecondsRealtime(playAfterWaitDuration);
-            audios?[0].Play();
+            if (audios.Length>0)
+            {
+                audios?[0].Play();
+            }
+           
         }
         
         if (!gameplayManager.bShouldPlayCutscene)

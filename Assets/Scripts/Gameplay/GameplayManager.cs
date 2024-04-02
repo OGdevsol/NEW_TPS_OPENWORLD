@@ -442,7 +442,9 @@ namespace Gameplay
 
         public IEnumerator LevelCompleteRoutine()
         {
+            InGameSoundManager.instance.missionCompleteSound.Play();
             yield return new WaitForSecondsRealtime(2f);
+            ShootBehaviour.instance.ChangeWeapon(ShootBehaviour.instance.activeWeapon, 0);
             gameUIManager.levelCompletePanel.SetActive(true);
             gameUIManager.pauseButton.gameObject.SetActive(false);
             if (dataController.GetMode()==1)

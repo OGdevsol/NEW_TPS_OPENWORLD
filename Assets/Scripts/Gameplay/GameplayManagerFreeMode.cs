@@ -43,6 +43,7 @@ public class GameplayManagerFreeMode : MonoBehaviour
     private GameplayCarControllerFreeMode gameplayCarController;
     private InteractiveWeapon interactiveWeapon;
     private HUDNavigationSystem hns;
+    public AudioSource missionSound;
 
     private int y;
 
@@ -112,10 +113,10 @@ public class GameplayManagerFreeMode : MonoBehaviour
 
         yield return new WaitForSecondsRealtime(0.25f);
 
-        ShootBehaviour.instance.ChangeWeapon(ShootBehaviour.instance.activeWeapon, 0);
+    
 
         gameUIManager.FreeModeDeactivations();
-
+        ShootBehaviour.instance.ChangeWeapon(ShootBehaviour.instance.activeWeapon, 0);
     }
 
     #endregion

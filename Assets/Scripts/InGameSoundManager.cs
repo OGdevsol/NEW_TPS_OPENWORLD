@@ -6,6 +6,7 @@ public class InGameSoundManager : MonoBehaviour
     public static InGameSoundManager instance;
     public Slider inGameSlider;
     public AudioSource clickSound;
+    public AudioSource missionCompleteSound;
 
     private void Awake()
     {

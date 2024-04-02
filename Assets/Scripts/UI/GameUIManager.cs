@@ -68,6 +68,7 @@ public class GameUIManager : MonoBehaviour
     public TMP_Text phonePanelText;
     
     
+    
     public enum ModeState
     {
         Missions,
@@ -100,15 +101,15 @@ public class GameUIManager : MonoBehaviour
     {
         for (int i = 0; i < winPanelDeactivations.Length; i++)
         {
-            winPanelDeactivations[i].interactable = false;
+            winPanelDeactivations[i].gameObject.SetActive(false); 
         }
         for (int i = 0; i < losePanelDeactivations.Length; i++)
         {
-            losePanelDeactivations[i].interactable = false;
+            losePanelDeactivations[i].gameObject.SetActive(false);  
         }
         for (int i = 0; i < pausePanelDeactivations.Length; i++)
         {
-            pausePanelDeactivations[i].interactable = false;
+            pausePanelDeactivations[i].gameObject.SetActive(false); 
         }
     }
     public void DisableObjectsOnPlayerDeath()
@@ -135,6 +136,8 @@ public class GameUIManager : MonoBehaviour
         Time.timeScale = 0;
         pausePanel.SetActive(true);
         AudioListener.volume = 0;
+      //  ShootBehaviour.instance.activeWeapon = 0;
+        ShootBehaviour.instance.ChangeWeapon(ShootBehaviour.instance.activeWeapon, 0);
     }
 
     public void OnClickResume()
