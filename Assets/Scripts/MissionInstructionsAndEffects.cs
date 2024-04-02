@@ -10,6 +10,7 @@ public class MissionInstructionsAndEffects : MonoBehaviour
     private DataController dataController;
     [SerializeField] private float playAfterWaitDuration;
     [SerializeField] public AudioSource[] audios;
+    public string levelObjective;
 
     private void Awake()
     {

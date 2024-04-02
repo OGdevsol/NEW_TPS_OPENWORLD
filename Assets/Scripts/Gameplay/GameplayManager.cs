@@ -204,15 +204,63 @@ namespace Gameplay
             }
         }
 
-        public void OnClickMobile()
+        /*public IEnumerator OnClickMobileRoutine()
         {
             if (missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>()
                     .enabled && missionsGameObjects[dataController.GetSelectedLevel()]
                     .GetComponent<MissionInstructionsAndEffects>().audios != null)
             {
-                missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>()
-                    .audios[0].Play();
+                if ( missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>()
+                    .audios.Length>0)
+                {
+                    missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>()
+                        .audios[0].Play();
+                }
+              
             }
+            
+            gameUIManager.phonePanelText.GetComponent<TypewriterEffectTextMeshPro>().stringArray[0] = missionsGameObjects[dataController.GetSelectedLevel()]
+                .GetComponent<MissionInstructionsAndEffects>().levelObjective;
+            gameUIManager.phonePanel.SetActive(true);
+         //   gameUIManager.phonePanelText.gameObject.SetActive(true);
+            yield return new WaitForSecondsRealtime(4f);
+            gameUIManager.phonePanel.SetActive(false);
+            gameUIManager.phonePanelText.GetComponent<TypewriterEffectTextMeshPro>().stringArray[0] = null;
+        //    gameUIManager.phonePanelText.gameObject.SetActive(false);
+            
+
+        }*/
+        public IEnumerator OnClickMobileRoutine()
+        {
+            MissionInstructionsAndEffects missionInstructions = missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>();
+
+            if (missionInstructions.enabled && missionInstructions.audios != null && missionInstructions.audios.Length > 0)
+            {
+                missionInstructions.audios[0].Play();
+            }
+
+            TypewriterEffectTextMeshPro phonePanelTextEffect = gameUIManager.phonePanelText.GetComponent<TypewriterEffectTextMeshPro>();
+
+            if (phonePanelTextEffect != null)
+            {
+                phonePanelTextEffect.stringArray[0] = missionInstructions.levelObjective;
+            }
+
+            gameUIManager.phonePanel.SetActive(true);
+
+            yield return new WaitForSecondsRealtime(4f);
+
+            gameUIManager.phonePanel.SetActive(false);
+
+            if (phonePanelTextEffect != null)
+            {
+                phonePanelTextEffect.stringArray[0] = null;
+            }
+        }
+
+        public void OnClickMobile()
+        {
+            StartCoroutine(OnClickMobileRoutine());
         }
 
         #region CoRoutines

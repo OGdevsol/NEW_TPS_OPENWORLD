@@ -64,6 +64,8 @@ public class GameUIManager : MonoBehaviour
     public GameObject levelFailPanelBusted;
     public GameObject pausePanel;
     public GameObject loadingPanel;
+    public GameObject phonePanel;
+    public TMP_Text phonePanelText;
     
     
     public enum ModeState
