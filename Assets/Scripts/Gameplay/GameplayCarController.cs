@@ -21,13 +21,15 @@ public class GameplayCarController : MonoBehaviour
     public Transform playerOutOfCarPosition;
 
     [HideInInspector] public bool inCar;
-
-    // public AudioSource doorOpen;
-//  public AudioSource doorClose;
     private GameUIManager gameUIManager;
     private HUDNavigationSystem hns;
     private GameplayManager gameplayManager;
     private ShootBehaviour shootBehaviour;
+
+    private void Start()
+    {
+        
+    }
 
     private void Awake()
     {
@@ -236,6 +238,4 @@ public class GameplayCarController : MonoBehaviour
         gameplayManager ??= GameplayManager.instance;
         shootBehaviour ??= ShootBehaviour.instance;
     }
-
-  
 }

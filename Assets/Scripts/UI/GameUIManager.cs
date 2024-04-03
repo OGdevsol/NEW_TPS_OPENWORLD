@@ -89,7 +89,6 @@ public class GameUIManager : MonoBehaviour
         instance = this;
         Transform personTransform;
         inGameSoundManager = InGameSoundManager.instance;
-      
     }
 
     private void Start()
@@ -210,7 +209,7 @@ public class GameUIManager : MonoBehaviour
 
     public void CheckAndApplyControlsSettingsOnStart()
     {
-        int selectedController = GetSelectedController();
+        var selectedController = GetSelectedController();
         RCC_Settings.Instance.mobileController = (selectedController == 0)
             ? RCC_Settings.MobileController.TouchScreen
             : RCC_Settings.MobileController.SteeringWheel;
@@ -234,122 +233,3 @@ public class GameUIManager : MonoBehaviour
         }
     }
 }
-
-
-/*if (levelsData[DataController.instance.GetSelectedLevel()].LevelLogic==Levels.levelLogic.hasCutscene)
-      {
-          levelsData[DataController.instance.GetSelectedLevel()].cutscene.SetActive(true);
-
-          for (int i = 0; i < levelsData[DataController.instance.GetSelectedLevel()].dropPeople.Length; i++)
-          {
-              player.transform.position = levelsData[DataController.instance.GetSelectedLevel()].pickPos.position;
-              levelsData[DataController.instance.GetSelectedLevel()].dropPeople[i].SetActive(true);
-          
-          }
-      }
-
-      if (levelsData[DataController.instance.GetSelectedLevel()].LevelLogic==Levels.levelLogic.noCutscene)
-      {
-          for (int i = 0; i < levelsData[DataController.instance.GetSelectedLevel()].dropPeople.Length; i++)
-          {
-              player.transform.position = levelsData[DataController.instance.GetSelectedLevel()].pickPos.position;
-              levelsData[DataController.instance.GetSelectedLevel()].dropPeople[i].SetActive(true);
-          }
-      }*/
-
-
-/*
-if (levels[1].cutSceneEnum==Levels.CuttSenEnum.Yes)
-{
-  //  StartCoroutine(CutsceneRoutine(levels[0].cutsceen, levels[0].cutsceneDuration));
-    // cutscene end
-    //level start
-  //  playerr.transform.position = levels[0].startPos.position;
- //   SpawnEnemies();
- Debug.Log(levels[1].enemies.Length);
- Debug.Log(levels[1].cutSceneEnum);
-    
-   
-}
-else if (levels[1].cutSceneEnum==Levels.CuttSenEnum.No)
-{
- //   playerr.transform.position = levels[0].startPos.position;
-    Debug.Log(levels[1].enemies.Length);
-    Debug.Log(levels[1].cutSceneEnum);
-  
-}
-*/
-/*
-   public void SpawnEnemies()
-   {
-       for (int i = 0; i < levels[0].enemies.Length; i++)
-       {
-           GameObject enemy = Instantiate(enemyPrefab, levels[0].enemies[i].position);
-           levels[0].enemies[i].weapon.SetActive(true);
-           SpawnEnemies();
-       }
-   }
-   */
-
-/*
-public void CheckController()
-{
-       
-    for (int i = 0; i < controllerButtons.Length; i++)
-    {
-        controllerButtons[i].image.sprite = redMark;
-    }
-    if (PlayerPrefs.HasKey("Controller"))
-    {
-        controllerButtons[PlayerPrefs.GetInt("Controller")].image.sprite = greenMark;
-            
-    }
-    else
-    {
-        controllerButtons[defaultIndex].image.sprite = greenMark;
-    }
-}
-
-public void OnClickControllerButton(int index)
-{
-    PlayerPrefs.SetInt("Controller", index);
-    for (int i = 0; i < controllerButtons.Length; i++)
-    {
-        controllerButtons[i].image.sprite = redMark;
-    }
-    controllerButtons[GetSelectedController()].image.sprite = greenMark;
-    if (GetSelectedController()==0)
-    {
-        RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.TouchScreen;
-    }
-    else if(GetSelectedController()==1)
-    {
-        RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.SteeringWheel;
-    }
-       
-      
-
-}
-
-private int GetSelectedController()
-{
-    return PlayerPrefs.GetInt("Controller");
-}
-
-public void CheckAndApplyControlsSettingsOnStart()
-{
-      
-    if (GetSelectedController()==0)
-    {
-        RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.TouchScreen;
-    }
-    else if(GetSelectedController()==1)
-    {
-        RCC_Settings.Instance.mobileController = RCC_Settings.MobileController.SteeringWheel;
-    }
-    foreach (var t in controllerButtons)
-    {
-        t.image.sprite = redMark;
-    }
-    controllerButtons[GetSelectedController()].image.sprite = greenMark;
-}#1#*/

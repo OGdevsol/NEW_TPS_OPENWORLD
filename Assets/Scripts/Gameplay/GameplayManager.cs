@@ -22,33 +22,20 @@ namespace Gameplay
 
         [Tooltip("Remove this bool and functionality before final build as this is for testing purposes only")]
         public bool bShouldPlayCutscene;
-
         public bool bShouldSpawnEnemies;
-
         public static GameplayManager instance;
         public GameObject environment;
-
         [Header("____Player And Enemy Data____"), Space(10)]
         public GameObject player;
-
         public Transform impactDirection;
-
-
         public GameObject targetForEnemy;
         public GameObject[] enemyVariantsPrefab;
         public GameObject[] playerCar;
         public GameObject[] missionsGameObjects;
 
         [Header("______________")]
-        [Header("______________")]
-        [Header("______________")]
-        [Header("______________")]
         [Header("____MissionsData____"), Space(10)]
         public Mission[] missions;
-
-        [Header("______________")]
-        [Header("______________")]
-        [Header("______________")]
         [Header("______________")]
         [Header("____DO NOT MODIFY, DEBUG DATA____"), Space(10)]
         [SerializeField]
@@ -85,12 +72,10 @@ namespace Gameplay
 
         private void Awake()
         {
-           
-            //  QualitySettings.SetQualityLevel(3);
             instance = this;
             DataCache();
             Debug.LogError(missions[dataController.GetSelectedLevel()].missionControllerType);
-            // dataController.SetSelectedLevel(1);
+
             Time.timeScale = 1;
             environment.SetActive(true);
             ActivateCurrentLevel();
@@ -98,34 +83,11 @@ namespace Gameplay
             rccCar = FindObjectOfType<RCC_CarControllerV3>();
             hns = FindObjectOfType<HUDNavigationSystem>();
             GameUIManager.instance.modeState = GameUIManager.ModeState.Missions;
-//            GameplayCarController.instance.playerCamera.GetComponent<Camera>().enabled = false;
-        
-           // GameUIManager.instance.CheckAndChangeCurrentWeapon();
-            
-          //  dataController.SetMode(1);
-
-
-          
-                switch (bShouldPlayCutscene)
-                {
-                    case true:
-                        myRoutine = StartCoroutine(CutsceneRoutine());
-                        break;
-                    case false:
-                        myRoutine = StartCoroutine(noCutsceneRoutine());
-                        break;
-                }
-            
-           
-
-            if (bShouldSpawnEnemies)
-            {
-                SpawnEnemies();
-            }
+            myRoutine = StartCoroutine(CutsceneRoutine());
             Debug.LogError("Mode is " + dataController.GetMode());
-            if (dataController.GetMode()==1)
+            if (dataController.GetMode() == 1)
             {
-             gameUIManager.FreeModeDeactivations();   
+                gameUIManager.FreeModeDeactivations();
             }
         }
 
@@ -209,42 +171,20 @@ namespace Gameplay
             }
         }
 
-        /*public IEnumerator OnClickMobileRoutine()
-        {
-            if (missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>()
-                    .enabled && missionsGameObjects[dataController.GetSelectedLevel()]
-                    .GetComponent<MissionInstructionsAndEffects>().audios != null)
-            {
-                if ( missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>()
-                    .audios.Length>0)
-                {
-                    missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>()
-                        .audios[0].Play();
-                }
-              
-            }
-            
-            gameUIManager.phonePanelText.GetComponent<TypewriterEffectTextMeshPro>().stringArray[0] = missionsGameObjects[dataController.GetSelectedLevel()]
-                .GetComponent<MissionInstructionsAndEffects>().levelObjective;
-            gameUIManager.phonePanel.SetActive(true);
-         //   gameUIManager.phonePanelText.gameObject.SetActive(true);
-            yield return new WaitForSecondsRealtime(4f);
-            gameUIManager.phonePanel.SetActive(false);
-            gameUIManager.phonePanelText.GetComponent<TypewriterEffectTextMeshPro>().stringArray[0] = null;
-        //    gameUIManager.phonePanelText.gameObject.SetActive(false);
-            
 
-        }*/
         public IEnumerator OnClickMobileRoutine()
         {
-            MissionInstructionsAndEffects missionInstructions = missionsGameObjects[dataController.GetSelectedLevel()].GetComponent<MissionInstructionsAndEffects>();
+            MissionInstructionsAndEffects missionInstructions = missionsGameObjects[dataController.GetSelectedLevel()]
+                .GetComponent<MissionInstructionsAndEffects>();
 
-            if (missionInstructions.enabled && missionInstructions.audios != null && missionInstructions.audios.Length > 0)
+            if (missionInstructions.enabled && missionInstructions.audios != null &&
+                missionInstructions.audios.Length > 0)
             {
                 missionInstructions.audios[0].Play();
             }
 
-            TypewriterEffectTextMeshPro phonePanelTextEffect = gameUIManager.phonePanelText.GetComponent<TypewriterEffectTextMeshPro>();
+            TypewriterEffectTextMeshPro phonePanelTextEffect =
+                gameUIManager.phonePanelText.GetComponent<TypewriterEffectTextMeshPro>();
 
             if (phonePanelTextEffect != null)
             {
@@ -273,7 +213,7 @@ namespace Gameplay
         private IEnumerator CutsceneRoutine()
         {
             NullCheck();
-          //.playerCamera.gameObject.SetActive(false);
+            //.playerCamera.gameObject.SetActive(false);
             yield return new WaitForSeconds(0.03f);
             var selectedLevel = missions[dataController.GetSelectedLevel()];
             var selectedWave = selectedLevel.waves[waveToKeepActive];
@@ -309,40 +249,6 @@ namespace Gameplay
                 : PlayerAtStartRoutine());
             gameUIManager.cutSceneUICanvas.enabled = false;
             Timer.instance.SetTimerValueOnSkip();
-        }
-
-        private IEnumerator noCutsceneRoutine()
-        {
-            NullCheck();
-            yield return new WaitForSeconds(0.05f);
-            var selectedLevel = missions[dataController.GetSelectedLevel()];
-            var selectedWave = selectedLevel.waves[waveToKeepActive];
-            var waveCutscene = selectedWave.waveCutscene;
-            if (waveCutscene != null)
-            {
-                var selectedVehicle = dataController.GetSelectedVehicle();
-                var playerCarInstance = playerCar[selectedVehicle];
-                var playerCamera = GameplayCarController.instance.playerCamera;
-                var rccCam = GameplayCarController.instance.rccCam;
-
-                playerCarInstance.SetActive(true);
-                playerCamera.gameObject.SetActive(true);
-                rccCam.gameObject.SetActive(true);
-
-                gameUIManager.screenHudCanvas.enabled = true;
-                gameUIManager.pickupCanvas.enabled = true;
-                gameUIManager.gameplayUICanvas.enabled = true;
-                gameUIManager.hUDNavigationCanvas.enabled = true;
-                StartCoroutine(interactiveWeapon.WeaponCoroutine());
-                gameUIManager.playerControllerCanvas.enabled = true;
-                gameUIManager.cutSceneUICanvas.enabled = false;
-                player.gameObject.SetActive(true);
-                if (waveCutscene != null)
-                    waveCutscene.SetActive(false);
-                yield return new WaitForSecondsRealtime(0.25f);
-
-                ShootBehaviour.instance.ChangeWeapon(ShootBehaviour.instance.activeWeapon, 0);
-            }
         }
 
 
@@ -453,21 +359,23 @@ namespace Gameplay
             ShootBehaviour.instance.ChangeWeapon(ShootBehaviour.instance.activeWeapon, 0);
             gameUIManager.levelCompletePanel.SetActive(true);
             gameUIManager.pauseButton.gameObject.SetActive(false);
-            if (dataController.GetMode()==1)
+
+            if (dataController.GetMode() == 1)
             {
-                for (int i = 0; i < gameUIManager.winPanelDeactivations.Length; i++)
+                foreach (var button in gameUIManager.winPanelDeactivations)
                 {
-                    gameUIManager.winPanelDeactivations[i].interactable = false;
+                    button.interactable = false;
                 }
+
                 yield return new WaitForSecondsRealtime(3f);
                 gameUIManager.loadingPanel.SetActive(true);
                 yield return new WaitForSecondsRealtime(3f);
 
                 SceneManager.LoadScene(2);
             }
-           
+
             yield return new WaitForSecondsRealtime(1.5f);
-            //Show Ad here
+            // Show Ad here
         }
 
         public IEnumerator LevelFailRoutine(GameObject panelToActivate)
@@ -478,20 +386,21 @@ namespace Gameplay
             gameUIManager.hUDNavigationCanvas.enabled = false;
             gameUIManager.playerControllerCanvas.enabled = false;
             gameUIManager.pauseButton.gameObject.SetActive(false);
-            if (dataController.GetMode()==1)
+
+            if (dataController.GetMode() == 1)
             {
-                for (int i = 0; i < gameUIManager.losePanelDeactivations.Length; i++)
+                foreach (var button in gameUIManager.losePanelDeactivations)
                 {
-                    gameUIManager.losePanelDeactivations[i].interactable = false;
+                    button.interactable = false;
                 }
+
                 yield return new WaitForSecondsRealtime(2f);
-                Debug.Log("Retruning to open world");
-                
+                Debug.Log("Returning to open world");
             }
+
             yield return new WaitForSecondsRealtime(1.5f);
-            //Show Ad here
+            // Show Ad here
         }
-        
 
         #endregion
     }

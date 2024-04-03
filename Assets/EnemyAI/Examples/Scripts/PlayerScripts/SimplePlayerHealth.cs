@@ -60,8 +60,8 @@ public class SimplePlayerHealth : HealthManager
     {
         health -= damage;
 
-        if (hurtPrefab && canvas)
-            hurtUI.DrawHurtUI(origin.transform, origin.GetHashCode());
+        /*if (hurtPrefab && canvas)
+            hurtUI.DrawHurtUI(origin.transform, origin.GetHashCode());*/
     }
 
     public void OnGUI()
