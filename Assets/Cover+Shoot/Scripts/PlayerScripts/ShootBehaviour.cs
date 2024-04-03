@@ -347,6 +347,7 @@ public class ShootBehaviour : GenericBehaviour
 		SetWeaponCrosshair(newWeapon > 0);
 		Debug.Log(oldWeapon);
 		Debug.Log(newWeapon);
+		GameUIManager.instance.CheckAndChangeCurrentWeapon();
 	}
 
 	// Handle the shot parameters during its lifetime.

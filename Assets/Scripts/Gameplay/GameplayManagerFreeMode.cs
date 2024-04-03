@@ -73,6 +73,7 @@ public class GameplayManagerFreeMode : MonoBehaviour
 
         myRoutine = StartCoroutine(noCutsceneRoutine());*/
         Debug.LogError("Mode is " + dataController.GetMode());
+     //   gameUIManager.otherDoorPanel.SetActive(false);
     }
 
     private void Start()
@@ -117,6 +118,7 @@ public class GameplayManagerFreeMode : MonoBehaviour
 
         gameUIManager.FreeModeDeactivations();
         ShootBehaviour.instance.ChangeWeapon(ShootBehaviour.instance.activeWeapon, 0);
+        Debug.Log("Weapon Changed");
     }
 
     #endregion

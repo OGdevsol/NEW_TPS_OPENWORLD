@@ -85,6 +85,7 @@ namespace Gameplay
 
         private void Awake()
         {
+           
             //  QualitySettings.SetQualityLevel(3);
             instance = this;
             DataCache();
@@ -97,6 +98,10 @@ namespace Gameplay
             rccCar = FindObjectOfType<RCC_CarControllerV3>();
             hns = FindObjectOfType<HUDNavigationSystem>();
             GameUIManager.instance.modeState = GameUIManager.ModeState.Missions;
+//            GameplayCarController.instance.playerCamera.GetComponent<Camera>().enabled = false;
+        
+           // GameUIManager.instance.CheckAndChangeCurrentWeapon();
+            
           //  dataController.SetMode(1);
 
 
@@ -268,6 +273,7 @@ namespace Gameplay
         private IEnumerator CutsceneRoutine()
         {
             NullCheck();
+          //.playerCamera.gameObject.SetActive(false);
             yield return new WaitForSeconds(0.03f);
             var selectedLevel = missions[dataController.GetSelectedLevel()];
             var selectedWave = selectedLevel.waves[waveToKeepActive];

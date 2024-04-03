@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using ControlFreak2;
+using Gameplay;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -32,10 +33,14 @@ public class GameUIManager : MonoBehaviour
     public Button reject;
     public GameObject freeModePanel;
     public TMP_Text freeModePanelText;
-   
-    
+
+
     public Sprite redMark;
     public Sprite greenMark;
+
+    public Image currentWeaponReference;
+    public Sprite gunIcon;
+    public Sprite punchIcon;
 
 
     public static GameUIManager instance;
@@ -65,10 +70,13 @@ public class GameUIManager : MonoBehaviour
     public GameObject pausePanel;
     public GameObject loadingPanel;
     public GameObject phonePanel;
+    public GameObject otherDoorPanel;
     public TMP_Text phonePanelText;
-    
-    
-    
+
+    private ShootBehaviour shootBehaviour;
+    private GameUIManager gameUIManager;
+
+
     public enum ModeState
     {
         Missions,
@@ -81,11 +89,13 @@ public class GameUIManager : MonoBehaviour
         instance = this;
         Transform personTransform;
         inGameSoundManager = InGameSoundManager.instance;
+      
     }
 
     private void Start()
     {
         CheckAndApplyControlsSettingsOnStart();
+        shootBehaviour = ShootBehaviour.instance;
     }
 
     private IEnumerator CutsceneRoutine(GameObject cutscene, float time)
@@ -101,17 +111,20 @@ public class GameUIManager : MonoBehaviour
     {
         for (int i = 0; i < winPanelDeactivations.Length; i++)
         {
-            winPanelDeactivations[i].gameObject.SetActive(false); 
+            winPanelDeactivations[i].gameObject.SetActive(false);
         }
+
         for (int i = 0; i < losePanelDeactivations.Length; i++)
         {
-            losePanelDeactivations[i].gameObject.SetActive(false);  
+            losePanelDeactivations[i].gameObject.SetActive(false);
         }
+
         for (int i = 0; i < pausePanelDeactivations.Length; i++)
         {
-            pausePanelDeactivations[i].gameObject.SetActive(false); 
+            pausePanelDeactivations[i].gameObject.SetActive(false);
         }
     }
+
     public void DisableObjectsOnPlayerDeath()
     {
         for (int i = 0; i < deathDeactivationButtons.Count; i++)
@@ -136,7 +149,7 @@ public class GameUIManager : MonoBehaviour
         Time.timeScale = 0;
         pausePanel.SetActive(true);
         AudioListener.volume = 0;
-      //  ShootBehaviour.instance.activeWeapon = 0;
+        //  ShootBehaviour.instance.activeWeapon = 0;
         ShootBehaviour.instance.ChangeWeapon(ShootBehaviour.instance.activeWeapon, 0);
     }
 
@@ -207,6 +220,18 @@ public class GameUIManager : MonoBehaviour
     private int GetSelectedController()
     {
         return PlayerPrefs.GetInt("Controller", defaultIndex);
+    }
+
+    public void CheckAndChangeCurrentWeapon()
+    {
+        if (ShootBehaviour.instance.activeWeapon == 0)
+        {
+            currentWeaponReference.sprite = gunIcon;
+        }
+        else if (ShootBehaviour.instance.activeWeapon == 1)
+        {
+            currentWeaponReference.sprite = punchIcon;
+        }
     }
 }
 
