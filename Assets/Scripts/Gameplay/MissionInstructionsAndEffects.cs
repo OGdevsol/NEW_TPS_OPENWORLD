@@ -25,8 +25,7 @@ public class MissionInstructionsAndEffects : MonoBehaviour
 
     private IEnumerator MissionIntroductionCoRoutine()
     {
-        if (gameplayManager.bShouldPlayCutscene)
-        {
+      
             yield return new WaitForSecondsRealtime(gameplayManager.missions[dataController.GetSelectedLevel()].waves[0]
                 .cutsceneDuration);
             yield return new WaitForSecondsRealtime(playAfterWaitDuration);
@@ -34,16 +33,14 @@ public class MissionInstructionsAndEffects : MonoBehaviour
             {
                 audios?[0].Play();
             }
-           
-        }
         
-        if (!gameplayManager.bShouldPlayCutscene)
-        {
+        
+        
+       
            
-            yield return new WaitForSecondsRealtime(playAfterWaitDuration);
-            audios?[0].Play();
+           
 
-        }
+        
        
     }
 }

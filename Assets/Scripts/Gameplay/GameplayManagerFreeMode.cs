@@ -36,6 +36,7 @@ public class GameplayManagerFreeMode : MonoBehaviour
 
     private void Awake()
     {
+        Time.timeScale = 1;
         instance = this;
         environment.SetActive(true);
         StartCoroutine(FreeModeRoutine());

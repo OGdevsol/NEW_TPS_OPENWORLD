@@ -11,7 +11,7 @@ using UnityEngine.UIElements.Experimental;
 
 public class GameUIManager : MonoBehaviour
 {
-    public ModeState modeState;
+    [HideInInspector]public ModeState modeState;
     private InGameSoundManager inGameSoundManager;
 
     [Header("____BUTTONS+____"), Space(10)]
@@ -105,28 +105,28 @@ public class GameUIManager : MonoBehaviour
         cutscene.SetActive(false);
     }
 
-
     public void FreeModeDeactivations()
     {
-        for (int i = 0; i < winPanelDeactivations.Length; i++)
-        {
-            winPanelDeactivations[i].gameObject.SetActive(false);
-        }
+        DeactivateGameObjects(winPanelDeactivations);
+        DeactivateGameObjects(losePanelDeactivations);
+        DeactivateGameObjects(pausePanelDeactivations);
+    }
 
-        for (int i = 0; i < losePanelDeactivations.Length; i++)
+    private void DeactivateGameObjects(Button[] gameObjects)
+    {
+        foreach (Button obj in gameObjects)
         {
-            losePanelDeactivations[i].gameObject.SetActive(false);
-        }
-
-        for (int i = 0; i < pausePanelDeactivations.Length; i++)
-        {
-            pausePanelDeactivations[i].gameObject.SetActive(false);
+            obj.gameObject.SetActive(false);
         }
     }
 
+   
+
     public void DisableObjectsOnPlayerDeath()
     {
-        for (int i = 0; i < deathDeactivationButtons.Count; i++)
+        int i;
+        var deathDeactivationsLength=deathDeactivationButtons.Count;
+        for (i = 0; i < deathDeactivationsLength; i++)
         {
             deathDeactivationButtons[i].SetActive(false);
         }
@@ -148,7 +148,7 @@ public class GameUIManager : MonoBehaviour
         Time.timeScale = 0;
         pausePanel.SetActive(true);
         AudioListener.volume = 0;
-        //  ShootBehaviour.instance.activeWeapon = 0;
+        
         ShootBehaviour.instance.ChangeWeapon(ShootBehaviour.instance.activeWeapon, 0);
     }
 
@@ -165,18 +165,13 @@ public class GameUIManager : MonoBehaviour
         SceneManager.LoadScene(1);
     }
 
+
     public void OnClickNext()
     {
-        if (DataController.instance.GetSelectedLevel() < 9)
-        {
-            DataController.instance.SetSelectedLevel(DataController.instance.GetSelectedLevel() + 1);
-            SceneManager.LoadScene(1);
-        }
-        else if (DataController.instance.GetSelectedLevel() >= 9)
-        {
-            DataController.instance.SetSelectedLevel(0);
-            SceneManager.LoadScene(1);
-        }
+        int selectedLevel = DataController.instance.GetSelectedLevel();
+        selectedLevel = (selectedLevel < 9) ? selectedLevel + 1 : 0;
+        DataController.instance.SetSelectedLevel(selectedLevel);
+        SceneManager.LoadScene(1);
     }
 
     public void OnClickHome()
@@ -221,15 +216,58 @@ public class GameUIManager : MonoBehaviour
         return PlayerPrefs.GetInt("Controller", defaultIndex);
     }
 
+ 
     public void CheckAndChangeCurrentWeapon()
     {
-        if (ShootBehaviour.instance.activeWeapon == 0)
-        {
-            currentWeaponReference.sprite = gunIcon;
-        }
-        else if (ShootBehaviour.instance.activeWeapon == 1)
-        {
-            currentWeaponReference.sprite = punchIcon;
-        }
+        currentWeaponReference.sprite = (ShootBehaviour.instance.activeWeapon == 0) ? gunIcon : punchIcon;
     }
 }
+
+/*public void OnClickNext()
+{
+    if (DataController.instance.GetSelectedLevel() < 9)
+    {
+        DataController.instance.SetSelectedLevel(DataController.instance.GetSelectedLevel() + 1);
+        SceneManager.LoadScene(1);
+    }
+    else if (DataController.instance.GetSelectedLevel() >= 9)
+    {
+        DataController.instance.SetSelectedLevel(0);
+        SceneManager.LoadScene(1);
+    }
+}*/
+
+/*public void CheckAndChangeCurrentWeapon()
+{
+    if (ShootBehaviour.instance.activeWeapon == 0)
+    {
+        currentWeaponReference.sprite = gunIcon;
+    }
+    else if (ShootBehaviour.instance.activeWeapon == 1)
+    {
+        currentWeaponReference.sprite = punchIcon;
+    }
+}*/
+/*public void FreeModeDeactivations()
+{
+    int i;
+    int winPanelDeactivationsLengths= winPanelDeactivations.Length;
+    int losePanelDeactivationsLengths= losePanelDeactivations.Length;
+    int  pausePanelDeactivationsLengths=pausePanelDeactivations.Length;
+        
+        
+    for (i = 0; i < winPanelDeactivationsLengths; i++)
+    {
+        winPanelDeactivations[i].gameObject.SetActive(false);
+    }
+
+    for ( i = 0; i < losePanelDeactivationsLengths; i++)
+    {
+        losePanelDeactivations[i].gameObject.SetActive(false);
+    }
+
+    for ( i = 0; i <pausePanelDeactivationsLengths; i++)
+    {
+        pausePanelDeactivations[i].gameObject.SetActive(false);
+    }
+}*/
