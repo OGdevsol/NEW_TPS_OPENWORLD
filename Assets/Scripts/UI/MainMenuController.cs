@@ -41,14 +41,46 @@ public class MainMenuController : MonoBehaviour
     {
         AdsManager.instance.InitializeAdmob();
     }*/
+    public float lowMemoryThresholdMB = 512f; // Example threshold, adjust as needed
 
+
+    // Get the total system memory size in megabytes
+    float totalMemoryMB = SystemInfo.systemMemorySize;
+
+        // Check if the total memory is below the low memory threshold
+    
     private void Start()
     {
         CheckForPlayerData();
         CacheChildren();
         CheckAndApplyControlsSettingsOnStart();
+   //     TestFunc();
+        
     }
 
+    void TestFunc()
+    {
+        
+        if (totalMemoryMB < lowMemoryThresholdMB)
+        {
+            // If the memory is low, adjust game settings or behavior here
+            Debug.Log("Low memory detected! Adjusting game settings...");
+            
+            // Example: Reduce texture quality
+            QualitySettings.globalTextureMipmapLimit = 1; // Set texture quality to medium
+            
+            // Example: Disable some effects
+            // YourCodeToDisableEffects();
+
+            // Example: Use simpler geometry
+            // YourCodeToUseSimplerGeometry();
+        }
+        else
+        {
+            // If memory is sufficient, continue with normal game initialization
+            Debug.Log("Sufficient memory detected. Normal game initialization.");
+        }
+    }
     #region Main Menu
 
     public void EnablePanel(int panelIndex)
@@ -332,3 +364,6 @@ private int GetSelectedController()
 {
     return PlayerPrefs.GetInt("Controller");
 }*/
+
+
+

@@ -39,6 +39,11 @@ namespace EnemyAI
         private MissionCompleteManager missionCompleteManager;
         private GameUIManager gameUIManager;
         private HUDNavigationElement hudElement;
+        
+       
+        private float originalBarWidth; // The original width of the health bar
+      
+      
 
         private void Awake()
         {
@@ -131,6 +136,7 @@ namespace EnemyAI
         // Remove unnecessary components on killed NPC and set as dead.
         public void Kill()
         {
+          
             NullChecker();
             
             x =  GameplayManager.instance. missions[DataController.instance.GetSelectedLevel()].enemiesInLevel
@@ -141,6 +147,7 @@ namespace EnemyAI
                 if (this != mb)
                     Destroy(mb);
             }
+           
 
             Destroy(this.GetComponent<NavMeshAgent>());
             RemoveAllForces();
@@ -149,6 +156,9 @@ namespace EnemyAI
             Destroy(hud.gameObject);
             dead = true;
            GameplayManager.instance. missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.RemoveAt(x);
+           SimplePlayerHealth.instance.bloodSplatter.gameObject.SetActive(false);
+               
+            
       //     Debug.Log("Removed Enemy" +  GameplayManager.instance.enemiesInLevel[x] );
             print("Enemy Removed from list");
             if (hudElement)
@@ -160,7 +170,10 @@ namespace EnemyAI
             {
                 CheckEnemiesInLevel();
             }
-           
+
+          
+
+          
         }
 
 
@@ -183,7 +196,9 @@ namespace EnemyAI
             
             if (gameplayManager . missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.Count == 0)
             {
+               
                 StartCoroutine(gameplayManager.LevelCompleteRoutine());
+               
             }
             else
             {
@@ -193,12 +208,14 @@ namespace EnemyAI
 
         // Update health bar HUD to current NPC health.
         private void UpdateHealthBar()
-        {
+        { 
             float scaleFactor = health / totalHealth;
-
             healthBar.sizeDelta = new Vector2(scaleFactor * originalBarScale, healthBar.sizeDelta.y);
         }
+     
+      
 
+    
         // Remove existing forces and set ragdoll parts as not kinematic to interact with physics.
         private void RemoveAllForces()
         {
