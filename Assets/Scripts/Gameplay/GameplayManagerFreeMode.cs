@@ -31,8 +31,10 @@ public class GameplayManagerFreeMode : MonoBehaviour
     private InteractiveWeapon interactiveWeapon;
     private HUDNavigationSystem hns;
     public AudioSource missionSound;
-
+    public Transform impactDirection;
     private int waveToKeepActive;
+    private GameplayCarControllerFreeMode gameplayCarControllerFreeMode;
+    
 
     private void Awake()
     {
@@ -46,8 +48,10 @@ public class GameplayManagerFreeMode : MonoBehaviour
 
     private void Start()
     {
+        hns=HUDNavigationSystem.Instance;
+        gameplayCarControllerFreeMode=GameplayCarControllerFreeMode.instance;
         Debug.Log("Start");
-        HUDNavigationSystem.Instance.PlayerCamera = GameplayCarControllerFreeMode.instance.playerCamera.GetComponent<Camera>();
+        hns.PlayerCamera =  gameplayCarControllerFreeMode.playerCamera.GetComponent<Camera>();
     }
 
     private void NullCheck()

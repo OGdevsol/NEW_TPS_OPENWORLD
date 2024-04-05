@@ -8,6 +8,9 @@ using UnityEngine;
 public class CollisionScript : MonoBehaviour
 {
    public static CollisionScript instance;
+   private DataController dataController;
+   private GameplayManager gameplayManager;
+   private GameplayManagerFreeMode gameplayManagerFreeMode;
 
    private void Awake()
    {
@@ -15,9 +18,17 @@ public class CollisionScript : MonoBehaviour
    }
   
    public GameObject hitEffect;
-   
-   
-private void OnTriggerEnter(Collider other)
+   public AudioSource impactSound;
+
+   private void Start()
+   {
+       dataController=DataController.instance;
+       gameplayManager=GameplayManager.instance;
+       gameplayManagerFreeMode=GameplayManagerFreeMode.instance;
+       Debug.LogError(dataController.GetMode());
+   }
+
+   private void OnTriggerEnter(Collider other)
 {
     if (other.CompareTag("StreetLight"))
     {
@@ -51,7 +62,17 @@ private void HandleStreetLightCollision(GameObject streetLight)
     {
         StartCoroutine(HitCoRoutine());
         streetLightRigidbody.isKinematic = false;
-        streetLightRigidbody.AddRelativeForce(-GameplayManager.instance.impactDirection.up * 10f, ForceMode.Impulse);
+        if (dataController.GetMode()==0)
+        {
+            streetLightRigidbody.AddRelativeForce(-gameplayManager.impactDirection.up * 10f, ForceMode.Impulse);
+        }
+        else if (dataController.GetMode()==1)
+        {
+            streetLightRigidbody.AddRelativeForce(-gameplayManagerFreeMode.impactDirection.up * 10f, ForceMode.Impulse);
+        }
+
+      //  streetLightRigidbody.AddRelativeForce(-gameplayManager.impactDirection.up * 10f, ForceMode.Impulse);
+        impactSound.Play();
         StartCoroutine(colliderCoroutine(streetLight.GetComponent<Collider>()));
         StartCoroutine(DestroyStreetlight(streetLight));
     }

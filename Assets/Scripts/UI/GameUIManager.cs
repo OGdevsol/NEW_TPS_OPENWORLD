@@ -63,7 +63,9 @@ public class GameUIManager : MonoBehaviour
     public GameObject playerr;
     public GameObject enemyPrefab;
 
-    [Header("____Panels____"), Space(10)] public GameObject levelCompletePanel;
+    [Header("____Panels____"), Space(10)] 
+    public GameObject levelCompletePanel;
+    public GameObject levelCompletePanelFreeMode;
     public GameObject levelFailPanelTime;
     public GameObject levelFailPanelDeath;
     public GameObject levelFailPanelBusted;
@@ -162,16 +164,53 @@ public class GameUIManager : MonoBehaviour
 
     public void OnClickRestart()
     {
-        SceneManager.LoadScene(1);
+
+        if (DataController.instance.GetMode()==0)
+        {
+            SceneManager.LoadScene(1);
+        }
+        else  if (DataController.instance.GetMode()==1)
+        {
+            SceneManager.LoadScene(2);
+        }
+        
+    }
+
+    public IEnumerator OnClickContinueInFreeModeLevelCompleteRoutine()
+    {
+        loadingPanel.SetActive(true);
+        yield return new WaitForSecondsRealtime(3f);
+        SceneManager.LoadScene(2);
+    }
+
+    public void OnClickContinueFromFreeMode()
+    {
+        StartCoroutine(OnClickContinueInFreeModeLevelCompleteRoutine());
     }
 
 
     public void OnClickNext()
     {
-        int selectedLevel = DataController.instance.GetSelectedLevel();
-        selectedLevel = (selectedLevel < 9) ? selectedLevel + 1 : 0;
-        DataController.instance.SetSelectedLevel(selectedLevel);
-        SceneManager.LoadScene(1);
+        if (DataController.instance.GetMode()==0)
+        {
+            int selectedLevel = DataController.instance.GetSelectedLevel();
+            selectedLevel = (selectedLevel < 9) ? selectedLevel + 1 : 0;
+            DataController.instance.SetSelectedLevel(selectedLevel);
+            SceneManager.LoadScene(1);
+        }
+        else if (DataController.instance.GetMode()==1)
+        {
+            StartCoroutine(LoadingToFreeModeOnNextClick());
+        }
+       
+       
+    }
+
+    public IEnumerator LoadingToFreeModeOnNextClick()
+    {
+        loadingPanel.SetActive(true);
+        yield return new WaitForSecondsRealtime(4f);
+        SceneManager.LoadScene(2);
     }
 
     public void OnClickHome()

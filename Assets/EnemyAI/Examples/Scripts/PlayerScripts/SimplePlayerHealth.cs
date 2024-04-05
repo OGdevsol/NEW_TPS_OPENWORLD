@@ -25,6 +25,7 @@ public class SimplePlayerHealth : HealthManager
     private ShootBehaviour shootBehaviour;
     private GameplayManager gameplayManager;
     public Slider healthSlider;
+    public Image bloodSplatter;
 
     private void OnEnable()
     {
@@ -60,6 +61,14 @@ public class SimplePlayerHealth : HealthManager
     {
         health -= damage;
 
+        float maxOpacity = 255f; // Maximum opacity value
+        float currentOpacity = Mathf.Lerp(0f, maxOpacity, 1f - (health / 500)); // Adjust opacity based on health
+        byte opacityByte = (byte)Mathf.Clamp(currentOpacity, 0f, maxOpacity); // Convert opacity to byte (0-255 range)
+
+        // Set blood splatter opacity
+        Color bloodSplatterColor = bloodSplatter.color;
+        bloodSplatterColor.a = opacityByte / 255f; // Set alpha value
+        bloodSplatter.color = bloodSplatterColor;
         /*if (hurtPrefab && canvas)
             hurtUI.DrawHurtUI(origin.transform, origin.GetHashCode());*/
     }
