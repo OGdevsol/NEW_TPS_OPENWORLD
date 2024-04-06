@@ -34,7 +34,7 @@ public class GameplayManagerFreeMode : MonoBehaviour
     public Transform impactDirection;
     private int waveToKeepActive;
     private GameplayCarControllerFreeMode gameplayCarControllerFreeMode;
-    
+
 
     private void Awake()
     {
@@ -48,10 +48,10 @@ public class GameplayManagerFreeMode : MonoBehaviour
 
     private void Start()
     {
-        hns=HUDNavigationSystem.Instance;
-        gameplayCarControllerFreeMode=GameplayCarControllerFreeMode.instance;
+        hns = HUDNavigationSystem.Instance;
+        gameplayCarControllerFreeMode = GameplayCarControllerFreeMode.instance;
         Debug.Log("Start");
-        hns.PlayerCamera =  gameplayCarControllerFreeMode.playerCamera.GetComponent<Camera>();
+        hns.PlayerCamera = gameplayCarControllerFreeMode.playerCamera.GetComponent<Camera>();
     }
 
     private void NullCheck()
@@ -78,6 +78,7 @@ public class GameplayManagerFreeMode : MonoBehaviour
     #endregion
 
     public int freeModeLevel;
+
     public void StartLevel()
     {
         DataController.instance.SetSelectedLevel(freeModeLevel);

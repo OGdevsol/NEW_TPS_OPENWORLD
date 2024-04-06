@@ -9,7 +9,7 @@ using UnityEngine.UI;
 // This class is created for the example scene. There is no support for this script.
 public class SimplePlayerHealth : HealthManager
 {
-    public static SimplePlayerHealth instance; 
+    public static SimplePlayerHealth instance;
     private AimBehaviour aimBehaviour;
     private GameUIManager gameUIManager;
     public float health = 100f;
@@ -38,7 +38,6 @@ public class SimplePlayerHealth : HealthManager
         MissionFailManager.onMissionFail -= FailMission;
     }*/
 
-   
 
     private void Awake()
     {
@@ -50,19 +49,17 @@ public class SimplePlayerHealth : HealthManager
         playerRigidBodies = gameObject.GetComponentsInChildren<Rigidbody>();
         playerAnimator = gameObject.GetComponent<Animator>();
         aimBehaviour = gameObject.GetComponent<AimBehaviour>();
-        shootBehaviour=ShootBehaviour.instance;
-        gameUIManager=GameUIManager.instance;
-        gameplayManager=GameplayManager.instance;
+        shootBehaviour = ShootBehaviour.instance;
+        gameUIManager = GameUIManager.instance;
+        gameplayManager = GameplayManager.instance;
         instance = this;
-
-
     }
 
     public override void TakeDamage(Vector3 location, Vector3 direction, float damage, Collider bodyPart,
         GameObject origin)
     {
         health -= damage;
-     bloodSplatter.gameObject.SetActive(true);
+        bloodSplatter.gameObject.SetActive(true);
 
         float maxOpacity = 255f; // Maximum opacity value
         float currentOpacity = Mathf.Lerp(0f, maxOpacity, 1f - (health / 500)); // Adjust opacity based on health
@@ -92,27 +89,26 @@ public class SimplePlayerHealth : HealthManager
         {
             dead = true;
             FailMission();
-           
+
             //StartCoroutine(nameof(ReloadScene));
         }
     }
 
     private IEnumerator KillPlayer()
     {
-       
         yield return new WaitForSecondsRealtime(0.3f);
         aim.toggle = false;
         /*Time.timeScale = 0.1f;
         yield return new WaitForSeconds(5f);
         Time.timeScale = 1;*/
-        
+
         if (!shootBehaviour)
         {
             shootBehaviour = ShootBehaviour.instance;
-            if (shootBehaviour.activeWeapon!=0)
+            if (shootBehaviour.activeWeapon != 0)
             {
                 ShootBehaviour.instance.DropWeaponOnDeath();
-               
+
                 playerAnimator.Play("Death");
                 yield return new WaitForSecondsRealtime(1f);
                 StartCoroutine(PlayerDeathSlowmotion());
@@ -121,27 +117,23 @@ public class SimplePlayerHealth : HealthManager
             }
             else
             {
-               
                 playerAnimator.Play("Death");
                 yield return new WaitForSecondsRealtime(1f);
                 StartCoroutine(PlayerDeathSlowmotion());
                 yield return new WaitForSecondsRealtime(2f);
                 StartCoroutine(gameplayManager.LevelFailRoutine(gameUIManager.levelFailPanelDeath));
             }
-           
         }
-       
-     
     }
-    
+
     public void FailMission()
     {
         // Trigger the event when the level is complete
-        
+
         Debug.Log("Mission Failed, You Died");
         StartCoroutine(KillPlayer());
         gameUIManager.DisableObjectsOnPlayerDeath();
-    //    StartCoroutine(PlayerDeathSlowmotion());
+        //    StartCoroutine(PlayerDeathSlowmotion());
     }
 
     private IEnumerator PlayerDeathSlowmotion()

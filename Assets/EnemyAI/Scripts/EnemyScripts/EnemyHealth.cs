@@ -39,11 +39,10 @@ namespace EnemyAI
         private MissionCompleteManager missionCompleteManager;
         private GameUIManager gameUIManager;
         private HUDNavigationElement hudElement;
-        
-       
+
+
         private float originalBarWidth; // The original width of the health bar
-      
-      
+
 
         private void Awake()
         {
@@ -86,12 +85,9 @@ namespace EnemyAI
         public override void TakeDamage(Vector3 location, Vector3 direction, float damage, Collider bodyPart,
             GameObject origin = null)
         {
-           
-            
             // Headshot multiplier. On default values, instantly kills NPC.
             if (!dead && headshot && bodyPart.transform == anim.GetBoneTransform(HumanBodyBones.Head))
             {
-              
                 // Default damage multiplier is 10x.
                 damage *= 10;
                 // Call headshot HUD callback, if any.
@@ -136,10 +132,9 @@ namespace EnemyAI
         // Remove unnecessary components on killed NPC and set as dead.
         public void Kill()
         {
-          
             NullChecker();
-            
-            x =  GameplayManager.instance. missions[DataController.instance.GetSelectedLevel()].enemiesInLevel
+
+            x = GameplayManager.instance.missions[DataController.instance.GetSelectedLevel()].enemiesInLevel
                 .IndexOf(transform);
             // Destroy all other MonoBehaviour scripts attached to the NPC.
             foreach (MonoBehaviour mb in this.GetComponents<MonoBehaviour>())
@@ -147,7 +142,7 @@ namespace EnemyAI
                 if (this != mb)
                     Destroy(mb);
             }
-           
+
 
             Destroy(this.GetComponent<NavMeshAgent>());
             RemoveAllForces();
@@ -155,25 +150,22 @@ namespace EnemyAI
             Destroy(weapon.gameObject);
             Destroy(hud.gameObject);
             dead = true;
-           GameplayManager.instance. missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.RemoveAt(x);
-           SimplePlayerHealth.instance.bloodSplatter.gameObject.SetActive(false);
-               
-            
-      //     Debug.Log("Removed Enemy" +  GameplayManager.instance.enemiesInLevel[x] );
+            GameplayManager.instance.missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.RemoveAt(x);
+            SimplePlayerHealth.instance.bloodSplatter.gameObject.SetActive(false);
+
+
+            //     Debug.Log("Removed Enemy" +  GameplayManager.instance.enemiesInLevel[x] );
             print("Enemy Removed from list");
             if (hudElement)
             {
                 hudElement.enabled = false;
             }
 
-            if (gameplayManager.missions[DataController.instance.GetSelectedLevel()].missionEndingType == Mission.MissionEndingType.EliminateAllEnemies)
+            if (gameplayManager.missions[DataController.instance.GetSelectedLevel()].missionEndingType ==
+                Mission.MissionEndingType.EliminateAllEnemies)
             {
                 CheckEnemiesInLevel();
             }
-
-          
-
-          
         }
 
 
@@ -193,12 +185,9 @@ namespace EnemyAI
 
         private void CheckEnemiesInLevel()
         {
-            
-            if (gameplayManager . missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.Count == 0)
+            if (gameplayManager.missions[DataController.instance.GetSelectedLevel()].enemiesInLevel.Count == 0)
             {
-               
                 StartCoroutine(gameplayManager.LevelCompleteRoutine());
-               
             }
             else
             {
@@ -208,14 +197,12 @@ namespace EnemyAI
 
         // Update health bar HUD to current NPC health.
         private void UpdateHealthBar()
-        { 
+        {
             float scaleFactor = health / totalHealth;
             healthBar.sizeDelta = new Vector2(scaleFactor * originalBarScale, healthBar.sizeDelta.y);
         }
-     
-      
 
-    
+
         // Remove existing forces and set ragdoll parts as not kinematic to interact with physics.
         private void RemoveAllForces()
         {
@@ -225,6 +212,7 @@ namespace EnemyAI
                 member.velocity = Vector3.zero;
             }
         }
+
         /*private void OnDisable()
         {
             MissionCompleteManager.onMissionComplete -= HandleLevelComplete;
@@ -232,13 +220,14 @@ namespace EnemyAI
         }*/
         private void NullChecker()
         {
-            gameplayManager??=GameplayManager.instance;
-            gameUIManager??=GameUIManager.instance;
+            gameplayManager ??= GameplayManager.instance;
+            gameUIManager ??= GameUIManager.instance;
             hudElement ??= GetComponent<HUDNavigationElement>();
         }
+
         private void OnTriggerEnter(Collider other)
         {
-            if (other.gameObject.tag=="PlayerCar")
+            if (other.gameObject.tag == "PlayerCar")
             {
                 //   Instantiate(bloodSample, location, Quaternion.LookRotation(-direction), this.transform);
                 // Take damage received from current health.
@@ -273,6 +262,4 @@ namespace EnemyAI
             }
         }
     }
-    
-    
 }

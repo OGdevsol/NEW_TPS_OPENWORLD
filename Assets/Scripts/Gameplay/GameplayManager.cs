@@ -22,23 +22,24 @@ namespace Gameplay
 
         [Tooltip("Remove this bool and functionality before final build as this is for testing purposes only")]
         public bool bShouldPlayCutscene;
+
         public bool bShouldSpawnEnemies;
         public static GameplayManager instance;
         public GameObject environment;
+
         [Header("____Player And Enemy Data____"), Space(10)]
         public GameObject player;
+
         public Transform impactDirection;
         public GameObject targetForEnemy;
         public GameObject[] enemyVariantsPrefab;
         public GameObject[] playerCar;
         public GameObject[] missionsGameObjects;
 
-        [Header("______________")]
-        [Header("____MissionsData____"), Space(10)]
+        [Header("______________")] [Header("____MissionsData____"), Space(10)]
         public Mission[] missions;
-        [Header("______________")]
-        [Header("____DO NOT MODIFY, DEBUG DATA____"), Space(10)]
-        [SerializeField]
+
+        [Header("______________")] [Header("____DO NOT MODIFY, DEBUG DATA____"), Space(10)] [SerializeField]
         public List<Transform> hudElement;
 
         [SerializeField] private GameObject postProcessVolume;
@@ -102,6 +103,7 @@ namespace Gameplay
             }
 
             missionsGameObjects[dataController.GetSelectedLevel()].SetActive(true);
+            
         }
 
 
@@ -190,13 +192,10 @@ namespace Gameplay
             {
                 phonePanelTextEffect.stringArray[0] = missionInstructions.levelObjective;
             }
-            
+
             yield return new WaitForSecondsRealtime(0.001f);
 
             gameUIManager.phonePanel.SetActive(true);
-
-        
-           
         }
 
         public void OnClickMobileOK()
@@ -371,7 +370,6 @@ namespace Gameplay
                 gameUIManager.pauseButton.gameObject.SetActive(false);
             }
 
-          
 
             else if (dataController.GetMode() == 1)
             {
@@ -380,11 +378,11 @@ namespace Gameplay
                     button.interactable = false;
                 }
 
-               gameUIManager.levelCompletePanelFreeMode.SetActive(true);
-               gameUIManager.pauseButton.gameObject.SetActive(false);
-            
+                gameUIManager.levelCompletePanelFreeMode.SetActive(true);
+                gameUIManager.pauseButton.gameObject.SetActive(false);
 
-              //  SceneManager.LoadScene(2);
+
+                //  SceneManager.LoadScene(2);
             }
 
             yield return new WaitForSecondsRealtime(1.5f);

@@ -41,46 +41,52 @@ public class MainMenuController : MonoBehaviour
     {
         AdsManager.instance.InitializeAdmob();
     }*/
-    /*public float lowMemoryThresholdMB = 512f; // Example threshold, adjust as needed
+    public float lowMemoryThresholdMB = 3000f; // Example threshold, adjust as needed
 
 
     // Get the total system memory size in megabytes
-    float totalMemoryMB = SystemInfo.systemMemorySize;*/
+    private float totalMemoryMB;
 
-        // Check if the total memory is below the low memory threshold
-    
+    // Check if the total memory is below the low memory threshold
+    private void Awake()
+    {
+        totalMemoryMB = SystemInfo.systemMemorySize;
+    }
+
     private void Start()
     {
         CheckForPlayerData();
         CacheChildren();
         CheckAndApplyControlsSettingsOnStart();
-   //     TestFunc();
-        
+        TestFunc();
     }
 
-    /*void TestFunc()
+    void TestFunc()
     {
-        
-        if (totalMemoryMB < lowMemoryThresholdMB)
+        if (totalMemoryMB <3000)
         {
             // If the memory is low, adjust game settings or behavior here
             Debug.Log("Low memory detected! Adjusting game settings...");
-            
-            // Example: Reduce texture quality
-            QualitySettings.globalTextureMipmapLimit = 1; // Set texture quality to medium
-            
-            // Example: Disable some effects
-            // YourCodeToDisableEffects();
 
-            // Example: Use simpler geometry
-            // YourCodeToUseSimplerGeometry();
+            // Example: Reduce texture quality
+            //  QualitySettings.globalTextureMipmapLimit = 1; // Set texture quality to medium
+            QualitySettings.SetQualityLevel(0);
+
+            // Example: Disable some effects
         }
-        else
+
+        else  if (totalMemoryMB<5000 && totalMemoryMB >=4000 )
         {
-            // If memory is sufficient, continue with normal game initialization
-            Debug.Log("Sufficient memory detected. Normal game initialization.");
+            QualitySettings.SetQualityLevel(2);
         }
-    }*/
+        
+        else  if (totalMemoryMB>=5000 )
+        {
+            QualitySettings.SetQualityLevel(5);
+        }
+      
+    }
+
     #region Main Menu
 
     public void EnablePanel(int panelIndex)
@@ -166,15 +172,15 @@ public class MainMenuController : MonoBehaviour
     public void OnClickMissions()
     {
         SetMode(0);
-       // SceneManager.LoadScene(1);
+        // SceneManager.LoadScene(1);
     }
+
     public void OnClickOpenWorld()
     {
         SetMode(1);
         StartCoroutine(LoadingToGameRoutine(2));
     }
-    
-    
+
 
     private IEnumerator LoadingWithinMenuRoutine(bool showAd)
     {
@@ -307,7 +313,7 @@ public class MainMenuController : MonoBehaviour
 
     public void SetMode(int index)
     {
-        PlayerPrefs.SetInt("Mode",index);
+        PlayerPrefs.SetInt("Mode", index);
     }
 
     public int GetMode()
@@ -364,6 +370,3 @@ private int GetSelectedController()
 {
     return PlayerPrefs.GetInt("Controller");
 }*/
-
-
-
