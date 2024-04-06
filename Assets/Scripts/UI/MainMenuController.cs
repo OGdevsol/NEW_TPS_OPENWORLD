@@ -41,11 +41,11 @@ public class MainMenuController : MonoBehaviour
     {
         AdsManager.instance.InitializeAdmob();
     }*/
-    public float lowMemoryThresholdMB = 512f; // Example threshold, adjust as needed
+    /*public float lowMemoryThresholdMB = 512f; // Example threshold, adjust as needed
 
 
     // Get the total system memory size in megabytes
-    float totalMemoryMB = SystemInfo.systemMemorySize;
+    float totalMemoryMB = SystemInfo.systemMemorySize;*/
 
         // Check if the total memory is below the low memory threshold
     
@@ -58,7 +58,7 @@ public class MainMenuController : MonoBehaviour
         
     }
 
-    void TestFunc()
+    /*void TestFunc()
     {
         
         if (totalMemoryMB < lowMemoryThresholdMB)
@@ -80,7 +80,7 @@ public class MainMenuController : MonoBehaviour
             // If memory is sufficient, continue with normal game initialization
             Debug.Log("Sufficient memory detected. Normal game initialization.");
         }
-    }
+    }*/
     #region Main Menu
 
     public void EnablePanel(int panelIndex)
