@@ -77,13 +77,9 @@ public class MainMenuController : MonoBehaviour
 
         else  if (totalMemoryMB<5000 && totalMemoryMB >=4000 )
         {
-            QualitySettings.SetQualityLevel(2);
-        }
-        
-        else  if (totalMemoryMB>=5000 )
-        {
             QualitySettings.SetQualityLevel(5);
         }
+       
       
     }
 

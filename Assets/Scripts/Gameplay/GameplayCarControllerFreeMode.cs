@@ -60,6 +60,7 @@ public class GameplayCarControllerFreeMode : MonoBehaviour
     // ReSharper disable Unity.PerformanceAnalysis
     private void ShowPlayerEnteringCar()
     {
+        gameUIManager.getInCarButton.gameObject.SetActive(false);
         if (shootBehaviour.activeWeapon != 0)
         {
             shootBehaviour.ChangeWeapon(shootBehaviour.activeWeapon, 0);
@@ -77,22 +78,19 @@ public class GameplayCarControllerFreeMode : MonoBehaviour
         //  ShootBehaviour.instance.activeWeapon = 0;
         inCar = true;
         // FindObjectOfType<InteractiveWeapon>().transform.gameObject.SetActive(false);
-        rccCam.gameObject.GetComponentInChildren<AudioListener>().enabled = true;
-        playerCamera.GetComponent<AudioListener>().enabled = false;
-        inGameSoundManager.SetInGameListenersVolume();
+        
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
     private void ShowPlayerExitingCar()
     {
+        gameUIManager.getOutOfCarButton.gameObject.SetActive(false);
         GameplayManagerFreeMode.instance.player.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
         getOutOfCarPlayer.SetActive(true);
         inCar = false;
 
         //  FindObjectOfType<InteractiveWeapon>().transform.gameObject.SetActive(true);
-        rccCam.gameObject.GetComponentInChildren<AudioListener>().enabled = false;
-        playerCamera.GetComponent<AudioListener>().enabled = true;
-        inGameSoundManager.SetInGameListenersVolume();
+       
     }
 
     // ReSharper disable Unity.PerformanceAnalysis
@@ -121,12 +119,13 @@ public class GameplayCarControllerFreeMode : MonoBehaviour
             switchTimer += Time.deltaTime;
             if (fromTransform == rccCam.transform)
             {
-//            Debug.Log("SWITCHING FROM RCCCCCCCCCCCCC");
+                Debug.Log("Switching " + "FROM " + "rcc");
                 ShowPlayerExitingCar();
             }
 
             if (fromTransform == playerCamera.transform)
             {
+                Debug.Log("Switching " + "FROM " + "player");
                 ShowPlayerEnteringCar();
             }
 
@@ -180,6 +179,7 @@ public class GameplayCarControllerFreeMode : MonoBehaviour
 
     private void UpdateGameState(Transform fromTransform, Transform toTransform)
     {
+        Debug.Log("Updating Game State Start");
         if (fromTransform == playerCamera.transform)
         {
             // GameplayManager.instance.player.SetActive(false);
@@ -198,8 +198,7 @@ public class GameplayCarControllerFreeMode : MonoBehaviour
             gameUIManager.gameplayUICanvas.enabled = true;
             gameUIManager.getOutOfCarButton.gameObject.SetActive(true);
             gameUIManager.getInCarButton.gameObject.SetActive(false);
-            hns.PlayerCamera = rccCam.GetComponentInChildren<Camera>();
-            hns.PlayerController = rccCam.transform;
+            
             getInCarPlayer.SetActive(false);
         }
 
@@ -215,8 +214,7 @@ public class GameplayCarControllerFreeMode : MonoBehaviour
 
             getOutOfCarPlayer.SetActive(false);
             gameplayManager.player.transform.position = playerOutOfCarPosition.position;
-            hns.PlayerCamera = playerCamera.GetComponent<Camera>();
-            hns.PlayerController = gameplayManager.player.transform;
+           
 
             Debug.Log("Active Weapon Is " + ShootBehaviour.instance.activeWeapon);
 
@@ -225,6 +223,26 @@ public class GameplayCarControllerFreeMode : MonoBehaviour
                 GameplayManager.instance.player.GetComponentInChildren<InteractiveWeapon>().transform.gameObject
                     .GetComponentInChildren<MeshRenderer>().enabled = true;
             }
+        }
+        Debug.Log("Game State Updated");
+        if (inCar)
+        {
+            Debug.Log("In Car");
+            rccCam.gameObject.GetComponentInChildren<AudioListener>().enabled = true;
+            playerCamera.GetComponent<AudioListener>().enabled = false;
+            inGameSoundManager.SetInGameListenersVolume();
+            hns.PlayerCamera = rccCam.GetComponentInChildren<Camera>();
+            hns.PlayerController = rccCam.transform;
+            gameUIManager.getOutOfCarButton.gameObject.SetActive(true);
+        }
+        else if (!inCar)
+        {
+            Debug.Log("Out Of Car");
+            rccCam.gameObject.GetComponentInChildren<AudioListener>().enabled = false;
+            playerCamera.GetComponent<AudioListener>().enabled = true;
+            inGameSoundManager.SetInGameListenersVolume();
+            hns.PlayerCamera = playerCamera.GetComponent<Camera>();
+            hns.PlayerController = gameplayManager.player.transform;
         }
     }
 
