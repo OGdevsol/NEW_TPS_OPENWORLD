@@ -25,7 +25,7 @@ public class CollisionScript : MonoBehaviour
         dataController = DataController.instance;
         gameplayManager = GameplayManager.instance;
         gameplayManagerFreeMode = GameplayManagerFreeMode.instance;
-        Debug.LogError(dataController.GetMode());
+//        Debug.LogError(dataController.GetMode());
     }
 
     private void OnTriggerEnter(Collider other)
@@ -113,6 +113,51 @@ public class CollisionScript : MonoBehaviour
             // Optionally, you can handle else case here if needed.
         }
     }
+    /*public IEnumerator GestureCoRoutine(Collider other)
+    {
+        if (other != null)
+        {
+            WaypointMover waypointMover = other.GetComponent<WaypointMover>();
+            if (waypointMover != null && !waypointMover.isDead && other.gameObject.activeInHierarchy)
+            {
+                Animation animation = other.GetComponent<Animation>();
+                Animator animator = other.GetComponent<Animator>();
+
+                if (animation != null)
+                    animation.Stop();
+                waypointMover.enabled = false;
+                if (animator != null)
+                {
+                    animator.enabled = true;
+                    animator.Play("AngryGesture", -1, 0f);
+                }
+                yield return new WaitForSeconds(4f);
+
+                var selectedVehicle = DataController.instance.GetSelectedVehicle();
+                if (selectedVehicle >= 0 && selectedVehicle < GameplayManager.instance.playerCar.Length)
+                {
+                    var playerCar = GameplayManager.instance.playerCar[selectedVehicle];
+                    if (waypointMover != null && !waypointMover.isDead && other.gameObject.activeInHierarchy &&
+                        playerCar != null && Vector3.Distance(other.transform.position, playerCar.transform.position) > 5)
+                    {
+                        if (animator != null)
+                            animator.enabled = false;
+                        if (animation != null)
+                            animation.Play();
+                        waypointMover.enabled = true;
+                    }
+                }
+                else
+                {
+                    Debug.LogError("Selected vehicle index is out of range.");
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("Collider 'other' is null.");
+        }
+    }*/
 
     private void KillPopulation(GameObject population)
     {

@@ -26,7 +26,7 @@ public class AimBehaviour : GenericBehaviour
     private InteractiveWeapon interactiveWeapon;
 
     private WeaponUIManager weaponUIManager;
-    private IEnumerator myCoroutine;
+  //  private IEnumerator myCoroutine;
 
     private Collider coll;
     // Start is always called after any Awake functions.
@@ -61,7 +61,7 @@ public class AimBehaviour : GenericBehaviour
 
         interactiveWeapon = InteractiveWeapon.instance;
         weaponUIManager = WeaponUIManager.instance;
-        myCoroutine = CollisionScript.instance.GestureCoRoutine(coll);
+     //   myCoroutine = CollisionScript.instance.GestureCoRoutine(coll);
     }
 
     // Update is used to set features regardless the active behaviour.
@@ -73,6 +73,7 @@ public class AimBehaviour : GenericBehaviour
         if (ControlFreak2.CF2Input.GetAxisRaw(aimButton) != 0 && !aim)
         {
             StartCoroutine(ToggleAimOn());
+          //  StartCoroutine(DisableAimAndEnableFireButton());
         }
         else if (aim && ControlFreak2.CF2Input.GetAxisRaw(aimButton) == 0)
         {
@@ -114,11 +115,24 @@ public class AimBehaviour : GenericBehaviour
             aimCamOffset.x = Mathf.Abs(aimCamOffset.x) * signal;
             aimPivotOffset.x = Mathf.Abs(aimPivotOffset.x) * signal;
             yield return new WaitForSeconds(0.1f);
+            GameUIManager.instance.fireButtonLEFT.SetActive(true);
+           // GameUIManager.instance.fireButton.GetComponent<Animator>().enabled = true;
             behaviourManager.GetAnim.SetFloat(speedFloat, 0);
             // This state overrides the active one.
             behaviourManager.OverrideWithBehaviour(this);
+            GameUIManager.instance.fireButton.transform.localScale = new Vector3(0.001f, 0.001f, 0.001f);
         }
+
+       
     }
+
+    private IEnumerator DisableAimAndEnableFireButton()
+    {
+        yield return new WaitForSecondsRealtime(0.5f);
+     //   GameUIManager.instance.fireButton.GetComponent<TouchButton>().enabled=false;
+       GameUIManager.instance.fireButton.SetActive(false);
+        
+    } 
 
     // Co-rountine to end aiming mode with delay.
     public IEnumerator ToggleAimOff()
@@ -130,6 +144,9 @@ public class AimBehaviour : GenericBehaviour
         behaviourManager.GetCamScript.ResetMaxVerticalAngle();
         yield return new WaitForSeconds(0.05f);
         behaviourManager.RevokeOverridingBehaviour(this);
+        GameUIManager.instance.fireButtonLEFT.SetActive(false);
+        GameUIManager.instance.fireButton.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);
+      //  GameUIManager.instance.fireButton.SetActive(true);
     }
 
     // LocalFixedUpdate overrides the virtual function of the base class.

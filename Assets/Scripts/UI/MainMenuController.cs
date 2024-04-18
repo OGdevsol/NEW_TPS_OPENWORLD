@@ -96,7 +96,7 @@ public class MainMenuController : MonoBehaviour
 
         if (index == 2)
         {
-            Debug.Log("SHOWING AD HERE");
+//            Debug.Log("SHOWING AD HERE");
             //AdsManager.instance.showAdmobInterstitial();
         }
 

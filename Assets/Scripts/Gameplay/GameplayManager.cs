@@ -75,7 +75,7 @@ namespace Gameplay
         {
             instance = this;
             DataCache();
-            Debug.LogError(missions[dataController.GetSelectedLevel()].missionControllerType);
+//            Debug.Log(missions[dataController.GetSelectedLevel()].missionControllerType);
 
             Time.timeScale = 1;
             environment.SetActive(true);
@@ -85,7 +85,7 @@ namespace Gameplay
             hns = FindObjectOfType<HUDNavigationSystem>();
             GameUIManager.instance.modeState = GameUIManager.ModeState.Missions;
             myRoutine = StartCoroutine(CutsceneRoutine());
-            Debug.LogError("Mode is " + dataController.GetMode());
+//            Debug.LogError("Mode is " + dataController.GetMode());
             if (dataController.GetMode() == 1)
             {
                 gameUIManager.FreeModeDeactivations();
@@ -221,6 +221,8 @@ namespace Gameplay
         {
             NullCheck();
             //.playerCamera.gameObject.SetActive(false);
+            gameUIManager.rccCanvas.enabled = false;
+            gameUIManager.playerControllerCanvas.enabled = false;
             yield return new WaitForSeconds(0.03f);
             var selectedLevel = missions[dataController.GetSelectedLevel()];
             var selectedWave = selectedLevel.waves[waveToKeepActive];
@@ -261,7 +263,8 @@ namespace Gameplay
 
         private IEnumerator CarAtStartRoutine()
         {
-            Debug.LogError("Calling Start");
+//            Debug.LogError("Calling Start");
+
             yield return new WaitForSecondsRealtime(0.1f);
             var selectedVehicle = dataController.GetSelectedVehicle();
             var playerCarInstance = playerCar[selectedVehicle];
@@ -277,6 +280,7 @@ namespace Gameplay
             hUDNavigationCanvas.enabled = true;
             rccCanvas.enabled = true;
             playerCamera.gameObject.SetActive(false);
+        
             playerCamera.GetComponent<Camera>().enabled = false;
             rccCam.gameObject.SetActive(true);
             rccCam.gameObject.GetComponentInChildren<Camera>().enabled = true;
@@ -286,7 +290,13 @@ namespace Gameplay
             player.gameObject.SetActive(false);
             hns.PlayerCamera = rccCam.GetComponentInChildren<Camera>();
             hns.PlayerController = playerCarInstance.transform;
-            Debug.LogError("Calling End");
+            if (gameplayCarController==null)
+            {
+                gameplayCarController=GameplayCarController.instance;
+            }
+            gameplayCarController.doorIndicator.SetActive(false);
+       
+//            Debug.LogError("Calling End");
         }
 
         private IEnumerator PlayerAtStartRoutine()
@@ -320,6 +330,7 @@ namespace Gameplay
             var waveCutscene = selectedWave.waveCutscene;
             if (waveCutscene != null)
                 waveCutscene.SetActive(false);
+            gameplayCarController.doorIndicator.SetActive(true);
 
             // Wait for a short delay
             yield return new WaitForSecondsRealtime(0.25f);

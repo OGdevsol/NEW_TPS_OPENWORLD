@@ -293,7 +293,12 @@ public class BasicBehaviour : MonoBehaviour
 	// Check if the player is moving.
 	public bool IsMoving()
 	{
+		/*if (AimBehaviour.instance.aim)
+		{
+			StartCoroutine(AimBehaviour.instance.ToggleAimOff()); 
+		}*/
 		return (h != 0)|| (v != 0);
+		
 	}
 
 	// Get the last player direction of facing.

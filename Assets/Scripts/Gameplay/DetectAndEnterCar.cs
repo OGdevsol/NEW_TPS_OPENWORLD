@@ -8,6 +8,7 @@ using UnityEngine;
 
 public class DetectAndEnterCar : MonoBehaviour
 {
+    public static DetectAndEnterCar instance;
     private Animator animator;
     private GameUIManager gameUIManager;
     private GameplayCarController gameplayCarController;
@@ -21,9 +22,9 @@ public class DetectAndEnterCar : MonoBehaviour
 
   
         private void Awake()
-    {
-      
-    }
+        {
+            instance = this;
+        }
 
         private void Start()
         {

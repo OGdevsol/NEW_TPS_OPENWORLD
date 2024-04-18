@@ -155,7 +155,7 @@ namespace EnemyAI
 
 
             //     Debug.Log("Removed Enemy" +  GameplayManager.instance.enemiesInLevel[x] );
-            print("Enemy Removed from list");
+//            print("Enemy Removed from list");
             if (hudElement)
             {
                 hudElement.enabled = false;

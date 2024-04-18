@@ -19,6 +19,7 @@ public class GameplayCarControllerFreeMode : MonoBehaviour
     public GameObject getInCarPlayer;
     public GameObject getOutOfCarPlayer;
     public Transform playerOutOfCarPosition;
+    public GameObject doorIndicator;
 
     [HideInInspector] public bool inCar;
 
@@ -78,6 +79,7 @@ public class GameplayCarControllerFreeMode : MonoBehaviour
         //  ShootBehaviour.instance.activeWeapon = 0;
         inCar = true;
         // FindObjectOfType<InteractiveWeapon>().transform.gameObject.SetActive(false);
+        doorIndicator.SetActive(false);
         
     }
 
@@ -131,13 +133,13 @@ public class GameplayCarControllerFreeMode : MonoBehaviour
 
             float t = Mathf.Clamp01(switchTimer / switchDuration);
 
-            fromTransform.position = Vector3.Lerp(initialPos, toTransform.position, t);
+            fromTransform.localPosition = Vector3.Lerp(initialPos, toTransform.localPosition, t);
             fromTransform.rotation = Quaternion.Lerp(initialRot, toTransform.rotation, t);
 
             yield return null;
         }
 
-        fromTransform.position = toTransform.position;
+        fromTransform.localPosition = toTransform.localPosition;
         fromTransform.rotation = toTransform.rotation;
 
         isSwitchingCamera = false;
@@ -234,6 +236,7 @@ public class GameplayCarControllerFreeMode : MonoBehaviour
             hns.PlayerCamera = rccCam.GetComponentInChildren<Camera>();
             hns.PlayerController = rccCam.transform;
             gameUIManager.getOutOfCarButton.gameObject.SetActive(true);
+           
         }
         else if (!inCar)
         {
@@ -243,6 +246,7 @@ public class GameplayCarControllerFreeMode : MonoBehaviour
             inGameSoundManager.SetInGameListenersVolume();
             hns.PlayerCamera = playerCamera.GetComponent<Camera>();
             hns.PlayerController = gameplayManager.player.transform;
+            doorIndicator.SetActive(true);
         }
     }
 

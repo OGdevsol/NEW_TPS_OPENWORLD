@@ -44,6 +44,7 @@ public class GameplayManagerFreeMode : MonoBehaviour
         StartCoroutine(FreeModeRoutine());
         GameUIManager.instance.modeState = GameUIManager.ModeState.FreeMode;
         Debug.LogError("Mode is " + DataController.instance.GetMode());
+        gameUIManager.rccCanvas.enabled = false;
     }
 
     private void Start()
@@ -52,7 +53,10 @@ public class GameplayManagerFreeMode : MonoBehaviour
         gameplayCarControllerFreeMode = GameplayCarControllerFreeMode.instance;
         Debug.Log("Start");
         hns.PlayerCamera = gameplayCarControllerFreeMode.playerCamera.GetComponent<Camera>();
+      
     }
+   
+
 
     private void NullCheck()
     {

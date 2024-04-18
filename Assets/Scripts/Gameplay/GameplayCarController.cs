@@ -19,12 +19,14 @@ public class GameplayCarController : MonoBehaviour
     public GameObject getInCarPlayer;
     public GameObject getOutOfCarPlayer;
     public Transform playerOutOfCarPosition;
+    public GameObject doorIndicator;
 
     [HideInInspector] public bool inCar;
     private GameUIManager gameUIManager;
     private HUDNavigationSystem hns;
     private GameplayManager gameplayManager;
     private ShootBehaviour shootBehaviour;
+    public GameObject levelOneGuidingIndicator;
 
     private void Start()
     {
@@ -77,6 +79,7 @@ public class GameplayCarController : MonoBehaviour
 
 
         getInCarPlayer.SetActive(true);
+        doorIndicator.SetActive(false);
         //  ShootBehaviour.instance.activeWeapon = 0;
         inCar = true;
         // FindObjectOfType<InteractiveWeapon>().transform.gameObject.SetActive(false);
@@ -101,7 +104,7 @@ public class GameplayCarController : MonoBehaviour
         if (fromTransform == rccCam.transform)
         {
             switchDuration = getOutOfCarDuration;
-            Debug.Log(getOutOfCarDuration);
+//            Debug.Log(getOutOfCarDuration);
         }
 
         else if (fromTransform == playerCamera.transform)
@@ -121,25 +124,25 @@ public class GameplayCarController : MonoBehaviour
             switchTimer += Time.deltaTime;
             if (fromTransform == rccCam.transform)
             {
-                Debug.Log("SWITCHING FROM RCC in mission mode");
+              //  Debug.Log("SWITCHING FROM RCC in mission mode");
                 ShowPlayerExitingCar();
             }
 
             if (fromTransform == playerCamera.transform)
             {
-                Debug.Log("SWITCHING FROM Player in mission mode");
+//                Debug.Log("SWITCHING FROM Player in mission mode");
                 ShowPlayerEnteringCar();
             }
 
             float t = Mathf.Clamp01(switchTimer / switchDuration);
 
-            fromTransform.position = Vector3.Lerp(initialPos, toTransform.position, t);
+            fromTransform.localPosition = Vector3.Lerp(initialPos, toTransform.localPosition, t);
             fromTransform.rotation = Quaternion.Lerp(initialRot, toTransform.rotation, t);
 
             yield return null;
         }
 
-        fromTransform.position = toTransform.position;
+        fromTransform.position = toTransform.localPosition;
         fromTransform.rotation = toTransform.rotation;
 
         isSwitchingCamera = false;
@@ -177,7 +180,7 @@ public class GameplayCarController : MonoBehaviour
 
         // Update other game state based on camera transition.
         UpdateGameState(fromTransform, toTransform);
-        Debug.Log("Game State Updated");
+//        Debug.Log("Game State Updated");
         if (inCar)
         {
             Debug.Log("In Car");
@@ -187,10 +190,14 @@ public class GameplayCarController : MonoBehaviour
             hns.PlayerCamera = rccCam.GetComponentInChildren<Camera>();
             hns.PlayerController = rccCam.transform;
             gameUIManager.getOutOfCarButton.gameObject.SetActive(true);
+            if (levelOneGuidingIndicator.activeInHierarchy)
+            {
+                levelOneGuidingIndicator.SetActive(false);
+            }
         }
         else if (!inCar)
         {
-            Debug.Log("Out Of Car");
+//            Debug.Log("Out Of Car");
             rccCam.gameObject.GetComponentInChildren<AudioListener>().enabled = false;
             playerCamera.GetComponent<AudioListener>().enabled = true;
             inGameSoundManager.SetInGameListenersVolume();
@@ -221,6 +228,7 @@ public class GameplayCarController : MonoBehaviour
            
           
             getInCarPlayer.SetActive(false);
+            
         }
 
         if (fromTransform == rccCam.transform)
@@ -235,9 +243,10 @@ public class GameplayCarController : MonoBehaviour
 
             getOutOfCarPlayer.SetActive(false);
             gameplayManager.player.transform.position = playerOutOfCarPosition.position;
+            doorIndicator.SetActive(true);
           
 
-            Debug.Log("Active Weapon Is " + ShootBehaviour.instance.activeWeapon);
+//            Debug.Log("Active Weapon Is " + ShootBehaviour.instance.activeWeapon);
 
             if (ShootBehaviour.instance.activeWeapon != 0)
             {

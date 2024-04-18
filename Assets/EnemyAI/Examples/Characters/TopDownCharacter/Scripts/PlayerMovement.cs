@@ -40,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
 
 	void Move(float h, float v)
 	{
+		
 		// Set the movement vector based on the axis input.
 		movement.Set(h, 0f, v);
 

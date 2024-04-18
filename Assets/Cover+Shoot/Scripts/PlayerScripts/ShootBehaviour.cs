@@ -360,8 +360,8 @@ public class ShootBehaviour : GenericBehaviour
 
         // Set crosshair if armed.
         SetWeaponCrosshair(newWeapon > 0);
-        Debug.Log(oldWeapon);
-        Debug.Log(newWeapon);
+       // Debug.Log(oldWeapon);
+//        Debug.Log(newWeapon);
         GameUIManager.instance.CheckAndChangeCurrentWeapon();
     }
 

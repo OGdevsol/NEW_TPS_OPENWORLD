@@ -17,7 +17,7 @@ public class ThresholdScript : MonoBehaviour
 
     private void ChangeButtonsAlphaHit()
     {
-        Debug.Log("Buttons with shapes AlphaHit changed");
+//        Debug.Log("Buttons with shapes AlphaHit changed");
         Image imageComponent;
         foreach (var shapedButton in buttons)
         {

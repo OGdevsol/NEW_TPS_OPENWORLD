@@ -31,6 +31,9 @@ public class GameUIManager : MonoBehaviour
     public Button[] pausePanelDeactivations;
     public Button accept;
     public Button reject;
+    public GameObject fireButton;
+    public GameObject fireButtonLEFT;
+    public GameObject changeWeaponButton;
     public GameObject freeModePanel;
     public TMP_Text freeModePanelText;
 
@@ -259,6 +262,16 @@ public class GameUIManager : MonoBehaviour
     public void CheckAndChangeCurrentWeapon()
     {
         currentWeaponReference.sprite = (ShootBehaviour.instance.activeWeapon == 0) ? gunIcon : punchIcon;
+        if (currentWeaponReference.sprite==gunIcon)
+        {
+            changeWeaponButton.GetComponent<Animator>() .enabled = true;
+            fireButton.SetActive(false);
+        }
+        else if (currentWeaponReference.sprite==punchIcon)
+        {
+            changeWeaponButton.GetComponent<Animator>() .enabled = false;
+            fireButton.SetActive(true);
+        }
     }
 }
 

@@ -44,7 +44,7 @@ public class Timer : MonoBehaviour
 
     private void Initialize()
     {
-        Debug.LogError(totalTime);
+//        Debug.LogError(totalTime);
 
         gameplayManager ??= GameplayManager.instance;
         dataController ??= DataController.instance;
@@ -52,7 +52,7 @@ public class Timer : MonoBehaviour
 
         timerAnimator = timerObject.GetComponent<Animator>();
         totalTime = gameplayManager.missions[dataController.GetSelectedLevel()].missionTime;
-        Debug.LogError(totalTime);
+//        Debug.LogError(totalTime);
         CheckCutscene();
     }
 
